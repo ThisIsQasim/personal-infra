@@ -4,4 +4,4 @@ resources:
 - gotk-components.yaml
 - gotk-sync.yaml
 - sealed-secrets.yaml
-- ../device-manager
+- ../apps/apps-sync.yaml
