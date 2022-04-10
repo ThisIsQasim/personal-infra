@@ -1,0 +1,89 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: heimdall
+  namespace: entertainment
+  labels:
+    app: heimdall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heimdall
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: heimdall
+    spec:
+      containers:
+      - image: lscr.io/linuxserver/heimdall:js
+        name: heimdall
+        env:
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "1001"
+        - name: TZ
+          value: "Asia/Karachi"
+        - name:  DB_TYPE
+          value: sqlite
+        - name:  DB_STORAGE
+          value: /config/app.db
+        - name:  UPLOAD_DIR
+          value: /config/uploads
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        ports:
+        - containerPort: 3000
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/entertainment/heimdall
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: heimdall
+  namespace: entertainment
+  labels:
+    app: heimdall
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: heimdall
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: heimdall
+  namespace: entertainment
+  labels:
+    app: heimdall
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+  - secretName: heimdall-tls
+    hosts:
+    - home.com
+  rules:
+  - host: home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: heimdall
+            port:
+              number: 80
