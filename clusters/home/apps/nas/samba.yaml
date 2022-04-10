@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba
+  namespace: nas
+  labels:
+    app: samba
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samba
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: samba
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - image: thisisqasim/samba:latest
+        name: samba
+        env:
+        - name: SAMBA_FRUIT_MODEL
+          value: "Macmini"
+        - name: SAMBA_CONF_ENABLE_NTLM_AUTH
+          value: "y"
+        - name: ACCOUNT_qasim
+          valueFrom:
+            secretKeyRef:
+              name: samba-password
+              key: qasim
+        - name: ACCOUNT_media
+          valueFrom:
+            secretKeyRef:
+              name: samba-password
+              key: media
+        - name: SAMBA_VOLUME_CONFIG_qasimonly
+          value: "[Qasim's File]; path=/shares/qasim; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
+        - name: SAMBA_VOLUME_CONFIG_media
+          value: "[Media]; path=/shares/media; valid users = media; guest ok = no; read only = yes; browseable = no; writable = no"
+        volumeMounts:
+        - mountPath: /shares/qasim
+          name: external
+        - mountPath: /shares/media
+          name: media
+        ports:
+        - containerPort: 445
+        - containerPort: 139
+        livenessProbe:
+          tcpSocket:
+            port: 445
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 445
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "3000m"
+            memory: "5120Mi"
+      volumes:
+        - name: external
+          hostPath:
+            path: /mnt/external
+            type: Directory
+        - name: media
+          hostPath:
+            path: /mnt/external/media
+            type: Directory
