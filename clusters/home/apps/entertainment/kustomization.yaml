@@ -5,3 +5,4 @@ resources:
 - heimdall.yaml
 - jellyfin.yaml
 - sonarr.yaml
+- radarr.yaml
