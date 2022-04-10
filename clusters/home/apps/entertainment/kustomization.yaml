@@ -8,3 +8,4 @@ resources:
 - radarr.yaml
 - jackett.yaml
 - ombi.yaml
+- transmission.yaml

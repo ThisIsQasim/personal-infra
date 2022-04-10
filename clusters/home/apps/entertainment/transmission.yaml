@@ -1,0 +1,118 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+  namespace: entertainment
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: thisisqasim/transmission:latest
+        name: transmission
+        env:
+        - name: TRANSMISSION_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: transmission
+              key: password
+        - name: TRANSMISSION_DOWNLOAD_LIMIT
+          value: "1024"
+        - name: TRANSMISSION_DOWNLOAD_QUEUE
+          value: "20"
+        volumeMounts:
+        - mountPath: /downloads
+          name: downloads
+        - mountPath: /etc/transmission-daemon/torrents
+          name: torrents
+        - mountPath: /etc/transmission-daemon/resume
+          name: resume
+        ports:
+        - containerPort: 9091
+        livenessProbe:
+          tcpSocket:
+            port: 9091
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 9091
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "3000m"
+            memory: "5120Mi"
+      volumes:
+        - name: downloads
+          hostPath:
+            path: /mnt/external/Downloads
+            type: Directory
+        - name: torrents
+          hostPath:
+            path: /mnt/external/Torrents/torrent.
+            type: Directory
+        - name: resume
+          hostPath:
+            path: /mnt/external/Torrents/transmission
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transmission
+  namespace: entertainment
+  labels:
+    app: transmission
+spec:
+  ports:
+  - port: 9091
+    protocol: TCP
+    targetPort: 9091
+  selector:
+    app: transmission
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transmission
+  namespace: entertainment
+  labels:
+    app: transmission
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+  - secretName: transmission-tls
+    hosts:
+    - torrent.home.com
+  rules:
+  - host: torrent.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: transmission
+            port:
+              number: 9091
