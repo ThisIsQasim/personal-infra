@@ -1,0 +1,115 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: entertainment
+  labels:
+    app: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: jellyfin/jellyfin:latest
+        name: jellyfin
+        env:
+        - name: JELLYFIN_PublishedServerUrl
+          value: "https://jellyfin.home.com"
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /cache
+          name: cache
+        - mountPath: /media
+          name: media
+        ports:
+        - containerPort: 8096
+        livenessProbe:
+          tcpSocket:
+            port: 8096
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8096
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+          limits:
+            cpu: "3000m"
+            memory: "5120Mi"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/entertainment/jellyfin/config
+            type: Directory
+        - name: cache
+          hostPath:
+            path: /home/entertainment/jellyfin/cache
+            type: Directory
+        - name: media
+          hostPath:
+            path: /mnt/external/media
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+  namespace: entertainment
+  labels:
+    app: jellyfin
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8096
+  selector:
+    app: jellyfin
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin
+  namespace: entertainment
+  labels:
+    app: jellyfin
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+  - secretName: jellyfin-tls
+    hosts:
+    - jellyfin.home.com
+  rules:
+  - host: jellyfin.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jellyfin
+            port:
+              number: 80
