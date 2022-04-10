@@ -80,7 +80,7 @@ metadata:
     app: jellyfin
 spec:
   ports:
-  - port: 80
+  - port: 8096
     protocol: TCP
     targetPort: 8096
   selector:
@@ -112,4 +112,4 @@ spec:
           service:
             name: jellyfin
             port:
-              number: 80
+              number: 8096

@@ -7,3 +7,4 @@ resources:
 - sonarr.yaml
 - radarr.yaml
 - jackett.yaml
+- ombi.yaml

@@ -34,15 +34,15 @@ spec:
         - mountPath: /downloads
           name: downloads
         ports:
-        - containerPort: 8989
+        - containerPort: 9117
         livenessProbe:
           tcpSocket:
-            port: 8989
-          initialDelaySeconds: 600
+            port: 9117
+          initialDelaySeconds: 60
           periodSeconds: 5
         readinessProbe:
           tcpSocket:
-            port: 8989
+            port: 9117
           initialDelaySeconds: 15
           periodSeconds: 5
         resources:
@@ -71,9 +71,9 @@ metadata:
     app: jackett
 spec:
   ports:
-  - port: 80
+  - port: 9117
     protocol: TCP
-    targetPort: 8989
+    targetPort: 9117
   selector:
     app: jackett
   type: NodePort
@@ -103,4 +103,4 @@ spec:
           service:
             name: jackett
             port:
-              number: 80
+              number: 9117

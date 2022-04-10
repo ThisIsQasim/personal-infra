@@ -2,25 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: radarr
+  name: ombi
   namespace: entertainment
   labels:
-    app: radarr
+    app: ombi
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: radarr
+      app: ombi
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: radarr
+        app: ombi
     spec:
       containers:
-      - image: lscr.io/linuxserver/radarr:latest
-        name: radarr
+      - image: lscr.io/linuxserver/ombi:latest
+        name: ombi
         env:
         - name: PUID
           value: "1001"
@@ -31,18 +31,16 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: config
-        - mountPath: /data
-          name: media
         ports:
-        - containerPort: 7878
+        - containerPort: 3579
         livenessProbe:
           tcpSocket:
-            port: 7878
+            port: 3579
           initialDelaySeconds: 600
           periodSeconds: 5
         readinessProbe:
           tcpSocket:
-            port: 7878
+            port: 3579
           initialDelaySeconds: 15
           periodSeconds: 5
         resources:
@@ -55,52 +53,48 @@ spec:
       volumes:
         - name: config
           hostPath:
-            path: /home/entertainment/radarr
-            type: Directory
-        - name: media
-          hostPath:
-            path: /mnt/external/media
+            path: /home/entertainment/ombi
             type: Directory
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: radarr
+  name: ombi
   namespace: entertainment
   labels:
-    app: radarr
+    app: ombi
 spec:
   ports:
-  - port: 7878
+  - port: 3579
     protocol: TCP
-    targetPort: 7878
+    targetPort: 3579
   selector:
-    app: radarr
+    app: ombi
   type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: radarr
+  name: ombi
   namespace: entertainment
   labels:
-    app: radarr
+    app: ombi
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: radarr-tls
+  - secretName: ombi-tls
     hosts:
-    - radarr.home.com
+    - ombi.home.com
   rules:
-  - host: radarr.home.com
+  - host: ombi.home.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: radarr
+            name: ombi
             port:
-              number: 7878
+              number: 3579
