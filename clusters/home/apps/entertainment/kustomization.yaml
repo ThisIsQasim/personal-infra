@@ -6,3 +6,4 @@ resources:
 - jellyfin.yaml
 - sonarr.yaml
 - radarr.yaml
+- jackett.yaml

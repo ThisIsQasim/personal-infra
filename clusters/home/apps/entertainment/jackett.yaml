@@ -1,0 +1,106 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jackett
+  namespace: entertainment
+  labels:
+    app: jackett
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jackett
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jackett
+    spec:
+      containers:
+      - image: lscr.io/linuxserver/jackett:latest
+        name: jackett
+        env:
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "1001"
+        - name: TZ
+          value: "Asia/Karachi"
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /downloads
+          name: downloads
+        ports:
+        - containerPort: 8989
+        livenessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 600
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2560Mi"
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/entertainment/jackett/config
+            type: Directory
+        - name: downloads
+          hostPath:
+            path: /home/entertainment/jackett/downloads
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jackett
+  namespace: entertainment
+  labels:
+    app: jackett
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8989
+  selector:
+    app: jackett
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jackett
+  namespace: entertainment
+  labels:
+    app: jackett
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+  - secretName: jackett-tls
+    hosts:
+    - jackett.home.com
+  rules:
+  - host: jackett.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jackett
+            port:
+              number: 80
