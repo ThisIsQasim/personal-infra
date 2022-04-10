@@ -19,7 +19,7 @@ spec:
         app: heimdall
     spec:
       containers:
-      - image: lscr.io/linuxserver/heimdall:js
+      - image: lscr.io/linuxserver/heimdall:latest
         name: heimdall
         env:
         - name: PUID
@@ -28,17 +28,21 @@ spec:
           value: "1001"
         - name: TZ
           value: "Asia/Karachi"
-        - name:  DB_TYPE
-          value: sqlite
-        - name:  DB_STORAGE
-          value: /config/app.db
-        - name:  UPLOAD_DIR
-          value: /config/uploads
         volumeMounts:
         - mountPath: /config
           name: config
         ports:
-        - containerPort: 3000
+        - containerPort: 80
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 5
       volumes:
         - name: config
           hostPath:
@@ -56,7 +60,7 @@ spec:
   ports:
   - port: 80
     protocol: TCP
-    targetPort: 3000
+    targetPort: 80
   selector:
     app: heimdall
   type: NodePort
