@@ -1,0 +1,106 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+  namespace: entertainment
+  labels:
+    app: sonarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+      - image: lscr.io/linuxserver/sonarr:latest
+        name: sonarr
+        env:
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "1001"
+        - name: TZ
+          value: "Asia/Karachi"
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /data
+          name: media
+        ports:
+        - containerPort: 8989
+        livenessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 600
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8989
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2560Mi"
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/entertainment/sonarr
+            type: Directory
+        - name: media
+          hostPath:
+            path: /mnt/external/media
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: entertainment
+  labels:
+    app: sonarr
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8989
+  selector:
+    app: sonarr
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sonarr
+  namespace: entertainment
+  labels:
+    app: sonarr
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  tls:
+  - secretName: sonarr-tls
+    hosts:
+    - sonarr.home.com
+  rules:
+  - host: sonarr.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sonarr
+            port:
+              number: 80
