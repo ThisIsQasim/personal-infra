@@ -1,0 +1,91 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: avahi
+  namespace: nas
+data:
+  avahi-daemon.conf: |
+    [server]
+    use-ipv4=yes
+    use-ipv6=no
+    allow-interfaces=enp0s31f6
+    enable-dbus=no
+    ratelimit-interval-usec=1000000
+    ratelimit-burst=1000
+
+    [wide-area]
+    enable-wide-area=yes
+
+    [publish]
+    publish-hinfo=no
+    publish-workstation=no
+
+  smb.service: |
+    <?xml version="1.0" standalone='no'?>
+    <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+    <service-group>
+     <name replace-wildcards="yes">%h</name>
+     <service>
+       <type>_adisk._tcp</type>
+       <txt-record>sys=waMa=0,adVF=0x100</txt-record>
+       <txt-record>dk0=adVN=TimeCapsule,adVF=0x82</txt-record>
+     </service>
+     <service>
+        <type>_smb._tcp</type>
+        <port>445</port>
+     </service>
+     <service>
+       <type>_device-info._tcp</type>
+       <port>0</port>
+       <txt-record>model=Macmini6</txt-record>
+     </service>
+    </service-group>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avahi
+  namespace: nas
+  labels:
+    app: avahi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: avahi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: avahi
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - image: thisisqasim/avahi:latest
+        name: avahi
+        volumeMounts:
+        - mountPath: /etc/avahi/avahi-daemon.conf
+          subPath: avahi-daemon.conf
+          name: config
+        - mountPath: /etc/avahi/services/smb.service
+          subPath: smb.service
+          name: config
+        - mountPath: /run/avahi-daemon
+          name: tmpfs
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "12Mi"
+          limits:
+            cpu: "3000m"
+            memory: "5120Mi"
+      volumes:
+        - name: config
+          configMap:
+            name: avahi
+        - name: tmpfs
+          emptyDir:
+            medium: Memory
