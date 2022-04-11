@@ -21,10 +21,10 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: thisisqasim/samba:latest
+      - image: servercontainers/samba:smbd-only-latest
         name: samba
         env:
-        - name: SAMBA_FRUIT_MODEL
+        - name: MODEL
           value: "Macmini"
         - name: SAMBA_CONF_ENABLE_NTLM_AUTH
           value: "y"
@@ -38,10 +38,20 @@ spec:
             secretKeyRef:
               name: samba-password
               key: media
+        - name: UID_qasim
+          value: "1001"
+        - name: UID_media
+          value: "1000"
+        - name: GROUPS_media
+          value: "qasim"
         - name: SAMBA_VOLUME_CONFIG_qasimonly
-          value: "[Qasim's File]; path=/shares/qasim; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
+          value: "[Qasim's Files]; path=/shares/qasim; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
         - name: SAMBA_VOLUME_CONFIG_media
-          value: "[Media]; path=/shares/media; valid users = media; guest ok = no; read only = yes; browseable = no; writable = no"
+          value: "[Media]; path=/shares/media; valid users = media; guest ok = no; read only = yes; browseable = yes; writable = no"
+        - name: AVAHI_DISABLE
+          value: "true"
+        - name: WSDD2_DISABLE
+          value: "true"
         volumeMounts:
         - mountPath: /shares/qasim
           name: external
