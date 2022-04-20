@@ -32,7 +32,7 @@ spec:
         - mountPath: /config
           name: config
         - mountPath: /data
-          name: media
+          name: data
         ports:
         - containerPort: 8989
         livenessProbe:
@@ -57,9 +57,9 @@ spec:
           hostPath:
             path: /home/entertainment/sonarr
             type: Directory
-        - name: media
+        - name: data
           hostPath:
-            path: /mnt/external/media
+            path: /mnt/external
             type: Directory
 ---
 apiVersion: v1
