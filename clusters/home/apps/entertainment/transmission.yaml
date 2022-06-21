@@ -99,11 +99,9 @@ metadata:
     app: transmission
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: transmission-tls
-    hosts:
+  - hosts:
     - torrent.home.com
   rules:
   - host: torrent.home.com

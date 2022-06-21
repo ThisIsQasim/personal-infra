@@ -96,11 +96,9 @@ metadata:
     app: jellyfin
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: jellyfin-tls
-    hosts:
+  - hosts:
     - jellyfin.home.com
   rules:
   - host: jellyfin.home.com

@@ -81,11 +81,9 @@ metadata:
     app: ombi
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: ombi-tls
-    hosts:
+  - hosts:
     - ombi.home.com
   rules:
   - host: ombi.home.com

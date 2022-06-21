@@ -87,11 +87,9 @@ metadata:
     app: jackett
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: jackett-tls
-    hosts:
+  - hosts:
     - jackett.home.com
   rules:
   - host: jackett.home.com

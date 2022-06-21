@@ -87,11 +87,9 @@ metadata:
     app: radarr
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   tls:
-  - secretName: radarr-tls
-    hosts:
+  - hosts:
     - radarr.home.com
   rules:
   - host: radarr.home.com
