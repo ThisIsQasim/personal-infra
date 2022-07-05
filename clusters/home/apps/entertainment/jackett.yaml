@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jackett
-  namespace: entertainment
   labels:
     app: jackett
 spec:
@@ -66,7 +65,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jackett
-  namespace: entertainment
   labels:
     app: jackett
 spec:
@@ -82,7 +80,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: jackett
-  namespace: entertainment
   labels:
     app: jackett
   annotations:
