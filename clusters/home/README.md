@@ -1,8 +1,4 @@
 # Home Cluster
 
-Scripts to bootstrap home cluster with fluxcd
+Scripts to bootstrap home cluster
 
-```
-eval `ssh-agent -s`; ssh-add
-flux bootstrap git   --url=ssh://git@git.project.com/Qasim/infra.git   --branch=main   --path=clusters/home
-```
