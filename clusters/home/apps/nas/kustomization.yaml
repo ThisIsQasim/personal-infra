@@ -5,3 +5,15 @@ resources:
 - namespace.yaml
 - samba.yaml
 - avahi.yaml
+- mysql.yaml
+- nextcloud.yaml
+- redis.yaml
+
+generators:
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: mysql
+    files:
+      - ./mysql.enc.yaml

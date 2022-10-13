@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: mysql
+    annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+stringData:
+    MYSQL_ALLOW_EMPTY_PASSWORD: ENC[AES256_GCM,data:cKeQ,iv:V6qvdQliMm079wBHwJulf8EGQt+OJKAK1xXRdWL6SUs=,tag:KS25H8bqz4/bbC/8AbZuZw==,type:str]
+    MYSQL_PASSWORD: ENC[AES256_GCM,data:41CS705nhBTlNtq5UeU=,iv:zV0JNfwf5563BUn1JUgB+c+Is7dmUQQmmDmvdf5X/Nw=,tag:ASB7CI6cmqVIfpwoZliWTg==,type:str]
+    MYSQL_DATABASE: ENC[AES256_GCM,data:nVm4hH5NTrLV,iv:+zFF3LTmMWGOucpc/ALzD+yIjLM/L34MWGuO8cwHNOI=,tag:JK6BrqSkh7yftTPDSQOqFA==,type:str]
+    MYSQL_USER: ENC[AES256_GCM,data:bCXJbwwyWeo7,iv:m2knVQQtCTxBoP4HGEK6v7qi+TjhS0QmqAKKioDYnYI=,tag:vrCQfitIeGH3m4aDCKIeIA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1y5rqvlhmmfjs5xugxte9j4djl9ztk9v3w6n7sjg32pst5gw4vq5sey3mhy
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBhN21na0cyY0twSUEwNnVv
+            SDQ1M2dPQjhzY202QTQyUnc0MnlOczFSZ1hjCktjVG9hSmhoWkxHT3ZpUjJFSm5E
+            UVpHWmFPVGJSMXdsVnptK1hKNkZoN3MKLS0tIHh3TTFnUjNZQ0lRV0RUa1RVWEV3
+            cXBiSEdldEVLYThVbFZGc1NQNFUySlUKPwe3+e+deIfkhDBcPWXc2poFPdDCR1KV
+            7iVn3J/nvxmAepCmzvmYehrGrllNQartCojTWriMsrF1Yvjx0oC3uQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2022-10-13T13:34:29Z"
+    mac: ENC[AES256_GCM,data:PnuawW5GjKx+BH3j1t2EyokaQmkOl4oRD0hAL19dz2v9k/PaP1IL9qx5wSN7DsmPrJZmgHANcYyfNIRW19Qa2GZYeTc0ft/pXk8xgVjv0cZjF7PK9S6OEoeZoOb4sSUI1k/xawV/GwBjJAlq2R5J2i15x5YJHhqgpeSN3fMXwWM=,iv:Xi+eGm6L7kww+R3IemSGu2upTjgPy46E8FnlydNMpgA=,tag:+sITmrWhHn5e6OOQzIs+pg==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.7.2

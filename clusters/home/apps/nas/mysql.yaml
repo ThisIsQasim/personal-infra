@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306
+  type: ClusterIP
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        # command:
+        # - --innodb_large_prefix=true
+        # - --innodb_file_format=barracuda
+        # - --innodb_file_per_table=1
+        envFrom:
+        - secretRef:
+            name: mysql
+        resources:
+          requests:
+            cpu: 0.2
+            memory: "500Mi"
+          limits:
+            cpu: 2
+            memory: "2Gi"
+        ports:
+        - containerPort: 3306
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+        volumeMounts:
+        - name: database
+          mountPath: /var/lib/mysql
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 999
+      volumes:
+        - name: database
+          hostPath:
+            path: /home/nas/mysql
+            type: Directory
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 999
+        runAsUser: 999
