@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
+spec:
+  project: default
+  source:
+    repoURL: git@git.project.com/Qasim/infra.git
+    targetRevision: main
+    path: clusters/home/argocd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - Validate=true
+    - CreateNamespace=true

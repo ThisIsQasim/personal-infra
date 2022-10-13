@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps
+spec:
+  generators:
+  - list:
+      elements:
+      - app: entertainment
+      - app: nas
+      - app: smarter-device-manager
+  template:
+    metadata:
+      name: '{{app}}'
+    spec:
+      project: default
+      source:
+        repoURL: git@git.project.com/Qasim/infra.git
+        targetRevision: main
+        path: clusters/home/apps/{{app}}
+      destination:
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated: {}
+        syncOptions:
+        - Validate=true
+        - CreateNamespace=true
