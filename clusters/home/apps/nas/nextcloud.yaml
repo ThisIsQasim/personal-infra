@@ -126,6 +126,8 @@ spec:
           ./occ maintenance:update:htaccess
           sed -i '/protected \$allowedFormActionDomains = \[/a '\''\*.'$CSP_DOMAIN''\'',' \
             lib/public/AppFramework/Http/ContentSecurityPolicy.php
+          sed -i '/protected \$allowedFormActionDomains = \[/a '\'''$CSP_DOMAIN''\'',' \
+            lib/public/AppFramework/Http/ContentSecurityPolicy.php
           while sleep 300;do php -f cron.php; done
         env:
         - name: PHP_MEMORY_LIMIT
