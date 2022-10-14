@@ -10,3 +10,4 @@ resources:
 - jackett.yaml
 - ombi.yaml
 - transmission.yaml
+- metube.yaml

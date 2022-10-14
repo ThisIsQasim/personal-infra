@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metube
+  labels:
+    app: metube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: metube
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: alexta69/metube
+        name: metube
+        env:
+        - name: UID
+          value: "1001"
+        - name: GID
+          value: "1001"
+        - name: YTDL_OPTIONS
+          value: '{"proxy": "socks5://y.y.y.y
+        volumeMounts:
+        - mountPath: /downloads
+          name: downloads
+        ports:
+        - containerPort: 8081
+        livenessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "3000m"
+            memory: "5120Mi"
+      volumes:
+        - name: downloads
+          hostPath:
+            path: /mnt/external/Downloads/ytdl
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: metube
+  labels:
+    app: metube
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: metube
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: metube
+  labels:
+    app: metube
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+spec:
+  tls:
+  - hosts:
+    - ytdl.home.com
+  rules:
+  - host: ytdl.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: metube
+            port:
+              number: 8081
