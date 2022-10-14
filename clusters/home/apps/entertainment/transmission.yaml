@@ -28,6 +28,8 @@ spec:
           value: "1024"
         - name: TRANSMISSION_DOWNLOAD_QUEUE
           value: "20"
+        - name: TRANSMISSION_AUTH
+          value: "false"
         volumeMounts:
         - mountPath: /downloads
           name: downloads
