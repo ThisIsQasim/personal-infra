@@ -1,0 +1,27 @@
+---
+config:
+  configFile: |-
+    provider = "nextcloud"
+    login_url = "https://cloud.home.com/apps/oauth2/authorize"
+    redeem_url = "http://nextcloud.nas.svc:8080/apps/oauth2/api/v1/token"
+    validate_url = "http://nextcloud.nas.svc:8080/ocs/v2.php/cloud/user?format=json"
+    skip_provider_button = true
+    upstreams = [ "static://200" ]
+    allowed_groups = ["admin"]
+    email_domains = "*"
+    whitelist_domains = [".home.com"]
+    cookie_domains = [".home.com"]
+    set_xauthrequest = true
+  existingSecret: oauth2-proxy
+ingress:
+  enabled: true
+  path: /
+  pathType: Prefix
+  hosts:
+    - iap.home.com
+  tls:
+    - hosts:
+        - iap.home.com
+  annotations:
+    kubernetes.io/ingress.class: nginx
+replicaCount: 1

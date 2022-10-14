@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: oauth2-proxy
+    annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+stringData:
+    cookie-secret: ENC[AES256_GCM,data:ctQVMbJVEYJE/GrIyxhy6Njntm3sxAQjEaNh4PVTXHCV5sEaRbZaISEROac=,iv:vCO4Qk+E4xKDjdz053o31/gHhlxv/owDLZV19bfqEkQ=,tag:kPNlMLjyUxDVXpTc4ukNdA==,type:str]
+    client-secret: ENC[AES256_GCM,data:TMFNCXUHhCo2QbkWNyVdJ2X1xeEtYhwHBIN35s17KDPOWE5QAlD9QMFHvydqjINBk2yoaSy58dbk1W4mCXpgFw==,iv:++llgnLoUVXKzgCipp2pKO+BxRrNpz7XdrT45x16IKQ=,tag:NE136z6vlwvIc/cUXVEgMA==,type:str]
+    client-id: ENC[AES256_GCM,data:a/vJOBoKMz2pQ0kJFhay/M5sI3KHQJg5JBOcD5XjcCS8/MhuIc22mqn71JuIo7PAYIsldyzDnYmKXqHnIpd4Dw==,iv:995Ts/lPfsCanLCfPXR3QxDFmyov0EYwq2odvY2ABCg=,tag:YXV+FoQEAJRbpmq3KbdT0A==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1y5rqvlhmmfjs5xugxte9j4djl9ztk9v3w6n7sjg32pst5gw4vq5sey3mhy
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBEOG9wclpFRlB3MzVsRWtD
+            SjJLRUlWSHJxNm9WNDhHQUxhSDllQnBNOVNzCmZ3R042TUNaZDUrRTFrSnMxY1cv
+            R1ovekZOQnRURXJ3NE1aNzFzM0NSeXcKLS0tIFFFUGJEUUdqT3Z4cXYxOVRuVWZ5
+            ZUVTdVZqNHozQzNxaktUNHlOWUk4NlkKWT2a6JIQ+XxCTZKKuQfvcuSssqBmQxNB
+            IbjJ08/AqiBlB0ttNHYZ1QGKh0PFOfONILkv8TXjOfUChdTUs9eW0w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2022-10-13T20:14:39Z"
+    mac: ENC[AES256_GCM,data:PJWqJs7o+Jo36OYwkuPXzA8YGnMqOZKFJIAvMdQxXAIVQD8V0jBGY/jO+HsCyR31OxHcYfoGZ6GuhJ3DGtsqwqPFqXbVZCESM8b7F4/1rGkssvGY26aganfwNJhnMZ1enUVIR8alNikd9zu16b470QGEMjI1xUi8K0nZuiUysI4=,iv:NBZ5dN9L+p8zRm9G9CVec/CJ/jMhgxVZ1ukBNkUyRgY=,tag:/Kz6ZOLOmci3RVrAb7IkMQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.7.2

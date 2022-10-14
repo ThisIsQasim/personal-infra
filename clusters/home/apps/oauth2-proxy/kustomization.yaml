@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: oauth2-proxy
+
+resources:
+- namespace.yaml
+
+helmChartInflationGenerator:
+- chartName: oauth2-proxy
+  chartRepoUrl: https://oauth2-proxy.github.io/manifests
+  chartVersion: 6.2.7
+  releaseName: oauth2-proxy
+  values: values.yaml
+
+
+generators:
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: oauth2-proxy
+    files:
+      - ./oauth2-proxy.enc.yaml
+
+images:
+- name: quay.io/oauth2-proxy/oauth2-proxy
+  newName: docker.io/thisisqasim/oauth2-proxy
+  newTag: latest

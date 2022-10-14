@@ -9,6 +9,7 @@ spec:
       - app: entertainment
       - app: nas
       - app: smarter-device-manager
+      - app: oauth2-proxy
   template:
     metadata:
       name: '{{app}}'
