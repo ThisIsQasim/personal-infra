@@ -116,17 +116,17 @@ spec:
           mountPath: /var/www/html/config
         - name: data
           mountPath: /var/www/html/data
-      - name: patch
+      - name: cron
         image: nextcloud:latest
         command:
         - /bin/bash
         - -c
         - |
-          set -eux
+          set -eu
           ./occ maintenance:update:htaccess
           sed -i '/protected \$allowedFormActionDomains = \[/a '\''\*.'$CSP_DOMAIN''\'',' \
             lib/public/AppFramework/Http/ContentSecurityPolicy.php
-          sleep inf
+          while sleep 300;do php -f cron.php; done
         env:
         - name: PHP_MEMORY_LIMIT
           value: 1G
