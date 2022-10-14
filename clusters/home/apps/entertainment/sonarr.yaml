@@ -69,7 +69,7 @@ metadata:
     app: sonarr
 spec:
   ports:
-  - port: 80
+  - port: 8989
     protocol: TCP
     targetPort: 8989
   selector:
@@ -102,4 +102,4 @@ spec:
           service:
             name: sonarr
             port:
-              number: 80
+              number: 8989
