@@ -33,10 +33,6 @@ spec:
       containers:
       - name: mysql
         image: mysql:8
-        # command:
-        # - --innodb_large_prefix=true
-        # - --innodb_file_format=barracuda
-        # - --innodb_file_per_table=1
         envFrom:
         - secretRef:
             name: mysql

@@ -78,6 +78,8 @@ spec:
           mountPath: /var/www/html/config
         - name: data
           mountPath: /var/www/html/data
+        - name: nextcloud
+          mountPath: /var/www/html
       - name: push
         image: nextcloud:latest
         command:
@@ -114,6 +116,39 @@ spec:
           mountPath: /var/www/html/config
         - name: data
           mountPath: /var/www/html/data
+      - name: patch
+        image: nextcloud:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          set -eux
+          ./occ maintenance:update:htaccess
+          sed -i '/protected \$allowedFormActionDomains = \[/a '\''\*.'$CSP_DOMAIN''\'',' \
+            lib/public/AppFramework/Http/ContentSecurityPolicy.php
+          sleep inf
+        env:
+        - name: PHP_MEMORY_LIMIT
+          value: 1G
+        - name: CSP_DOMAIN
+          value: home.com
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+          runAsUser: 1001
+        volumeMounts:
+        - name: external
+          mountPath: /external
+        - name: custom-apps
+          mountPath: /var/www/html/custom_apps
+        - name: config
+          mountPath: /var/www/html/config
+        - name: data
+          mountPath: /var/www/html/data
+        - name: nextcloud
+          mountPath: /var/www/html
       volumes:
         - name: ports
           configMap:
@@ -134,6 +169,8 @@ spec:
           hostPath:
             path: /home/nas/nextcloud/data
             type: Directory
+        - name: nextcloud
+          emptyDir: {}
       enableServiceLinks: false
       terminationGracePeriodSeconds: 30
       securityContext:
