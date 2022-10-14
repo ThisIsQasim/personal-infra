@@ -68,7 +68,7 @@ spec:
     targetPort: 3579
   selector:
     app: ombi
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

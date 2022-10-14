@@ -83,7 +83,7 @@ spec:
     targetPort: 8096
   selector:
     app: jellyfin
-  type: NodePort
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
