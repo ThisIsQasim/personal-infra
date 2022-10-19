@@ -4,6 +4,7 @@ namespace: oauth2-proxy
 
 resources:
 - namespace.yaml
+- legacy.yaml
 
 helmChartInflationGenerator:
 - chartName: oauth2-proxy
