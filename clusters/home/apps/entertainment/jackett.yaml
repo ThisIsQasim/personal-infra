@@ -19,6 +19,7 @@ spec:
     spec:
       containers:
       - image: lscr.io/linuxserver/jackett:latest
+        imagePullPolicy: Always
         name: jackett
         env:
         - name: PUID

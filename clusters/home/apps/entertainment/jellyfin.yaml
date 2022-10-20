@@ -22,6 +22,7 @@ spec:
         runAsGroup: 1001
       containers:
       - image: jellyfin/jellyfin:latest
+        imagePullPolicy: Always
         name: jellyfin
         env:
         - name: JELLYFIN_PublishedServerUrl

@@ -44,6 +44,7 @@ spec:
       containers:
       - name: nextcloud
         image: nextcloud:latest
+        imagePullPolicy: Always
         env:
         - name: PHP_MEMORY_LIMIT
           value: 1G

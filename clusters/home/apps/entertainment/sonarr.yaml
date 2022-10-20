@@ -19,6 +19,7 @@ spec:
     spec:
       containers:
       - image: lscr.io/linuxserver/sonarr:latest
+        imagePullPolicy: Always
         name: sonarr
         env:
         - name: PUID

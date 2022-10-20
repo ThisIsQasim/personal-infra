@@ -22,6 +22,7 @@ spec:
         runAsGroup: 1001
       containers:
       - image: thisisqasim/transmission:latest
+        imagePullPolicy: Always
         name: transmission
         env:
         - name: TRANSMISSION_DOWNLOAD_LIMIT

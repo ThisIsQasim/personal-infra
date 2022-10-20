@@ -22,6 +22,7 @@ spec:
         runAsGroup: 1001
       containers:
       - image: alexta69/metube
+        imagePullPolicy: Always
         name: metube
         env:
         - name: UID

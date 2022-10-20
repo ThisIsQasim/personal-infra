@@ -63,6 +63,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - image: thisisqasim/avahi:latest
+        imagePullPolicy: Always
         name: avahi
         volumeMounts:
         - mountPath: /etc/avahi/avahi-daemon.conf

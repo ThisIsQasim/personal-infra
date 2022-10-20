@@ -33,6 +33,7 @@ spec:
       containers:
       - name: mysql
         image: mysql:8
+        imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: mysql
