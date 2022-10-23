@@ -1,0 +1,87 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speedtest
+  labels:
+    app: speedtest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: speedtest
+  template:
+    metadata:
+      labels:
+        app: speedtest
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: thisisqasim/speedtest
+        name: speedtest
+        ports:
+        - containerPort: 8989
+          name: http
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: http
+            path: /empty
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: speedtest
+  labels:
+    app: speedtest
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: speedtest
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: speedtest
+  labels:
+    app: speedtest
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+spec:
+  tls:
+  - hosts:
+    - speedtest.home.com
+  rules:
+  - host: speedtest.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: speedtest
+            port:
+              number: 80
