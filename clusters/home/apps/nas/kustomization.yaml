@@ -17,3 +17,10 @@ generators:
       name: mysql
     files:
       - ./mysql.enc.yaml
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: samba
+    files:
+      - ./samba.enc.yaml
