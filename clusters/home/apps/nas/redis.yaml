@@ -42,11 +42,9 @@ spec:
         - allkeys-lru
         resources:
           requests:
-            cpu: 0.2
-            memory: "500Mi"
+            cpu: 100m
           limits:
-            cpu: 1
-            memory: "2Gi"
+            memory: "256Mi"
         ports:
         - containerPort: 6379
         readinessProbe:

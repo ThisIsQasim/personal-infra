@@ -48,13 +48,12 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            cpu: "100m"
-            memory: "512Mi"
+            cpu: "250m"
+            memory: "1Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
-            cpu: "3000m"
-            memory: "5120Mi"
+            memory: "2Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
       volumes:

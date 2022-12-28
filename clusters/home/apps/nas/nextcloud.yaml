@@ -50,11 +50,9 @@ spec:
           value: 1G
         resources:
           requests:
-            cpu: 0.2
-            memory: "500Mi"
+            cpu: 200m
           limits:
-            cpu: 2
-            memory: "2Gi"
+            memory: "1.2Gi"
         ports:
         - containerPort: 8080
           name: http
@@ -91,11 +89,9 @@ spec:
           value: http://nextcloud:8080
         resources:
           requests:
-            cpu: 0.2
-            memory: "100Mi"
+            cpu: 50m
           limits:
-            cpu: 1
-            memory: "2Gi"
+            memory: "256Mi"
         ports:
         - containerPort: 7867
           name: push
@@ -135,6 +131,11 @@ spec:
           value: 1G
         - name: CSP_DOMAIN
           value: home.com
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: "256Mi"
         securityContext:
           capabilities:
             drop:

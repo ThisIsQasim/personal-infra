@@ -46,7 +46,6 @@ spec:
             memory: 15Mi
           requests:
             cpu: 10m
-            memory: 15Mi
         volumeMounts:
           - name: device-plugin
             mountPath: /var/lib/kubelet/device-plugins

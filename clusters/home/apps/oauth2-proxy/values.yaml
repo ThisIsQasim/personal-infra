@@ -25,3 +25,8 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
 replicaCount: 1
+resources:
+  requests:
+    cpu: 100m
+  limits:
+    memory: "256Mi"

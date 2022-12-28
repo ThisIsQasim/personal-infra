@@ -52,11 +52,9 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            cpu: "100m"
-            memory: "512Mi"
+            cpu: "250m"
           limits:
-            cpu: "3000m"
-            memory: "5120Mi"
+            memory: "1536Mi"
       volumes:
         - name: downloads
           hostPath:

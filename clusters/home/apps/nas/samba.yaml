@@ -72,11 +72,9 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            cpu: "100m"
-            memory: "512Mi"
+            cpu: 100m
           limits:
-            cpu: "3000m"
-            memory: "5120Mi"
+            memory: "256Mi"
       volumes:
         - name: external
           hostPath:

@@ -47,11 +47,9 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "150m"
           limits:
-            cpu: "1000m"
-            memory: "2560Mi"
+            memory: "512Mi"
       volumes:
         - name: config
           hostPath:
