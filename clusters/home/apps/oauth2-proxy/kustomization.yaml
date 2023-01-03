@@ -19,7 +19,7 @@ generators:
     apiVersion: viaduct.ai/v1
     kind: ksops
     metadata:
-      name: oauth2-proxy
+      name: secrets
     files:
       - ./oauth2-proxy.enc.yaml
 

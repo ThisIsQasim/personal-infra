@@ -15,13 +15,17 @@ generators:
     apiVersion: viaduct.ai/v1
     kind: ksops
     metadata:
-      name: mysql
-    files:
-      - ./mysql.enc.yaml
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: samba
-    files:
-      - ./samba.enc.yaml
+      name: secrets
+    secretFrom:
+    - metadata:
+        name: mysql
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./mysql.enc.env
+    - metadata:
+        name: samba-password
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./samba.enc.env

@@ -32,6 +32,6 @@ generators:
     apiVersion: viaduct.ai/v1
     kind: ksops
     metadata:
-      name: repo-secret
+      name: secrets
     files:
       - ./repo-secret.enc.yaml
