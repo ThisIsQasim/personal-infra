@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@git.project.com/Qasim/infra.git
     targetRevision: main
-    path: clusters/home/argocd
+    path: home/argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

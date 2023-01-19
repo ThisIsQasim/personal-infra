@@ -19,7 +19,7 @@ spec:
       source:
         repoURL: git@git.project.com/Qasim/infra.git
         targetRevision: main
-        path: clusters/home/apps/{{app}}
+        path: home/apps/{{app}}
       destination:
         server: https://kubernetes.default.svc
       syncPolicy:
