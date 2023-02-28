@@ -17,10 +17,34 @@ spec:
       labels:
         app: metube
     spec:
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
+      initContainers:
+      - args:
+        - -c
+        - modprobe iptable_nat
+        command:
+        - /bin/sh
+        image: public.ecr.aws/docker/library/busybox
+        name: sysctl
+        securityContext:
+          privileged: true        
+        volumeMounts:
+        - mountPath: /lib/modules
+          name: modules
       containers:
+      - image: masipcat/wireguard-go
+        imagePullPolicy: Always
+        name: wireguard
+        volumeMounts:
+        - mountPath: /etc/wireguard
+          name: wireguard
+          readOnly: true
+        resources:
+          requests:
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+        securityContext:
+          privileged: true
       - image: alexta69/metube
         imagePullPolicy: Always
         name: metube
@@ -30,7 +54,7 @@ spec:
         - name: GID
           value: "1001"
         - name: YTDL_OPTIONS
-          value: '{"proxy": "socks5://y.y.y.y
+          value: '{"concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "verbose": true}'
         volumeMounts:
         - mountPath: /downloads
           name: downloads
@@ -51,11 +75,21 @@ spec:
             cpu: "100m"
           limits:
             memory: "512Mi"
+        securityContext:
+          runAsUser: 1001
+          runAsGroup: 1001
       volumes:
         - name: downloads
           hostPath:
             path: /mnt/external/Downloads/ytdl
             type: Directory
+        - name: modules
+          hostPath:
+            path: /lib/modules
+            type: Directory
+        - name: wireguard
+          secret:
+            secretName: wireguard
 ---
 apiVersion: v1
 kind: Service

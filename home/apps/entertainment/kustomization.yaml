@@ -11,3 +11,17 @@ resources:
 - ombi.yaml
 - transmission.yaml
 - metube.yaml
+
+generators:
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: secrets
+    secretFrom:
+    - metadata:
+        name: wireguard
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      files:
+      - wg0.conf=./wireguard.enc.ini
