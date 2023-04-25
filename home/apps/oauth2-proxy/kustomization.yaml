@@ -10,7 +10,7 @@ resources:
 helmChartInflationGenerator:
 - chartName: oauth2-proxy
   chartRepoUrl: https://oauth2-proxy.github.io/manifests
-  chartVersion: 6.2.7
+  chartVersion: 6.12.0
   releaseName: oauth2-proxy
   values: values.yaml
 
@@ -23,8 +23,3 @@ generators:
       name: secrets
     files:
       - ./oauth2-proxy.enc.yaml
-
-images:
-- name: quay.io/oauth2-proxy/oauth2-proxy
-  newName: docker.io/thisisqasim/oauth2-proxy
-  newTag: latest
