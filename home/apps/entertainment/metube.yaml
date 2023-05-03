@@ -45,7 +45,7 @@ spec:
             memory: "64Mi"
         securityContext:
           privileged: true
-      - image: alexta69/metube
+      - image: ghcr.io/alexta69/metube:2023-03-25
         imagePullPolicy: Always
         name: metube
         env:
@@ -54,7 +54,7 @@ spec:
         - name: GID
           value: "1001"
         - name: YTDL_OPTIONS
-          value: '{"concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "verbose": true}'
+          value: '{"concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "nopart": true, "verbose": true}'
         volumeMounts:
         - mountPath: /downloads
           name: downloads
