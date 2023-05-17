@@ -11,6 +11,7 @@ spec:
       - app: smarter-device-manager
       - app: oauth2-proxy
       - app: external-dns
+      - app: utilities
   template:
     metadata:
       name: '{{app}}'

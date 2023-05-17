@@ -1,0 +1,97 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hammond
+  labels:
+    app: hammond
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hammond
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hammond
+    spec:
+      containers:
+      - image: akhilrex/hammond:latest
+        imagePullPolicy: Always
+        name: hammond
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /assets
+          name: assets
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/utilities/hammond/config
+            type: Directory
+        - name: assets
+          hostPath:
+            path: /home/utilities/hammond/assets
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hammond
+  labels:
+    app: hammond
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app: hammond
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hammond
+  labels:
+    app: hammond
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+spec:
+  tls:
+  - hosts:
+    - hammond.home.com
+  rules:
+  - host: hammond.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hammond
+            port:
+              number: 80
