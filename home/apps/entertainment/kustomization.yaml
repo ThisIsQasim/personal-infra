@@ -8,7 +8,6 @@ resources:
 - prowlarr.yaml
 - sonarr.yaml
 - radarr.yaml
-- jackett.yaml
 - ombi.yaml
 - transmission.yaml
 - metube.yaml
