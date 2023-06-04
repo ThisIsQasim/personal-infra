@@ -5,6 +5,7 @@ resources:
 - namespace.yaml
 - heimdall.yaml
 - jellyfin.yaml
+- prowlarr.yaml
 - sonarr.yaml
 - radarr.yaml
 - jackett.yaml
