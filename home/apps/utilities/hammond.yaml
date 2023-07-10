@@ -18,7 +18,7 @@ spec:
         app: hammond
     spec:
       containers:
-      - image: akhilrex/hammond:latest
+      - image: ghcr.io/alfhou/hammond:latest
         imagePullPolicy: Always
         name: hammond
         volumeMounts:
