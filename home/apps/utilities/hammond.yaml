@@ -52,6 +52,8 @@ spec:
           hostPath:
             path: /home/utilities/hammond/assets
             type: Directory
+      nodeSelector:
+        disk-type: media
 ---
 apiVersion: v1
 kind: Service

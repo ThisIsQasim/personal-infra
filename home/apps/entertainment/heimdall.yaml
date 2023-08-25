@@ -53,6 +53,8 @@ spec:
           hostPath:
             path: /home/entertainment/heimdall
             type: Directory
+      nodeSelector:
+        disk-type: media
 ---
 apiVersion: v1
 kind: Service

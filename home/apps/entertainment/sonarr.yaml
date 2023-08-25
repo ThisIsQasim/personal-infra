@@ -59,6 +59,8 @@ spec:
           hostPath:
             path: /mnt/external
             type: Directory
+      nodeSelector:
+        disk-type: media
 ---
 apiVersion: v1
 kind: Service

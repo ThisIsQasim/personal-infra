@@ -84,3 +84,5 @@ spec:
           hostPath:
             path: /mnt/external/media
             type: Directory
+      nodeSelector:
+        disk-type: media

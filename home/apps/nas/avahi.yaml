@@ -86,3 +86,5 @@ spec:
         - name: tmpfs
           emptyDir:
             medium: Memory
+      nodeSelector:
+        disk-type: media

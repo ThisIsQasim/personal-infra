@@ -90,6 +90,8 @@ spec:
         - name: wireguard
           secret:
             secretName: wireguard
+      nodeSelector:
+        disk-type: media
 ---
 apiVersion: v1
 kind: Service
