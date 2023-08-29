@@ -1,0 +1,244 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+data:
+  config.yml: |
+    mqtt:
+      host: "mqtt.example.com"
+      port: 1883
+      user: admin
+      password: "<your_mqtt_password>"
+    detectors:
+      coral1:
+        type: edgetpu
+        device: pci:0
+    ffmpeg:
+      hwaccel_args: preset-vaapi
+    cameras:
+      # Define at least one camera
+      hikvision-1:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-2:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        motion:
+          mask:
+            - 1280,409,716,164,449,108,0,78,0,0,1280,0
+        detect:
+          width: 1280
+          height: 720
+      hikvision-3:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-4:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-5:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-6:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-7:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      hikvision-8:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+      pollo-1:
+        ffmpeg:
+          inputs:
+            - path: rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+              roles:
+                - detect
+                - rtmp
+        detect:
+          width: 1280
+          height: 720
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 5000
+      protocol: TCP
+      targetPort: http
+    - name: rtmp
+      port: 1935
+      protocol: TCP
+      targetPort: rtmp
+  selector:
+    app: frigate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: frigate
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      containers:
+      - name: frigate
+        image: "ghcr.io/blakeblackshear/frigate:0.12.1"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 5000
+          protocol: TCP
+        - name: rtmp
+          containerPort: 1935
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+            scheme: HTTP
+        env:
+        - name: LIBVA_DRIVER_NAME
+          value: i965
+        envFrom:
+        - secretRef:
+            name: frigate
+        volumeMounts:
+          - mountPath: /config
+            name: config
+          - mountPath: /data
+            name: data
+          - name: dshm
+            mountPath: /dev/shm
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "1Gi"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+            smarter-devices/apex_0: 1
+          limits:
+            memory: "2Gi"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+            smarter-devices/apex_0: 1
+        securityContext:
+          capabilities:
+            add: ["SYS_ADMIN", "CAP_PERFMON"]
+      volumes:
+      - name: config
+        configMap:
+          name: frigate
+      - name: data
+        emptyDir: {}
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+      nodeSelector:
+        disk-type: recordings
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frigate
+  labels:
+    app: frigate
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+spec:
+  tls:
+  - hosts:
+    - frigate.home.com
+  rules:
+  - host: frigate.home.com
+    http:
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+          backend:
+            service:
+              name: frigate
+              port:
+                name: http

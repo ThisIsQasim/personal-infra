@@ -4,3 +4,18 @@ namespace: utilities
 resources:
 - namespace.yaml
 - hammond.yaml
+- frigate.yaml
+
+generators:
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: secrets
+    secretFrom:
+    - metadata:
+        name: frigate
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./frigate.enc.env
