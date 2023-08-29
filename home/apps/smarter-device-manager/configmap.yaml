@@ -8,6 +8,8 @@ data:
         - devicematch: ^snd$
           nummaxdevices: 20
         - devicematch: ^dri.*$
-          nummaxdevices: 20
+          nummaxdevices: 10
         - devicematch: ^rtc0$
           nummaxdevices: 20
+        - devicematch: ^apex_.*$
+          nummaxdevices: 10
