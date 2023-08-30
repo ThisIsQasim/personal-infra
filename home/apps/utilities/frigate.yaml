@@ -18,12 +18,32 @@ data:
         device: pci:0
     ffmpeg:
       hwaccel_args: preset-vaapi
+    go2rtc:
+      streams:
+        hikvision-1:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-2:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-3:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-4:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-5:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-6:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-7:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        hikvision-8:
+          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        pollo-1:
+          - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
     cameras:
       # Define at least one camera
       hikvision-1:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-1
               roles:
                 - detect
         detect:
@@ -32,7 +52,7 @@ data:
       hikvision-2:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-2
               roles:
                 - detect
         motion:
@@ -44,7 +64,7 @@ data:
       hikvision-3:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-3
               roles:
                 - detect
         detect:
@@ -53,7 +73,7 @@ data:
       hikvision-4:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-4
               roles:
                 - detect
         detect:
@@ -62,7 +82,7 @@ data:
       hikvision-5:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-5
               roles:
                 - detect
         detect:
@@ -71,7 +91,7 @@ data:
       hikvision-6:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-6
               roles:
                 - detect
         detect:
@@ -80,7 +100,7 @@ data:
       hikvision-7:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-7
               roles:
                 - detect
         detect:
@@ -89,7 +109,7 @@ data:
       hikvision-8:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/hikvision-8
               roles:
                 - detect
         detect:
@@ -98,7 +118,7 @@ data:
       pollo-1:
         ffmpeg:
           inputs:
-            - path: rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+            - path: rtsp://127.0.0.1:8554/pollo-1
               roles:
                 - detect
         detect:
