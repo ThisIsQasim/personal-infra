@@ -8,10 +8,10 @@ metadata:
 data:
   config.yml: |
     mqtt:
-      host: "mqtt.example.com"
+      host: mqtt
       port: 1883
-      user: admin
-      password: "<your_mqtt_password>"
+      user: mqtt
+      password: "{FRIGATE_MQTT_PASSWORD}"
     detectors:
       coral1:
         type: edgetpu

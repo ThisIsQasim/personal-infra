@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt
+  labels:
+    app: mqtt
+data:
+  mosquitto.conf: |
+    listener 1883
+    persistence true
+    persistence_location /mosquitto/data/
+
+    log_dest stdout
+
+    allow_anonymous false
+    password_file /passwd/file
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt
+  labels:
+    app: mqtt
+spec:
+  ports:
+  - port: 1883
+  type: ClusterIP
+  selector:
+    app: mqtt
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt
+  labels:
+    app: mqtt
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mqtt
+  template:
+    metadata:
+      labels:
+        app: mqtt
+    spec:
+      initContainers:
+      - name: passwd
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2
+        imagePullPolicy: Always
+        command:
+        - /bin/sh
+        - -c
+        - mosquitto_passwd -c -b /passwd/file ${MQTT_USERNAME} ${MQTT_PASSWORD}
+        envFrom:
+        - secretRef:
+            name: mqtt
+        volumeMounts:
+        - name: passwd
+          mountPath: /passwd
+      containers:
+      - name: mqtt
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 200m
+          limits:
+            memory: "1Gi"
+        ports:
+        - containerPort: 1883
+        readinessProbe:
+          tcpSocket:
+            port: 1883
+        volumeMounts:
+        - name: config
+          mountPath: /mosquitto/config
+        - name: passwd
+          mountPath: /passwd
+        - name: database
+          mountPath: /mosquitto/data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      volumes:
+      - name: config
+        configMap:
+          name: mqtt
+      - name: passwd
+        emptyDir: {}
+      - name: database
+        hostPath:
+          path: /home/utilities/mqtt
+          type: Directory
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 1883
+        runAsUser: 1883
+      nodeSelector:
+        disk-type: recordings

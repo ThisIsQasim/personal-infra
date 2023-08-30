@@ -5,6 +5,7 @@ resources:
 - namespace.yaml
 - hammond.yaml
 - frigate.yaml
+- mqtt.yaml
 
 generators:
   - |
@@ -19,3 +20,9 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./frigate.enc.env
+    - metadata:
+        name: mqtt
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./mqtt.enc.env
