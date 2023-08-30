@@ -4,8 +4,9 @@ namespace: utilities
 resources:
 - namespace.yaml
 - hammond.yaml
-- frigate.yaml
 - mqtt.yaml
+- frigate.yaml
+- home-assistant.yaml
 
 generators:
   - |

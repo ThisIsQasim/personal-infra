@@ -8,13 +8,14 @@ metadata:
 data:
   mosquitto.conf: |
     listener 1883
+
     persistence true
     persistence_location /mosquitto/data/
 
-    log_dest stdout
-
     allow_anonymous false
     password_file /passwd/file
+
+    log_dest stdout
 ---
 apiVersion: v1
 kind: Service
