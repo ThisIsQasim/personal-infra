@@ -16,6 +16,7 @@ data:
     password_file /passwd/file
 
     log_dest stdout
+    log_type all
 ---
 apiVersion: v1
 kind: Service
@@ -26,7 +27,7 @@ metadata:
 spec:
   ports:
   - port: 1883
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: mqtt
 ---
