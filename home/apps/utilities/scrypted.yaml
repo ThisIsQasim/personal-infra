@@ -1,34 +1,26 @@
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: home-assistant
-  labels:
-    app: home-assistant
-data:
----
-apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: home-assistant
-  name: home-assistant
+    app: scrypted
+  name: scrypted
 spec:
   type: ClusterIP
   ports:
-  - port: 8123
+  - port: 11080
     targetPort: http
     protocol: TCP
     name: http
   selector:
-    app: home-assistant
+    app: scrypted
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: home-assistant
-  name: home-assistant
+    app: scrypted
+  name: scrypted
 spec:
   revisionHistoryLimit: 3
   replicas: 1
@@ -36,45 +28,52 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: home-assistant
+      app: scrypted
   template:
     metadata:
       labels:
-        app: home-assistant
+        app: scrypted
     spec:
-#      securityContext:
-#        fsGroup: 33
-#        fsGroupChangePolicy: "OnRootMismatch"
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - name: home-assistant-app
-        image: "ghcr.io/home-assistant/home-assistant:latest"
+      - name: scrypted
+        image: "koush/scrypted:full"
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
-        env:
-        - name: TZ
-          value: Asia/Karachi
+        envFrom:
+        - secretRef:
+            name: scrypted
         ports:
           - name: http
-            containerPort: 8123
+            containerPort: 11080
             protocol: TCP
-        resources: {}
+        resources:
+          requests:
+            cpu: "2"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+            smarter-devices/apex_0: 1
+          limits:
+            memory: "3Gi"
+            smarter-devices/dri_card0: 1
+            smarter-devices/dri_renderD128: 1
+            smarter-devices/apex_0: 1
         livenessProbe:
           tcpSocket:
-            port: 8123
+            port: 11080
         readinessProbe:
           tcpSocket:
-            port: 8123
+            port: 11080
         volumeMounts:
-          - name: config
-            mountPath: /config
+        - name: data
+          mountPath: /server/volume
       restartPolicy: Always
       volumes:
-      - name: config
+      - name: data
         hostPath:
-          path: /home/utilities/home-assistant
+          path: /home/utilities/scrypted
           type: Directory
       nodeSelector:
         disk-type: recordings
@@ -82,9 +81,9 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: home-assistant
+  name: scrypted
   labels:
-    app: home-assistant
+    app: scrypted
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
@@ -95,15 +94,15 @@ metadata:
 spec:
   tls:
   - hosts:
-    - home-assistant.home.com
+    - scrypted.home.com
   rules:
-  - host: home-assistant.home.com
+  - host: scrypted.home.com
     http:
       paths:
         - path: /
           pathType: "ImplementationSpecific"
           backend:
             service:
-              name: home-assistant
+              name: scrypted
               port:
                 name: http

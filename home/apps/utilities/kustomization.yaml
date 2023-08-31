@@ -6,7 +6,7 @@ resources:
 - hammond.yaml
 - mqtt.yaml
 - frigate.yaml
-- home-assistant.yaml
+- scrypted.yaml
 
 generators:
   - |
@@ -27,3 +27,9 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./mqtt.enc.env
+    - metadata:
+        name: scrypted
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./scrypted.enc.env
