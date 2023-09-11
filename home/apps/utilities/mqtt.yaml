@@ -16,7 +16,6 @@ data:
     password_file /passwd/file
 
     log_dest stdout
-    log_type all
 ---
 apiVersion: v1
 kind: Service

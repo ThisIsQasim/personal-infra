@@ -39,7 +39,7 @@ spec:
       containers:
       - name: scrypted
         image: "koush/scrypted:full"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           privileged: false
         envFrom:

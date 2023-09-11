@@ -16,8 +16,30 @@ data:
       coral1:
         type: edgetpu
         device: pci:0
+    detect:
+      enabled: True
+      width: 1280
+      height: 720
+      fps: 5
+    objects:
+      track:
+        - person
+        - car
+        - motorcycle
+        - bicycle
+    record:
+      enabled: True
+      retain:
+        days: 7
+        mode: motion
+      events:
+        retain:
+          default: 14
+          mode: active_objects
     ffmpeg:
       hwaccel_args: preset-vaapi
+      output_args:
+        record: preset-record-generic-audio-copy
     go2rtc:
       streams:
         hikvision-1:
@@ -38,6 +60,11 @@ data:
           - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         pollo-1:
           - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+          - "ffmpeg:pollo-1#audio=aac"
+      webrtc:
+        candidates:
+          - y.y.y.y
+          - stun:18555
     cameras:
       # Define at least one camera
       hikvision-1:
@@ -47,8 +74,8 @@ data:
               roles:
                 - detect
         detect:
-          width: 1280
-          height: 720
+          width: 2560
+          height: 1440
       hikvision-2:
         ffmpeg:
           inputs:
@@ -57,28 +84,19 @@ data:
                 - detect
         motion:
           mask:
-            - 1280,409,716,164,449,108,0,78,0,0,1280,0
-        detect:
-          width: 1280
-          height: 720
+          - 1280,409,716,164,449,108,0,78,0,0,1280,0
       hikvision-3:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-3
               roles:
                 - detect
-        detect:
-          width: 1280
-          height: 720
       hikvision-4:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-4
               roles:
                 - detect
-        detect:
-          width: 1280
-          height: 720
       hikvision-5:
         ffmpeg:
           inputs:
@@ -86,17 +104,23 @@ data:
               roles:
                 - detect
         detect:
-          width: 1280
-          height: 720
+          width: 2560
+          height: 1440
+          stationary:
+            interval: 0
+            threshold: 10
+        motion:
+          mask:
+          - 2560,0,2560,130,2232,130,1192,178,0,312,0,0
       hikvision-6:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-6
               roles:
                 - detect
-        detect:
-          width: 1280
-          height: 720
+        motion:
+          mask:
+            - 1280,0,1280,266,570,0
       hikvision-7:
         ffmpeg:
           inputs:
@@ -104,26 +128,26 @@ data:
               roles:
                 - detect
         detect:
-          width: 1280
-          height: 720
+          stationary:
+            interval: 0
+            threshold: 10
       hikvision-8:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-8
               roles:
                 - detect
-        detect:
-          width: 1280
-          height: 720
       pollo-1:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/pollo-1
               roles:
                 - detect
-        detect:
-          width: 1280
-          height: 720
+        motion:
+          mask:
+          - 956,0,937,124,813,82,559,100,567,0
+    ui:
+      live_mode: webrtc
 ---
 apiVersion: v1
 kind: Service
@@ -138,10 +162,28 @@ spec:
       port: 5000
       protocol: TCP
       targetPort: http
-    - name: rtsp
-      port: 8554
+  selector:
+    app: frigate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate-webrtc
+  labels:
+    app: frigate
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: y.y.y.y
+spec:
+  type: LoadBalancer
+  ports:
+    - name: webrtc-tcp
+      port: 8555
       protocol: TCP
-      targetPort: rtsp
+      targetPort: webrtc-tcp
+    - name: webrtc-udp
+      port: 8555
+      protocol: UDP
+      targetPort: webrtc-udp
   selector:
     app: frigate
 ---
@@ -165,15 +207,18 @@ spec:
     spec:
       containers:
       - name: frigate
-        image: "ghcr.io/blakeblackshear/frigate:0.12.1"
-        imagePullPolicy: IfNotPresent
+        image: "ghcr.io/blakeblackshear/frigate:stable"
+        imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 5000
           protocol: TCP
-        - name: rtsp
-          containerPort: 8554
+        - name: webrtc-tcp
+          containerPort: 8555
           protocol: TCP
+        - name: webrtc-udp
+          containerPort: 8555
+          protocol: UDP
         livenessProbe:
           httpGet:
             path: /
@@ -191,10 +236,14 @@ spec:
         - secretRef:
             name: frigate
         volumeMounts:
-          - mountPath: /config
-            name: config
-          - mountPath: /data
-            name: data
+          - name: config
+            mountPath: /config
+          - name: media
+            mountPath: /media/frigate
+          - name: recordings
+            mountPath: /media/frigate/recordings
+          - name: clips
+            mountPath: /media/frigate/clips
           - name: dshm
             mountPath: /dev/shm
         resources:
@@ -216,8 +265,18 @@ spec:
       - name: config
         configMap:
           name: frigate
-      - name: data
-        emptyDir: {}
+      - name: media
+        hostPath:
+          path: /home/utilities/frigate
+          type: Directory
+      - name: recordings
+        hostPath:
+          path: /mnt/external/backups/recordings
+          type: Directory
+      - name: clips
+        hostPath:
+          path: /mnt/external/backups/clips
+          type: Directory
       - name: dshm
         emptyDir:
           medium: Memory
