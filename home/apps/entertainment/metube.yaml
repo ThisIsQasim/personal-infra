@@ -45,7 +45,7 @@ spec:
             memory: "64Mi"
         securityContext:
           privileged: true
-      - image: ghcr.io/alexta69/metube:2023-03-25
+      - image: ghcr.io/alexta69/metube:latest
         imagePullPolicy: Always
         name: metube
         env:
