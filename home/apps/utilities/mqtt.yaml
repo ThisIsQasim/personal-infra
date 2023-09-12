@@ -23,10 +23,13 @@ metadata:
   name: mqtt
   labels:
     app: mqtt
+  annotations:
+    kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
   ports:
   - port: 1883
   type: LoadBalancer
+  externalTrafficPolicy: Local
   selector:
     app: mqtt
 ---

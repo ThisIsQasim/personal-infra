@@ -172,9 +172,10 @@ metadata:
   labels:
     app: frigate
   annotations:
-    metallb.universe.tf/loadBalancerIPs: y.y.y.y
+    kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
     - name: webrtc-tcp
       port: 8555
