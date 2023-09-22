@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: utilities
 resources:
 - namespace.yaml
+- homepage.yaml
 - hammond.yaml
 - mqtt.yaml
 - frigate.yaml
@@ -21,6 +22,12 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./frigate.enc.env
+    - metadata:
+        name: homepage
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./homepage.enc.env
     - metadata:
         name: mqtt
         annotations:

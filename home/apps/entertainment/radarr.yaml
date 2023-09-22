@@ -89,6 +89,15 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
     nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
     nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    gethomepage.dev/description: Movies downloader
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Entertainment
+    gethomepage.dev/icon: radarr.png
+    gethomepage.dev/name: Radarr
+    gethomepage.dev/weight: "20"
+    gethomepage.dev/widget.type: radarr
+    gethomepage.dev/widget.url: http://radarr.entertainment.svc:7878
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
 spec:
   tls:
   - hosts:

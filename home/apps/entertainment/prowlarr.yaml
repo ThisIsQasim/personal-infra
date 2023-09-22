@@ -83,6 +83,15 @@ metadata:
     nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth
     nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
     nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    gethomepage.dev/description: Torrent indexer for *arr stack
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Entertainment
+    gethomepage.dev/icon: prowlarr.png
+    gethomepage.dev/name: Prowlarr
+    gethomepage.dev/weight: "100"
+    gethomepage.dev/widget.type: prowlarr
+    gethomepage.dev/widget.url: http://prowlarr.entertainment.svc:9696
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
 spec:
   tls:
   - hosts:

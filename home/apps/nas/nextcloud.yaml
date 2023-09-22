@@ -193,6 +193,16 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    gethomepage.dev/description: File Storage
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Utilities
+    gethomepage.dev/icon: nextcloud.png
+    gethomepage.dev/name: Nextcloud
+    gethomepage.dev/weight: "10"
+    gethomepage.dev/widget.type: nextcloud
+    gethomepage.dev/widget.url: http://nextcloud.nas.svc:8080
+    gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_NEXTCLOUD_USERNAME}}"
+    gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_NEXTCLOUD_PASSWORD}}"
 spec:
   tls:
   - hosts:

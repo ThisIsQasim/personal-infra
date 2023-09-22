@@ -91,6 +91,12 @@ metadata:
     nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
     nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    gethomepage.dev/description: HomeKit Secure Video Bridge
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Home Automation
+    gethomepage.dev/icon: scrypted.png
+    gethomepage.dev/name: Scrypted
+    gethomepage.dev/weight: "10"
 spec:
   tls:
   - hosts:

@@ -86,9 +86,9 @@ metadata:
 spec:
   tls:
   - hosts:
-    - home.com
+    - heimdall.home.com
   rules:
-  - host: home.com
+  - host: heimdall.home.com
     http:
       paths:
       - path: /
