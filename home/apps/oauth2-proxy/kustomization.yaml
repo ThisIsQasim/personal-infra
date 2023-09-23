@@ -7,13 +7,12 @@ resources:
 - legacy.yaml
 - ups.yaml
 
-helmChartInflationGenerator:
-- chartName: oauth2-proxy
-  chartRepoUrl: https://oauth2-proxy.github.io/manifests
-  chartVersion: 6.12.0
+helmCharts:
+- name: oauth2-proxy
+  repo: https://oauth2-proxy.github.io/manifests
   releaseName: oauth2-proxy
-  values: values.yaml
-
+  version: 6.17.0
+  valuesFile: values.yaml
 
 generators:
   - |
