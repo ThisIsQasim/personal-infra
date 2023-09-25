@@ -7,10 +7,11 @@ spec:
   - list:
       elements:
       - app: entertainment
-      - app: nas
-      - app: smarter-device-manager
-      - app: oauth2-proxy
       - app: external-dns
+      # - app: grafana
+      - app: nas
+      - app: oauth2-proxy
+      - app: smarter-device-manager
       - app: utilities
   template:
     metadata:

@@ -42,8 +42,8 @@ spec:
             drop: ["ALL"]
         resources:
           limits:
-            cpu: 100m
-            memory: 15Mi
+            cpu: 200m
+            memory: 150Mi
           requests:
             cpu: 10m
         volumeMounts:
