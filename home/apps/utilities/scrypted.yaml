@@ -51,12 +51,12 @@ spec:
             protocol: TCP
         resources:
           requests:
-            cpu: "2"
+            cpu: "1"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
             smarter-devices/apex_0: 1
           limits:
-            memory: "3Gi"
+            memory: "4Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
             smarter-devices/apex_0: 1
