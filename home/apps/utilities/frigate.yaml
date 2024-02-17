@@ -238,7 +238,11 @@ spec:
             name: frigate
         volumeMounts:
           - name: config
+            mountPath: /config/config.yml
+            subPath: config.yml
+          - name: media
             mountPath: /config
+            subPath: config
           - name: media
             mountPath: /media/frigate
           - name: recordings
