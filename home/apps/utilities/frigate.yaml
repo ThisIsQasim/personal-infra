@@ -107,7 +107,7 @@ data:
           width: 2560
           height: 1440
           stationary:
-            interval: 0
+            interval: 1
             threshold: 10
         motion:
           mask:
@@ -129,7 +129,7 @@ data:
                 - detect
         detect:
           stationary:
-            interval: 0
+            interval: 1
             threshold: 10
       hikvision-8:
         ffmpeg:
