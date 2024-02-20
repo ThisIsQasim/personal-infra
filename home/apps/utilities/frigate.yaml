@@ -249,6 +249,8 @@ spec:
             mountPath: /media/frigate/recordings
           - name: clips
             mountPath: /media/frigate/clips
+          - name: exports
+            mountPath: /media/frigate/exports
           - name: dshm
             mountPath: /dev/shm
         resources:
@@ -281,6 +283,10 @@ spec:
       - name: clips
         hostPath:
           path: /mnt/external/backups/clips
+          type: Directory
+      - name: exports
+        hostPath:
+          path: /mnt/external/backups/exports
           type: Directory
       - name: dshm
         emptyDir:
