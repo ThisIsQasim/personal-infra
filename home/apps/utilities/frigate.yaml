@@ -261,7 +261,7 @@ spec:
             smarter-devices/dri_renderD128: 1
             smarter-devices/apex_0: 1
           limits:
-            memory: "4Gi"
+            memory: "6Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
             smarter-devices/apex_0: 1
