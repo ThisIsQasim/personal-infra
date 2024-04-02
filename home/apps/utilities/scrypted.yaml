@@ -42,6 +42,9 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: false
+        env:
+        - name: DEBUG
+          value: "HAP-NodeJS:*"
         envFrom:
         - secretRef:
             name: scrypted
