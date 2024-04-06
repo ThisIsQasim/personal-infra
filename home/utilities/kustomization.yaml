@@ -9,6 +9,14 @@ resources:
 - frigate.yaml
 - scrypted.yaml
 
+helmCharts:
+- name: pihole
+  repo: https://mojo2600.github.io/pihole-kubernetes/
+  releaseName: pihole
+  version: 2.23.0
+  valuesFile: pihole.yaml
+
+
 generators:
   - |
     apiVersion: viaduct.ai/v1
