@@ -1,20 +1,223 @@
-# will create kubernees ingress
-ingress:
-  enabled: true
-  hosts:
-  - pihole.home.com
-
-# will create kubernetes services for web admin
-serviceWeb:
-  type: ClusterIP
-  
-# will set your admin password for the web inteface
-adminPassword: "my!admin3password"
-  
-# create a kubernetes service and expose
-# port 53 outside of cluster on the local network
-serviceDns:
-  mixedService: true
+---
+apiVersion: v1
+data:
+  02-custom.conf: |
+    addn-hosts=/etc/addn-hosts
+    dhcp-option=6,y.y.y.y
+  05-pihole-custom-cname.conf: ""
+  addn-hosts: ""
+kind: ConfigMap
+metadata:
+  labels:
+    app: pihole
+  name: pihole-custom-dnsmasq
+---
+apiVersion: v1
+data:
+  password: bXkhYWRtaW4zcGFzc3dvcmQ=
+kind: Secret
+metadata:
+  labels:
+    app: pihole  
+  name: pihole-password
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pihole
+  name: pihole-dhcp
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - name: client-udp
+    port: 67
+    protocol: UDP
+    targetPort: client-udp
+  selector:
+    app: pihole
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pihole
+  name: pihole-dns
+spec:
+  externalTrafficPolicy: Local
   loadBalancerIP: y.y.y.y
+  ports:
+  - name: dns
+    port: 53
+    protocol: TCP
+    targetPort: dns
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: dns-udp
+  selector:
+    app: pihole
   type: LoadBalancer
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pihole
+  name: pihole-web
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app: pihole
+  
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pihole
+  name: pihole
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pihole
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum.config.adlists: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
+        checksum.config.blacklist: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
+        checksum.config.dnsmasqConfig: 3d188d97e0931a7dce204656dbfee0f62f3f7d3b7d0b0aeb4673655cf2679ce
+        checksum.config.regex: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
+        checksum.config.staticDhcpConfig: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
+        checksum.config.whitelist: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
+      labels:
+        app: pihole
+    spec:
+      containers:
+      - env:
+        - name: WEB_PORT
+          value: "80"
+        - name: VIRTUAL_HOST
+          value: pi.hole
+        - name: WEBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: pihole-password
+        - name: PIHOLE_DNS_
+          value: 8.8.8.8;8.8.4.4
+        image: pihole/pihole:2024.03.2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /admin/index.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        name: pihole
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 53
+          name: dns
+          protocol: TCP
+        - containerPort: 53
+          name: dns-udp
+          protocol: UDP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 67
+          name: client-udp
+          protocol: UDP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /admin/index.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+        resources: {}
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - mountPath: /etc/pihole
+          name: config
+        - mountPath: /etc/dnsmasq.d/02-custom.conf
+          name: custom-dnsmasq
+          subPath: 02-custom.conf
+        - mountPath: /etc/addn-hosts
+          name: custom-dnsmasq
+          subPath: addn-hosts
+      dnsConfig:
+        nameservers:
+        - 127.0.0.1
+        - 8.8.8.8
+      dnsPolicy: None
+      hostNetwork: false
+      hostname: null
+      volumes:
+      - emptyDir: {}
+        name: config
+      - configMap:
+          defaultMode: 420
+          name: pihole-custom-dnsmasq
+        name: custom-dnsmasq
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: pihole
+  name: pihole
+spec:
+  rules:
+  - host: pihole.home.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: pihole-web
+            port:
+              name: http
+        path: /
+        pathType: ImplementationSpecific
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    helm.sh/hook: test
+  name: pihole-smoke-test
+spec:
+  containers:
+  - command:
+    - sh
+    - -c
+    - curl http://pihole-web:80/
+    image: curlimages/curl
+    imagePullPolicy: IfNotPresent
+    name: hook1-container
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 0

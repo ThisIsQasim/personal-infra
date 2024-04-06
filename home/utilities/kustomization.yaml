@@ -6,6 +6,7 @@ resources:
 - homepage.yaml
 - hammond.yaml
 - ups.yaml
+- pihole.yaml
 
 helmCharts:
 - name: oauth2-proxy
@@ -13,12 +14,6 @@ helmCharts:
   releaseName: oauth2-proxy
   version: 7.1.0
   valuesFile: oauth2-proxy.yaml
-- name: pihole
-  repo: https://mojo2600.github.io/pihole-kubernetes/
-  releaseName: pihole
-  version: 2.23.0
-  valuesFile: pihole.yaml
-
 
 generators:
   - |
