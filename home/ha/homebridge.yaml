@@ -95,12 +95,16 @@ metadata:
     nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
     nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
     nginx.ingress.kubernetes.io/proxy-body-size: 50m
-    gethomepage.dev/description: HomeKit Secure Video Bridge
+    gethomepage.dev/description: HomeKit bridge
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: homebridge.png
     gethomepage.dev/name: homebridge
-    gethomepage.dev/weight: "10"
+    gethomepage.dev/weight: "30"
+    gethomepage.dev/widget.type: homebridge
+    gethomepage.dev/widget.url: http://homebridge.ha.svc:8581
+    gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_HOMEBRIDGE_USERNAME}}"
+    gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_HOMEBRIDGE_PASSWORD}}"
 spec:
   tls:
   - hosts:

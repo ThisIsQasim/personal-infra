@@ -21,16 +21,6 @@ data:
   custom.js: "" 
   bookmarks.yaml: ""
   services.yaml: |
-    - Home Automation:
-        - Homebridge:
-            href: https://homebridge.home.com/
-            icon: homebridge.png
-            description: HomeKit bridge
-            widget:
-                type: homebridge
-                url: https://homebridge.home.com
-                username: {{HOMEPAGE_VAR_HOMEBRIDGE_USERNAME}}
-                password: {{HOMEPAGE_VAR_HOMEBRIDGE_PASSWORD}}
     - Networking:
         - PiHole:
             href: https://pdns.home.com/admin/
@@ -41,7 +31,7 @@ data:
                 url: https://pdns.home.com
                 key: {{HOMEPAGE_VAR_PIHOLE_KEY}}
         - Unifi:
-            href: https://unifi.home.com/
+            href: https://y.y.y.y
             icon: unifi-controller.png
             description: Network Management Console
     - Utilities:
@@ -55,7 +45,7 @@ data:
             description: Personal CRM
   widgets.yaml: |
     - unifi_console:
-        url: https://unifi.home.com
+        url: https://y.y.y.y
         username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
         password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
     - kubernetes:
