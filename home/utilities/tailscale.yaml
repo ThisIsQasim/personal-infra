@@ -55,6 +55,8 @@ spec:
         app: tailscale
     spec:
       serviceAccount: tailscale
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       initContainers:
       - image: ghcr.io/tailscale/tailscale
         name: sysctler
@@ -64,6 +66,18 @@ spec:
         args:
           - -c
           - sysctl -w net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1
+      - name: modprobe
+        image: ghcr.io/tailscale/tailscale
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /lib/modules
+          readOnly: true
+          name: modules
+        command: ["/bin/sh"]
+        args:
+          - -c
+          - modprobe tun ip_tables ip6_tables
       containers:
       - image: ghcr.io/tailscale/tailscale
         name: tailscale
@@ -71,7 +85,7 @@ spec:
         - name: TS_HOSTNAME
           value: f8k
         - name: TS_EXTRA_ARGS
-          value: "--login-server https://headscale.project.com:443 --advertise-exit-node --accept-routes"
+          value: "--login-server https://headscale.project.com:443 --advertise-routes=y.y.y.y
         - name: TS_TAILSCALED_EXTRA_ARGS
           value: "--port=31643"
         - name: TS_KUBE_SECRET
@@ -79,7 +93,7 @@ spec:
         - name: TS_NAMESPACE
           value: "tailscale"
         - name: TS_USERSPACE
-          value: "true"
+          value: "false"
         - name: TS_AUTHKEY
           valueFrom:
             secretKeyRef:
@@ -89,13 +103,28 @@ spec:
         - name: TS_ROUTES
           value: ""
         securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
         resources:
           requests:
             cpu: 100m
           limits:
             memory: 512M
+        volumeMounts:
+        - mountPath: /dev/net/tun
+          name: tun-device
+      volumes:
+      - name: tun-device
+        hostPath:
+          path: /dev/net/tun
+      - name: modules
+        hostPath:
+          path: /lib/modules
+          type: Directory
 ---
 apiVersion: v1
 kind: Service
