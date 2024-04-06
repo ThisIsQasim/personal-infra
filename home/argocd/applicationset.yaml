@@ -11,7 +11,6 @@ spec:
       # - app: grafana
       - app: ha
       - app: nas
-      - app: oauth2-proxy
       - app: smarter-device-manager
       - app: utilities
   template:

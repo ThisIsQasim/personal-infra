@@ -5,8 +5,14 @@ resources:
 - namespace.yaml
 - homepage.yaml
 - hammond.yaml
+- ups.yaml
 
 helmCharts:
+- name: oauth2-proxy
+  repo: https://oauth2-proxy.github.io/manifests
+  releaseName: oauth2-proxy
+  version: 7.1.0
+  valuesFile: oauth2-proxy.yaml
 - name: pihole
   repo: https://mojo2600.github.io/pihole-kubernetes/
   releaseName: pihole
@@ -19,7 +25,7 @@ generators:
     apiVersion: viaduct.ai/v1
     kind: ksops
     metadata:
-      name: secrets
+      name: secret-envs
     secretFrom:
     - metadata:
         name: homepage
@@ -27,3 +33,10 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./homepage.enc.env
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: secret-files
+    files:
+      - ./oauth2-proxy.enc.yaml
