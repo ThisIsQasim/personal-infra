@@ -7,6 +7,7 @@ resources:
 - hammond.yaml
 - ups.yaml
 - pihole.yaml
+- tailscale.yaml
 
 helmCharts:
 - name: oauth2-proxy
@@ -34,6 +35,12 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./pihole.enc.env
+    - metadata:
+        name: tailscale
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "false"
+      envs:
+      - ./tailscale.enc.env
   - |
     apiVersion: viaduct.ai/v1
     kind: ksops
