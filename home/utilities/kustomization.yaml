@@ -28,6 +28,12 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./homepage.enc.env
+    - metadata:
+        name: pihole
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./pihole.enc.env
   - |
     apiVersion: viaduct.ai/v1
     kind: ksops

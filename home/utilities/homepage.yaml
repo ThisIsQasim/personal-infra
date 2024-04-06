@@ -22,14 +22,6 @@ data:
   bookmarks.yaml: ""
   services.yaml: |
     - Networking:
-        - PiHole:
-            href: https://pdns.home.com/admin/
-            icon: pi-hole.png
-            description: DNS, DHCP & Ad Blocker
-            widget:
-                type: pihole
-                url: https://pdns.home.com
-                key: {{HOMEPAGE_VAR_PIHOLE_KEY}}
         - Unifi:
             href: https://y.y.y.y
             icon: unifi-controller.png

@@ -71,6 +71,6 @@ spec:
         - --policy=upsert-only
         - --provider=pihole
         # Change this to the actual address of your Pi-hole web server
-        - --pihole-server=https://pdns.home.com
+        - --pihole-server=http://pihole-web.utilities.svc
       securityContext:
         fsGroup: 65534 # For ExternalDNS to be able to read Kubernetes token files

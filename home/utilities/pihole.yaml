@@ -3,7 +3,9 @@ apiVersion: v1
 data:
   02-custom.conf: |
     addn-hosts=/etc/addn-hosts
-    dhcp-option=6,y.y.y.y
+    rev-server=y.y.y.y
+    server=/home.home.com/y.y.y.y
+    server=//y.y.y.y
   05-pihole-custom-cname.conf: ""
   addn-hosts: ""
 kind: ConfigMap
@@ -11,16 +13,6 @@ metadata:
   labels:
     app: pihole
   name: pihole-custom-dnsmasq
----
-apiVersion: v1
-data:
-  password: bXkhYWRtaW4zcGFzc3dvcmQ=
-kind: Secret
-metadata:
-  labels:
-    app: pihole  
-  name: pihole-password
-type: Opaque
 ---
 apiVersion: v1
 kind: Service
@@ -79,7 +71,6 @@ spec:
     targetPort: https
   selector:
     app: pihole
-  
   type: ClusterIP
 ---
 apiVersion: apps/v1
@@ -89,7 +80,7 @@ metadata:
     app: pihole
   name: pihole
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: pihole
@@ -100,13 +91,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      annotations:
-        checksum.config.adlists: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
-        checksum.config.blacklist: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
-        checksum.config.dnsmasqConfig: 3d188d97e0931a7dce204656dbfee0f62f3f7d3b7d0b0aeb4673655cf2679ce
-        checksum.config.regex: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
-        checksum.config.staticDhcpConfig: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
-        checksum.config.whitelist: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546
       labels:
         app: pihole
     spec:
@@ -116,15 +100,27 @@ spec:
           value: "80"
         - name: VIRTUAL_HOST
           value: pi.hole
-        - name: WEBPASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: password
-              name: pihole-password
         - name: PIHOLE_DNS_
-          value: 8.8.8.8;8.8.4.4
+          value: 127.0.0.1#5353
+        - name: TZ
+          value: 'Asia/Karachi'
+        - name: RESOLVE_IPV6
+          value: "no"
+        - name: DNSMASQ_LISTENING
+          value: "all"
+        - name: FTLCONF_BLOCK_ESNI
+          value: "false"
+        - name: FTLCONF_EDNS0_ECS
+          value: "false"
+        - name: FTLCONF_BLOCK_ICLOUD_PR
+          value: "false"
+        - name: DNSSEC
+          value: "false"
+        envFrom:
+        - secretRef:
+            name: pihole
         image: pihole/pihole:2024.03.2
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 10
           httpGet:
@@ -170,13 +166,48 @@ spec:
         - mountPath: /etc/addn-hosts
           name: custom-dnsmasq
           subPath: addn-hosts
+      - name: dnsproxy
+        image: adguard/dnsproxy
+        imagePullPolicy: Always
+        args:
+        - --port=5353
+        - --upstream=https://dns.cloudflare.com/dns-query
+        - --fallback=https://8.8.8.8/dns-query
+        - --fallback=https://8.8.4.4/dns-query 
+        - --http3
+        - --bootstrap=8.8.8.8:53
+        - --all-servers
+        livenessProbe:
+          tcpSocket:
+            port: 5353
+        readinessProbe:
+          tcpSocket:
+            port: 5353
       dnsConfig:
         nameservers:
         - 127.0.0.1
         - 8.8.8.8
       dnsPolicy: None
       hostNetwork: false
-      hostname: null
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            preference:
+              matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - node3
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pihole
+            topologyKey: "kubernetes.io/hostname"
       volumes:
       - emptyDir: {}
         name: config
@@ -188,9 +219,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: pihole
   labels:
     app: pihole
-  name: pihole
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "PHPSESSID"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "7200"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "7200"
+    gethomepage.dev/description: DNS & Ad Blocker
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Networking
+    gethomepage.dev/icon: pi-hole.png
+    gethomepage.dev/name: pihole
+    gethomepage.dev/href: https://pihole.home.com/admin/
+    gethomepage.dev/weight: "30"
+    gethomepage.dev/widget.type: pihole
+    gethomepage.dev/widget.url: http://pihole-web.utilities.svc:80
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 spec:
   rules:
   - host: pihole.home.com
