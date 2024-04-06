@@ -5,9 +5,6 @@ resources:
 - namespace.yaml
 - homepage.yaml
 - hammond.yaml
-- mqtt.yaml
-- frigate.yaml
-- scrypted.yaml
 
 helmCharts:
 - name: pihole
@@ -25,26 +22,8 @@ generators:
       name: secrets
     secretFrom:
     - metadata:
-        name: frigate
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./frigate.enc.env
-    - metadata:
         name: homepage
         annotations:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./homepage.enc.env
-    - metadata:
-        name: mqtt
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./mqtt.enc.env
-    - metadata:
-        name: scrypted
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./scrypted.enc.env

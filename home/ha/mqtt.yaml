@@ -99,7 +99,7 @@ spec:
         emptyDir: {}
       - name: database
         hostPath:
-          path: /home/utilities/mqtt
+          path: /home/ha/mqtt
           type: Directory
       enableServiceLinks: false
       terminationGracePeriodSeconds: 30

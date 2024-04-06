@@ -4,3 +4,32 @@ namespace: ha
 resources:
 - namespace.yaml
 - homebridge.yaml
+- mqtt.yaml
+- frigate.yaml
+- scrypted.yaml
+
+generators:
+  - |
+    apiVersion: viaduct.ai/v1
+    kind: ksops
+    metadata:
+      name: secrets
+    secretFrom:
+    - metadata:
+        name: frigate
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./frigate.enc.env
+    - metadata:
+        name: mqtt
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./mqtt.enc.env
+    - metadata:
+        name: scrypted
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      envs:
+      - ./scrypted.enc.env

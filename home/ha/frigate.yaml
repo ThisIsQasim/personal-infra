@@ -274,7 +274,7 @@ spec:
           name: frigate
       - name: media
         hostPath:
-          path: /home/utilities/frigate
+          path: /home/ha/frigate
           type: Directory
       - name: recordings
         hostPath:

@@ -76,7 +76,7 @@ spec:
       volumes:
       - name: data
         hostPath:
-          path: /home/utilities/scrypted
+          path: /home/ha/scrypted
           type: Directory
       nodeSelector:
         disk-type: recordings
