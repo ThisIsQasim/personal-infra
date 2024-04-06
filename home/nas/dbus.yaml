@@ -1,0 +1,69 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dbus
+data:
+  system.conf: |
+    <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-Bus Bus Configuration 1.0//EN"
+     "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+    <busconfig>
+      <listen>unix:path=/run/dbus/system_bus_socket</listen>
+
+      <policy context="default">
+        <!-- Allow everything to be sent -->
+        <allow send_destination="*" eavesdrop="true"/>
+        <!-- Allow everything to be received -->
+        <allow eavesdrop="true"/>
+        <!-- Allow anyone to own anything -->
+        <allow own="*"/>
+        <!-- XXX: Allow all users to connect -->
+        <allow user="*"/>
+      </policy>
+
+    </busconfig>
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dbus
+  labels:
+    app: dbus
+spec:
+  selector:
+    matchLabels:
+      app: dbus
+  template:
+    metadata:
+      labels:
+        app: dbus
+    spec:
+      hostNetwork: false
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - image: thisisqasim/dbus:latest
+        imagePullPolicy: Always
+        name: dbus
+        command: ["dbus-daemon", "--config-file=/etc/dbus-1/system.conf", "--nosyslog", "--nofork", "--nopidfile"]
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /etc/dbus-1/system.conf
+          subPath: system.conf
+          name: config
+        - mountPath: /run/dbus
+          subPath: dbus
+          name: run
+        resources:
+          requests:
+            cpu: "10m"
+          limits:
+            memory: "64Mi"
+      volumes:
+        - name: config
+          configMap:
+            name: dbus
+        - name: run
+          hostPath:
+            path: /host/run
+            type: DirectoryOrCreate

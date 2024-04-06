@@ -4,6 +4,7 @@ namespace: nas
 resources:
 - namespace.yaml
 - samba.yaml
+- dbus.yaml
 - avahi.yaml
 - mysql.yaml
 - nextcloud.yaml
