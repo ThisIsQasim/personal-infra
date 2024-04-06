@@ -72,11 +72,21 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /server/volume
+        - name: run
+          mountPath: /var/run/avahi-daemon
+          subPath: avahi-daemon
+        - name: run
+          mountPath: /run/dbus
+          subPath: dbus
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/scrypted
+          type: Directory
+      - name: run
+        hostPath:
+          path: /host/run
           type: Directory
       nodeSelector:
         disk-type: recordings

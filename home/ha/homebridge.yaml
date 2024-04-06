@@ -54,7 +54,7 @@ spec:
         - name: HOMEBRIDGE_CONFIG_UI_PORT
           value: "8581"
         - name: ENABLE_AVAHI
-          value: "1"
+          value: "0"
         ports:
           - name: http
             containerPort: 8581
@@ -73,11 +73,21 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /homebridge
+        - name: run
+          mountPath: /run/avahi-daemon
+          subPath: avahi-daemon
+        - name: run
+          mountPath: /run/dbus
+          subPath: dbus
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/homebridge
+          type: Directory
+      - name: run
+        hostPath:
+          path: /host/run
           type: Directory
       nodeSelector:
         disk-type: backups
