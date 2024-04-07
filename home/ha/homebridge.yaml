@@ -73,22 +73,24 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /homebridge
-        - name: run
-          mountPath: /run/avahi-daemon
-          subPath: avahi-daemon
-        - name: run
-          mountPath: /run/dbus
-          subPath: dbus
+        - name: avahi-socket
+          mountPath: /run/avahi-daemon/socket
+        - name: dbus-socket
+          mountPath: /run/dbus/system_bus_socket
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/homebridge
           type: Directory
-      - name: run
+      - name: dbus-socket
         hostPath:
-          path: /host/run
-          type: Directory
+          path: /host/run/dbus/system_bus_socket
+          type: Socket
+      - name: avahi-socket
+        hostPath:
+          path: /host/run/avahi-daemon/socket
+          type: Socket
       nodeSelector:
         disk-type: backups
 ---
