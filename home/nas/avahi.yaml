@@ -58,6 +58,15 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - image: thisisqasim/avahi:latest
+        imagePullPolicy: Always
+        name: clearpid
+        command: ["rm","-f","/run/avahi-daemon/pid"]
+        volumeMounts:
+        - mountPath: /run/avahi-daemon
+          subPath: avahi-daemon
+          name: run
       containers:
       - image: thisisqasim/avahi:latest
         imagePullPolicy: Always

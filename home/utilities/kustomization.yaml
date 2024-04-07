@@ -47,7 +47,7 @@ generators:
         annotations:
           kustomize.config.k8s.io/needs-hash: "true"
       files:
-      - ./ddclient.enc.conf
+      - ddclient.conf=./ddclient.enc.conf
   - |
     apiVersion: viaduct.ai/v1
     kind: ksops
