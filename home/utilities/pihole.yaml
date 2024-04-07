@@ -151,7 +151,7 @@ spec:
         envFrom:
         - secretRef:
             name: pihole
-        image: pihole/pihole:2024.03.2
+        image: pihole/pihole:latest
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 10
@@ -294,6 +294,46 @@ spec:
               name: http
         path: /
         pathType: ImplementationSpecific
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: dns-ip-fixer
+  labels:
+    app: dns-ip-fixer
+spec:
+  selector:
+    matchLabels:
+      app: dns-ip-fixer
+  template:
+    metadata:
+      labels:
+        app: dns-ip-fixer
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: dns-ip-fixer
+        image: pihole/pihole:latest
+        command: ["/bin/bash"]
+        args:
+        - -c
+        - |
+          set -ex
+          INTERFACE=$(ip route show default | awk '{print $5}')
+          GATEWAY=$(ip route show default | awk '{print $3}')
+          TABLE=10
+          ip route show table ${TABLE} | grep "default via ${GATEWAY} dev ${INTERFACE}" || \
+            ip route add default via ${GATEWAY} dev ${INTERFACE} table ${TABLE}
+          ip rule show table ${TABLE} | grep "from y.y.y.y
+            ip rule add from y.y.y.y
+          sleep inf
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            add:
+            - NET_ADMIN
 ---
 apiVersion: v1
 kind: Pod
