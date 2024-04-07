@@ -45,8 +45,6 @@ spec:
         imagePullPolicy: Always
         name: dbus
         command: ["dbus-daemon", "--config-file=/etc/dbus-1/system.conf", "--nosyslog", "--nofork", "--nopidfile"]
-        securityContext:
-          privileged: true
         volumeMounts:
         - mountPath: /etc/dbus-1/system.conf
           subPath: system.conf
@@ -54,6 +52,18 @@ spec:
         - mountPath: /run/dbus
           subPath: dbus
           name: run
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - test -S /run/dbus/system_bus_socket
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - test -S /run/dbus/system_bus_socket
         resources:
           requests:
             cpu: "10m"

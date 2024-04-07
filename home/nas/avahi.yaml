@@ -82,19 +82,34 @@ spec:
         - mountPath: /run/avahi-daemon
           subPath: avahi-daemon
           name: run
-        - mountPath: /run/dbus
-          subPath: dbus
-          name: run
+        - name: dbus-socket
+          mountPath: /run/dbus/system_bus_socket
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - test -S /run/avahi-daemon/socket
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - test -S /run/avahi-daemon/socket
         resources:
           requests:
             cpu: "10m"
           limits:
             memory: "64Mi"
       volumes:
-        - name: config
-          configMap:
-            name: avahi
-        - name: run
-          hostPath:
-            path: /host/run
-            type: DirectoryOrCreate
+      - name: config
+        configMap:
+          name: avahi
+      - name: run
+        hostPath:
+          path: /host/run
+          type: DirectoryOrCreate
+      - name: dbus-socket
+        hostPath:
+          path: /host/run/dbus/system_bus_socket
+          type: Socket
