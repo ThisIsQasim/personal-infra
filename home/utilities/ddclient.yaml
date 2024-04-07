@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ddclient
+  labels:
+    app: ddclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ddclient
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ddclient
+    spec:
+      containers:
+      - image: lscr.io/linuxserver/ddclient:latest
+        imagePullPolicy: Always
+        name: ddclient
+        command: ["/usr/bin/ddclient","-foreground","-noquiet","-file","/etc/ddclient.conf"]
+        volumeMounts:
+        - name: config
+          mountPath: /etc/ddclient.conf
+          subPath: ddclient.conf
+          readOnly: true
+        - name: cache
+          mountPath: /var/cache/ddclient
+        env:
+        - name: PUID
+          value: "1001"
+        - name: PGID
+          value: "1001"
+        - name: TZ
+          value: "Asia/Karachi"
+        resources:
+          requests:
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      volumes:
+      - name: config
+        secret:
+          nameName: ddclient
+          defaultMode: 0640
+      - name: cache
+        emptyDir: {}

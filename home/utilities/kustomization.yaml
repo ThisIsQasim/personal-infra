@@ -8,6 +8,7 @@ resources:
 - ups.yaml
 - pihole.yaml
 - tailscale.yaml
+- ddclient.yaml
 
 helmCharts:
 - name: oauth2-proxy
@@ -41,6 +42,12 @@ generators:
           kustomize.config.k8s.io/needs-hash: "false"
       envs:
       - ./tailscale.enc.env
+    - metadata:
+        name: ddclient
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "true"
+      files:
+      - ./ddclient.enc.conf
   - |
     apiVersion: viaduct.ai/v1
     kind: ksops
