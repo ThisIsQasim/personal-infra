@@ -1,20 +1,4 @@
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: scrypted
-  name: scrypted
-spec:
-  type: ClusterIP
-  ports:
-  - port: 11080
-    targetPort: http
-    protocol: TCP
-    name: http
-  selector:
-    app: scrypted
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -89,6 +73,22 @@ spec:
           type: Socket
       nodeSelector:
         disk-type: recordings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: scrypted
+  name: scrypted
+spec:
+  type: ClusterIP
+  ports:
+  - port: 11080
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: scrypted
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

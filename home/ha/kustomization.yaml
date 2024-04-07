@@ -7,6 +7,7 @@ resources:
 - mqtt.yaml
 - frigate.yaml
 - scrypted.yaml
+- zigbee2mqtt.yaml
 
 generators:
   - |

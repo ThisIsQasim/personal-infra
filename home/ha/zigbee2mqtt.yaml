@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zigbee2mqtt
+  name: zigbee2mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee2mqtt
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: zigbee2mqtt
+    spec:
+      containers:
+      - image: koenkk/zigbee2mqtt
+        name: z2m
+        env:
+        - name: TZ
+          value: 'Asia/Karachi'
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "100m"
+            smarter-devices/serial_by-path_pci-0000_00_1a_0-usb-0_1_1_1_0-port0: 1
+          limits:
+            memory: "1Gi"
+            smarter-devices/serial_by-path_pci-0000_00_1a_0-usb-0_1_1_1_0-port0: 1
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: udev
+          mountPath: /run/udev
+          readOnly: true
+      restartPolicy: Always
+      volumes:
+      - name: data
+        hostPath:
+          path: /home/ha/zigbee2mqtt
+          type: DirectoryOrCreate
+      - name: udev
+        hostPath:
+          path: /run/udev
+          type: Directory
+      nodeSelector:
+        disk-type: backups
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: zigbee2mqtt
+  name: zigbee2mqtt
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: zigbee2mqtt
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zigbee2mqtt
+  labels:
+    app: zigbee2mqtt
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    # nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.utilities.svc.cluster.local/oauth2/auth
+    # nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    # nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    # nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    gethomepage.dev/description: Zigbee to MQTT
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Home Automation
+    gethomepage.dev/icon: zigbee2mqtt.png
+    gethomepage.dev/name: zigbee2mqtt
+    gethomepage.dev/weight: "40"
+    # gethomepage.dev/widget.type: homebridge
+    # gethomepage.dev/widget.url: http://homebridge.ha.svc:8581
+    # gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_HOMEBRIDGE_USERNAME}}"
+    # gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_HOMEBRIDGE_PASSWORD}}"
+spec:
+  tls:
+  - hosts:
+    - zigbee2mqtt.home.com
+  rules:
+  - host: zigbee2mqtt.home.com
+    http:
+      paths:
+        - path: /
+          pathType: "ImplementationSpecific"
+          backend:
+            service:
+              name: zigbee2mqtt
+              port:
+                name: http
