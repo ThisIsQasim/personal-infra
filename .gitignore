@@ -12,3 +12,7 @@ crash.log
 
 # Macos
 .DS_Store
+
+# Helm charts
+charts
+!/charts
