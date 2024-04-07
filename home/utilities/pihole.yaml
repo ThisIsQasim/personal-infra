@@ -1,5 +1,10 @@
 ---
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-custom-dnsmasq
+  labels:
+    app: pihole
 data:
   02-custom.conf: |
     addn-hosts=/etc/addn-hosts
@@ -8,18 +13,45 @@ data:
     server=//y.y.y.y
   05-pihole-custom-cname.conf: ""
   addn-hosts: ""
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: pihole-custom-lists
   labels:
     app: pihole
-  name: pihole-custom-dnsmasq
+data:
+  regex.list: |
+    (^|\.)tunnelbear\.com$
+    (^|\.)acloudvideos\.com$
+    (^|\.)home\.com;querytype=HTTPS
+    (^|\.)siasat\.pk;querytype=HTTPS
+    (^|\.)twitter\.com;reply=y.y.y.y
+    (^|\.)twitter\.com;querytype=HTTPS
+    (^|\.)twimg\.com;reply=y.y.y.y
+    (^|\.)twimg\.com;querytype=HTTPS
+  blacklist.txt: |
+    www.hibids10.com
+    api.tunnelbear.com
+    doh.dns.apple
+  whitelist.txt: |
+    thepiratebay.org
+    slides.google.com
+    rpm.newrelic.com
+    www.rapidvideo.com
+    ip-api.com
+    pro.ip-api.com
+    one.newrelic.com
+    trace.svc.ui.com
+    api.keen.io
+    cdn.jsdelivr.net
 ---
 apiVersion: v1
 kind: Service
 metadata:
+  name: pihole-dhcp
   labels:
     app: pihole
-  name: pihole-dhcp
 spec:
   externalTrafficPolicy: Local
   ports:
@@ -34,9 +66,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: pihole-dns
   labels:
     app: pihole
-  name: pihole-dns
 spec:
   externalTrafficPolicy: Local
   loadBalancerIP: y.y.y.y
@@ -166,6 +198,15 @@ spec:
         - mountPath: /etc/addn-hosts
           name: custom-dnsmasq
           subPath: addn-hosts
+        - mountPath: /etc/pihole/whitelist.txt
+          name: custom-lists
+          subPath: whitelist.txt
+        - mountPath: /etc/pihole/blacklist.txt
+          name: custom-lists
+          subPath: blacklist.txt
+        - mountPath: /etc/pihole/regex.list
+          name: custom-lists
+          subPath: regex.list
       - name: dnsproxy
         image: adguard/dnsproxy
         imagePullPolicy: Always
@@ -215,6 +256,10 @@ spec:
           defaultMode: 420
           name: pihole-custom-dnsmasq
         name: custom-dnsmasq
+      - configMap:
+          defaultMode: 420
+          name: pihole-custom-lists
+        name: custom-lists
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
