@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - image: koenkk/zigbee2mqtt
-        name: z2m
+        name: zigbee2mqtt
         env:
         - name: TZ
           value: 'Asia/Karachi'
@@ -76,11 +76,11 @@ metadata:
     app: zigbee2mqtt
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    # nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
-    # nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.utilities.svc.cluster.local/oauth2/auth
-    # nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
-    # nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
-    # nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.utilities.svc.cluster.local/oauth2/auth
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
     gethomepage.dev/description: Zigbee to MQTT
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
