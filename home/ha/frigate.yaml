@@ -34,7 +34,7 @@ data:
         mode: motion
       events:
         retain:
-          default: 14
+          default: 30
           mode: active_objects
     ffmpeg:
       hwaccel_args: preset-vaapi
@@ -72,14 +72,17 @@ data:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-1
               roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
                 - detect
-        detect:
-          width: 2560
-          height: 1440
       hikvision-2:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-2
+              roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
               roles:
                 - detect
         motion:
@@ -90,11 +93,17 @@ data:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-3
               roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
                 - detect
       hikvision-4:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-4
+              roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
               roles:
                 - detect
       hikvision-5:
@@ -102,13 +111,10 @@ data:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-5
               roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
                 - detect
-        detect:
-          width: 2560
-          height: 1440
-          stationary:
-            interval: 1
-            threshold: 10
         motion:
           mask:
           - 2560,0,2560,130,2232,130,1192,178,0,312,0,0
@@ -116,6 +122,9 @@ data:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-6
+              roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
               roles:
                 - detect
         motion:
@@ -126,15 +135,17 @@ data:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-7
               roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+              roles:
                 - detect
-        detect:
-          stationary:
-            interval: 1
-            threshold: 10
       hikvision-8:
         ffmpeg:
           inputs:
             - path: rtsp://127.0.0.1:8554/hikvision-8
+              roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
               roles:
                 - detect
       pollo-1:
@@ -142,7 +153,13 @@ data:
           inputs:
             - path: rtsp://127.0.0.1:8554/pollo-1
               roles:
+                - record
+            - path: rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+              roles:
                 - detect
+        detect:
+          width: 640
+          height: 360
         motion:
           mask:
           - 956,0,937,124,813,82,559,100,567,0
