@@ -17,7 +17,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: servercontainers/samba:smbd-only-latest
+      - image: ghcr.io/servercontainers/samba:smbd-only-latest
         imagePullPolicy: Always
         name: samba
         env:
@@ -30,25 +30,27 @@ spec:
             secretKeyRef:
               name: samba-password
               key: qasim
-        - name: ACCOUNT_media
+        - name: ACCOUNT_timemachine
           valueFrom:
             secretKeyRef:
               name: samba-password
-              key: media
+              key: timemachine
         - name: UID_qasim
           value: "1001"
-        - name: UID_media
+        - name: UID_timemachine
           value: "1000"
-        - name: GROUPS_media
+        - name: GROUPS_timemachine
           value: "qasim"
         - name: SAMBA_VOLUME_CONFIG_qasimonly
-          value: "[Qasim's Files]; path=/shares/qasim; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
+          value: "[Qasim's Files]; path=/shares/external; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
+        - name: SAMBA_VOLUME_CONFIG_timemachine
+          value: "[TimeCapsule]; path=/shares/external/timemachine; valid users = timemachine qasim; guest ok = no; read only = no; browseable = no; writable = yes; fruit:aapl = yes; fruit:time machine = yes; fruit:time machine max size = 500G;"
         - name: AVAHI_DISABLE
           value: "true"
         - name: WSDD2_DISABLE
           value: "true"
         volumeMounts:
-        - mountPath: /shares/qasim
+        - mountPath: /shares/external
           name: external
         ports:
         - containerPort: 445
