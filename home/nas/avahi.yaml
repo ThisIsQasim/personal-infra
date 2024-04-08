@@ -62,7 +62,7 @@ spec:
       - image: thisisqasim/avahi:latest
         imagePullPolicy: Always
         name: clearpid
-        command: ["rm","-f","/run/avahi-daemon/pid"]
+        command: ["rm","-rf","/run/avahi-daemon/pid","/run/avahi-daemon/socket"]
         volumeMounts:
         - mountPath: /run/avahi-daemon
           subPath: avahi-daemon
