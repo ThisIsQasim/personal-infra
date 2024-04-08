@@ -7,12 +7,10 @@ metadata:
     app: pihole
 data:
   02-custom.conf: |
-    addn-hosts=/etc/addn-hosts
     rev-server=y.y.y.y
     server=/home.home.com/y.y.y.y
     server=//y.y.y.y
   05-pihole-custom-cname.conf: ""
-  addn-hosts: ""
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -21,10 +19,13 @@ metadata:
   labels:
     app: pihole
 data:
+  custom.list: |
+    y.y.y.y
   regex.list: |
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
     (^|\.)home\.com;querytype=HTTPS
+    (^|\.)siasat\.pk;reply=y.y.y.y
     (^|\.)siasat\.pk;querytype=HTTPS
     (^|\.)twitter\.com;reply=y.y.y.y
     (^|\.)twitter\.com;querytype=HTTPS
@@ -195,9 +196,6 @@ spec:
         - mountPath: /etc/dnsmasq.d/02-custom.conf
           name: custom-dnsmasq
           subPath: 02-custom.conf
-        - mountPath: /etc/addn-hosts
-          name: custom-dnsmasq
-          subPath: addn-hosts
         - mountPath: /etc/pihole/whitelist.txt
           name: custom-lists
           subPath: whitelist.txt
@@ -207,6 +205,9 @@ spec:
         - mountPath: /etc/pihole/regex.list
           name: custom-lists
           subPath: regex.list
+        - mountPath: /etc/pihole/custom.list
+          name: custom-lists
+          subPath: custom.list
       - name: dnsproxy
         image: adguard/dnsproxy
         imagePullPolicy: Always
