@@ -21,6 +21,7 @@ metadata:
 data:
   custom.list: |
     y.y.y.y
+    y.y.y.y
   regex.list: |
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
@@ -127,6 +128,19 @@ spec:
       labels:
         app: pihole
     spec:
+      initContainers:
+      - name: copy-config
+        image: pihole/pihole:latest
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /etc/pihole
+          name: config
+        - mountPath: /etc/pihole-lists
+          name: custom-lists
+        command:
+        - /bin/bash
+        - -c
+        - cp /etc/pihole-lists/* /etc/pihole/ 
       containers:
       - env:
         - name: WEB_PORT
@@ -153,7 +167,7 @@ spec:
         - secretRef:
             name: pihole
         image: pihole/pihole:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 10
           httpGet:
@@ -187,7 +201,11 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 60
           timeoutSeconds: 5
-        resources: {}
+        resources:
+          requests:
+            cpu: 500m
+          limits:  
+            memory: 300Mi
         securityContext:
           privileged: false
         volumeMounts:
@@ -196,21 +214,10 @@ spec:
         - mountPath: /etc/dnsmasq.d/02-custom.conf
           name: custom-dnsmasq
           subPath: 02-custom.conf
-        - mountPath: /etc/pihole/whitelist.txt
-          name: custom-lists
-          subPath: whitelist.txt
-        - mountPath: /etc/pihole/blacklist.txt
-          name: custom-lists
-          subPath: blacklist.txt
-        - mountPath: /etc/pihole/regex.list
-          name: custom-lists
-          subPath: regex.list
-        - mountPath: /etc/pihole/custom.list
-          name: custom-lists
-          subPath: custom.list
+          readOnly: false
       - name: dnsproxy
         image: adguard/dnsproxy
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         args:
         - --port=5353
         - --upstream=https://dns.cloudflare.com/dns-query
