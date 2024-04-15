@@ -23,10 +23,10 @@ data:
       fps: 5
     objects:
       track:
-        - person
-        - car
-        - motorcycle
-        - bicycle
+      - person
+      - car
+      - motorcycle
+      - bicycle
     record:
       enabled: True
       retain:
@@ -43,126 +43,145 @@ data:
     go2rtc:
       streams:
         hikvision-1:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-2:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-3:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-4:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-5:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-6:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-7:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         hikvision-8:
-          - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+        - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
         pollo-1:
-          - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
-          - "ffmpeg:pollo-1#audio=aac"
+        - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+        - "ffmpeg:pollo-1#audio=aac"
       webrtc:
         candidates:
-          - y.y.y.y
-          - stun:18555
+        - y.y.y.y
+        - stun:18555
     cameras:
       # Define at least one camera
       hikvision-1:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-1
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-1
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
       hikvision-2:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-2
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-2
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
         motion:
           mask:
           - 1280,409,716,164,449,108,0,78,0,0,1280,0
+        objects:
+          track:
+          - person
+          filters:
+            person:
+              mask:
+              - 1280,409,716,164,449,108,0,78,0,0,1280,0
       hikvision-3:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-3
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-3
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
+        objects:
+          track:
+          - person
       hikvision-4:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-4
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-4
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
       hikvision-5:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-5
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-5
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
         motion:
           mask:
-          - 2560,0,2560,130,2232,130,1192,178,0,312,0,0
+          - 1280,0,1280,70,623,99,0,181,0,0
       hikvision-6:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-6
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-6
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
         motion:
           mask:
-            - 1280,0,1280,266,570,0
+          - 1280,0,1280,266,570,0
+        objects:
+          track:
+          - person
       hikvision-7:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-7
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-7
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
       hikvision-8:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/hikvision-8
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/hikvision-8
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+            roles:
+            - detect
+        objects:
+          track:
+          - person
       pollo-1:
         ffmpeg:
           inputs:
-            - path: rtsp://127.0.0.1:8554/pollo-1
-              roles:
-                - record
-            - path: rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
-              roles:
-                - detect
+          - path: rtsp://127.0.0.1:8554/pollo-1
+            roles:
+            - record
+          - path: rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+            roles:
+            - detect
         detect:
           width: 640
           height: 360
+        objects:
+          track:
+          - person
         motion:
           mask:
-          - 956,0,937,124,813,82,559,100,567,0
+          - 487,0,478,63,404,41,279,55,282,0
     ui:
       live_mode: webrtc
 ---
