@@ -13,9 +13,34 @@ data:
     persistence_location /mosquitto/data/
 
     allow_anonymous false
-    password_file /passwd/file
+    password_file /mosquitto/config/passwd
 
     log_dest stdout
+  configure.sh: |
+    #/bin/sh -ec
+    mosquitto_passwd -c -b /runtime/passwd ${MQTT_USERNAME} ${MQTT_PASSWORD}
+    cp /mosquitto/config/mosquitto.conf /runtime/
+
+    echo "Running on $MY_NODE_NAME"
+
+    if [ "${MY_NODE_NAME}" == "node3" ]; then
+      echo "Adding bridge config"
+      cat <<EOF >> /runtime/mosquitto.conf;
+
+    connection ha-bridge
+    address mqtt-node2:1883
+    bridge_insecure false
+    remote_username ${MQTT_USERNAME}
+    remote_password ${MQTT_PASSWORD}
+    local_username ${MQTT_USERNAME}
+    local_password ${MQTT_PASSWORD}
+    remote_clientid ${MY_NODE_NAME}
+    try_private true
+    topic zigbee2mqtt/# both 0
+    EOF
+    else
+      echo "Skipping bridge conf"
+    fi
 ---
 apiVersion: v1
 kind: Service
@@ -23,6 +48,7 @@ metadata:
   name: mqtt
   labels:
     app: mqtt
+    node: node2
   annotations:
     kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
@@ -32,13 +58,47 @@ spec:
   externalTrafficPolicy: Local
   selector:
     app: mqtt
+    node: node2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-node2
+  labels:
+    app: mqtt
+    node: node2
+spec:
+  ports:
+  - port: 1883
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: mqtt
+    node: node2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-node3
+  labels:
+    app: mqtt
+    node: node3
+spec:
+  ports:
+  - port: 1883
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: mqtt
+    node: node3
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mqtt
+  name: mqtt-node2
   labels:
     app: mqtt
+    node: node2
 spec:
   replicas: 1
   strategy:
@@ -46,25 +106,37 @@ spec:
   selector:
     matchLabels:
       app: mqtt
+      node: node2
   template:
     metadata:
       labels:
         app: mqtt
+        node: node2
     spec:
       initContainers:
-      - name: passwd
+      - name: config
         image: public.ecr.aws/docker/library/eclipse-mosquitto:2
         imagePullPolicy: Always
         command:
         - /bin/sh
-        - -c
-        - mosquitto_passwd -c -b /passwd/file ${MQTT_USERNAME} ${MQTT_PASSWORD}
+        - /configure.sh
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         envFrom:
         - secretRef:
             name: mqtt
         volumeMounts:
-        - name: passwd
-          mountPath: /passwd
+        - name: runtime
+          mountPath: /runtime
+        - name: config
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
+        - name: config
+          mountPath: /configure.sh
+          subPath: configure.sh
       containers:
       - name: mqtt
         image: public.ecr.aws/docker/library/eclipse-mosquitto:2
@@ -80,10 +152,8 @@ spec:
           tcpSocket:
             port: 1883
         volumeMounts:
-        - name: config
+        - name: runtime
           mountPath: /mosquitto/config
-        - name: passwd
-          mountPath: /passwd
         - name: database
           mountPath: /mosquitto/data
         securityContext:
@@ -95,7 +165,7 @@ spec:
       - name: config
         configMap:
           name: mqtt
-      - name: passwd
+      - name: runtime
         emptyDir: {}
       - name: database
         hostPath:
@@ -107,4 +177,91 @@ spec:
         fsGroup: 1883
         runAsUser: 1883
       nodeSelector:
-        disk-type: recordings
+        kubernetes.io/hostname: node2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-node3
+  labels:
+    app: mqtt
+    node: node3
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mqtt
+      node: node3
+  template:
+    metadata:
+      labels:
+        app: mqtt
+        node: node3
+    spec:
+      initContainers:
+      - name: config
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2
+        imagePullPolicy: Always
+        command:
+        - /bin/sh
+        - /configure.sh
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        envFrom:
+        - secretRef:
+            name: mqtt
+        volumeMounts:
+        - name: runtime
+          mountPath: /runtime
+        - name: config
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
+        - name: config
+          mountPath: /configure.sh
+          subPath: configure.sh
+      containers:
+      - name: mqtt
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 200m
+          limits:
+            memory: "1Gi"
+        ports:
+        - containerPort: 1883
+        readinessProbe:
+          tcpSocket:
+            port: 1883
+        volumeMounts:
+        - name: runtime
+          mountPath: /mosquitto/config
+        - name: database
+          mountPath: /mosquitto/data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      volumes:
+      - name: config
+        configMap:
+          name: mqtt
+      - name: runtime
+        emptyDir: {}
+      - name: database
+        hostPath:
+          path: /home/ha/mqtt
+          type: Directory
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 1883
+        runAsUser: 1883
+      nodeSelector:
+        kubernetes.io/hostname: node3
