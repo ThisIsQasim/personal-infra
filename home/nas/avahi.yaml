@@ -58,20 +58,16 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      initContainers:
-      - image: thisisqasim/avahi:latest
-        imagePullPolicy: Always
-        name: clearpid
-        command: ["rm","-rf","/run/avahi-daemon/pid","/run/avahi-daemon/socket"]
-        volumeMounts:
-        - mountPath: /run/avahi-daemon
-          subPath: avahi-daemon
-          name: run
       containers:
       - image: thisisqasim/avahi:latest
         imagePullPolicy: Always
         name: avahi
-        command: ["avahi-daemon","--no-chroot","--no-proc-title","--no-drop-root","-f","/etc/avahi/avahi-daemon.conf"]
+        command:
+        - /bin/sh
+        - -cex
+        - |
+          rm -rf /run/avahi-daemon/pid /run/avahi-daemon/socket
+          exec avahi-daemon --no-chroot --no-proc-title --no-drop-root -f /etc/avahi/avahi-daemon.conf
         volumeMounts:
         - mountPath: /etc/avahi/avahi-daemon.conf
           subPath: avahi-daemon.conf
@@ -113,3 +109,13 @@ spec:
         hostPath:
           path: /host/run/dbus/system_bus_socket
           type: Socket
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - dbus
