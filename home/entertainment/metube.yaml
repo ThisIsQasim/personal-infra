@@ -1,4 +1,35 @@
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: metube
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["secrets"]
+  # Create can not be restricted to a resource name.
+  verbs: ["create"]
+- apiGroups: [""] # "" indicates the core API group
+  resourceNames: ["metube"]
+  resources: ["secrets"]
+  verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: metube
+subjects:
+- kind: ServiceAccount
+  name: "metube"
+roleRef:
+  kind: Role
+  name: metube
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metube
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,34 +48,36 @@ spec:
       labels:
         app: metube
     spec:
-      initContainers:
-      - args:
-        - -c
-        - modprobe iptable_nat
-        command:
-        - /bin/sh
-        image: public.ecr.aws/docker/library/busybox
-        name: sysctl
-        securityContext:
-          privileged: true        
-        volumeMounts:
-        - mountPath: /lib/modules
-          name: modules
+      serviceAccount: metube
       containers:
-      - image: masipcat/wireguard-go
-        imagePullPolicy: Always
-        name: wireguard
-        volumeMounts:
-        - mountPath: /etc/wireguard
-          name: wireguard
-          readOnly: true
+      - image: ghcr.io/tailscale/tailscale
+        name: tailscale
+        env:
+        - name: TS_HOSTNAME
+          value: "metube"
+        - name: TS_EXTRA_ARGS
+          value: "--login-server https://headscale.project.com:443"
+        - name: TS_KUBE_SECRET
+          value: "metube"
+        - name: TS_DEBUG_FIREWALL_MODE
+          value: "auto"
+        - name: TS_USERSPACE
+          value: "false"
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: metube
+              key: TS_AUTHKEY
+              optional: true
         resources:
           requests:
             cpu: "50m"
           limits:
             memory: "64Mi"
         securityContext:
-          privileged: true
+          capabilities:
+            add:
+            - NET_ADMIN
       - image: ghcr.io/alexta69/metube:latest
         imagePullPolicy: Always
         name: metube
@@ -54,7 +87,7 @@ spec:
         - name: GID
           value: "1001"
         - name: YTDL_OPTIONS
-          value: '{"concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "nopart": true, "verbose": true}'
+          value: '{"proxy": "socks5://100.64.0.6:1055/", "concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "nopart": true, "verbose": true}'
         volumeMounts:
         - mountPath: /downloads
           name: downloads
@@ -82,10 +115,6 @@ spec:
         - name: downloads
           hostPath:
             path: /mnt/external/Downloads/ytdl
-            type: Directory
-        - name: modules
-          hostPath:
-            path: /lib/modules
             type: Directory
         - name: wireguard
           secret:

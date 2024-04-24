@@ -20,8 +20,8 @@ generators:
       name: secrets
     secretFrom:
     - metadata:
-        name: wireguard
+        name: metube
         annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      files:
-      - wg0.conf=./wireguard.enc.ini
+          kustomize.config.k8s.io/needs-hash: "false"
+      envs:
+      - ./metube.enc.env
