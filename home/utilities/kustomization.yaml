@@ -9,6 +9,7 @@ resources:
 - pihole.yaml
 - tailscale.yaml
 - ddclient.yaml
+- speedtest.yaml
 
 helmCharts:
 - name: oauth2-proxy

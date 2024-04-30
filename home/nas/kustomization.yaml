@@ -9,7 +9,6 @@ resources:
 - mysql.yaml
 - nextcloud.yaml
 - redis.yaml
-- speedtest.yaml
 
 generators:
   - |
