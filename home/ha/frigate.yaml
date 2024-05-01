@@ -15,7 +15,7 @@ data:
     ui:
       live_mode: webrtc
     logger:
-      default: debug
+      default: info
       logs:
         frigate.app: debug
         frigate.mqtt: debug
