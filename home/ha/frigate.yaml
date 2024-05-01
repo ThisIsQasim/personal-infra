@@ -12,6 +12,14 @@ data:
       port: 1883
       user: mqtt
       password: "{FRIGATE_MQTT_PASSWORD}"
+    ui:
+      live_mode: webrtc
+    logger:
+      default: debug
+      logs:
+        frigate.app: debug
+        frigate.mqtt: debug
+        frigate.object_detection: debug
     detectors:
       coral1:
         type: edgetpu
@@ -182,13 +190,6 @@ data:
         motion:
           mask:
           - 487,0,478,63,404,41,279,55,282,0
-    ui:
-      live_mode: webrtc
-    logger:
-      logs:
-        frigate.app: debug
-        frigate.mqtt: debug
-        frigate.object_detection: debug
 ---
 apiVersion: v1
 kind: Service
@@ -263,12 +264,12 @@ spec:
           protocol: UDP
         livenessProbe:
           httpGet:
-            path: /
+            path: /api/version
             port: http
             scheme: HTTP
         readinessProbe:
           httpGet:
-            path: /
+            path: /api/version
             port: http
             scheme: HTTP
         env:
