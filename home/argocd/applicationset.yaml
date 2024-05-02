@@ -7,11 +7,10 @@ spec:
   - list:
       elements:
       - app: entertainment
-      - app: external-dns
+      - app: external-tools
       # - app: grafana
       - app: ha
       - app: nas
-      - app: smarter-device-manager
       - app: utilities
   template:
     metadata:

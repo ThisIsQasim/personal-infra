@@ -1,9 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: external-dns
 resources:
-- namespace.yaml
 - external-dns.yaml
+- smarter-device-manager.yaml
+- github.com/rancher/local-path-provisioner/deploy?ref=v0.0.26
 
 generators:
   - |
@@ -14,5 +14,6 @@ generators:
     secretFrom:
     - metadata:
         name: pihole-password
+        namespace: external-dns
       envs:
       - pihole-password.enc.env
