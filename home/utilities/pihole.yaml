@@ -374,6 +374,18 @@ spec:
             add:
             - NET_ADMIN
 ---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: pihole
+  labels:
+    app: pihole
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: pihole
+---
 apiVersion: v1
 kind: Pod
 metadata:
