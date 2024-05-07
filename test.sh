@@ -1,2 +1,4 @@
-#!/bin/bash -eo pipefail
-kustomize build --enable-alpha-plugins $1 | kubectl apply -f - --dry-run=client
+#!/bin/bash -exo pipefail
+DIRECTORY=$1
+PIPECMD=${2:-"kubectl apply -f - --dry-run=client"}
+kustomize build --enable-alpha-plugins ${DIRECTORY} | ${PIPECMD}
