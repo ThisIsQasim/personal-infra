@@ -40,9 +40,12 @@ spec:
         - name: ENABLE_AVAHI
           value: "0"
         ports:
-          - name: http
-            containerPort: 8581
-            protocol: TCP
+        - name: http
+          containerPort: 8581
+          protocol: TCP
+        - name: metrics
+          containerPort: 36123
+          protocol: TCP
         resources:
           requests:
             cpu: "1"
@@ -132,3 +135,24 @@ spec:
               name: homebridge
               port:
                 name: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: homebridge
+  labels:
+    app: homebridge
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: homebridge
+  podMetricsEndpoints:
+  - port: metrics
+    basicAuth:
+      password:
+        name: prometheus
+        key: password
+      username:
+        name: prometheus
+        key: username

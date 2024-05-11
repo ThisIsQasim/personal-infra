@@ -34,3 +34,9 @@ generators:
           kustomize.config.k8s.io/needs-hash: "true"
       envs:
       - ./scrypted.enc.env
+    - metadata:
+        name: prometheus
+        annotations:
+          kustomize.config.k8s.io/needs-hash: "false"
+      envs:
+      - ./prometheus.enc.env
