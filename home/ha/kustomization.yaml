@@ -8,6 +8,7 @@ resources:
 - frigate.yaml
 - scrypted.yaml
 - zigbee2mqtt.yaml
+- mpp-solar.yaml
 
 generators:
   - |

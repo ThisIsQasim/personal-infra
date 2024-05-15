@@ -1,0 +1,20 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: mpp-solar
+  labels:
+    app: mpp-solar
+    release: kube-prometheus-stack
+spec:
+  jobName: mpp-solar
+  interval: 5s
+  scrapeTimeout: 5s
+  prober:
+    url: y.y.y.y
+    path: /metrics
+    scheme: http
+  targets:
+    staticConfig:
+      static:
+      - y.y.y.y
