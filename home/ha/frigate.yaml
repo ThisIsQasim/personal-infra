@@ -84,6 +84,9 @@ data:
           - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
             roles:
             - detect
+        motion:
+          mask:
+          - 316,0,373,0,372,35,317,32
       hikvision-2:
         ffmpeg:
           inputs:
@@ -115,6 +118,9 @@ data:
         objects:
           track:
           - person
+        motion:
+          mask:
+          - 332,21,367,21,367,51,329,50
       hikvision-4:
         ffmpeg:
           inputs:
@@ -124,6 +130,9 @@ data:
           - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
             roles:
             - detect
+        motion:
+          mask:
+          - 330,21,374,21,375,47,330,46
       hikvision-5:
         ffmpeg:
           inputs:
@@ -148,6 +157,7 @@ data:
         motion:
           mask:
           - 1280,0,1280,266,570,0
+          - 329,21,368,21,370,50,339,54
         objects:
           track:
           - person
@@ -160,6 +170,9 @@ data:
           - path: rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
             roles:
             - detect
+        motion:
+          mask:
+          - 330,0,374,0,378,28,333,31
       hikvision-8:
         ffmpeg:
           inputs:
@@ -172,6 +185,9 @@ data:
         objects:
           track:
           - person
+        motion:
+          mask:
+          - 372,52,369,0,322,0,326,49
       pollo-1:
         ffmpeg:
           inputs:
@@ -190,6 +206,7 @@ data:
         motion:
           mask:
           - 487,0,478,63,404,41,279,55,282,0
+          - 149,0,173,0,171,32,152,31
 ---
 apiVersion: v1
 kind: Service
