@@ -75,6 +75,7 @@ metadata:
     gethomepage.dev/group: Networking
     gethomepage.dev/icon: librespeed.png
     gethomepage.dev/name: Speedtest
+    gethomepage.dev/pod-selector: app=speedtest
     gethomepage.dev/weight: "20"
 spec:
   tls:

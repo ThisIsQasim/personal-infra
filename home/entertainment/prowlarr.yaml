@@ -88,6 +88,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: prowlarr.png
     gethomepage.dev/name: Prowlarr
+    gethomepage.dev/pod-selector: app=prowlarr
     gethomepage.dev/weight: "100"
     gethomepage.dev/widget.type: prowlarr
     gethomepage.dev/widget.url: http://prowlarr.entertainment.svc:9696

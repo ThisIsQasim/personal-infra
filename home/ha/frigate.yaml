@@ -372,6 +372,7 @@ metadata:
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: frigate-light.png
     gethomepage.dev/name: Frigate
+    gethomepage.dev/pod-selector: app=frigate
     gethomepage.dev/weight: "0"
 spec:
   tls:

@@ -198,6 +198,7 @@ metadata:
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: nextcloud.png
     gethomepage.dev/name: Nextcloud
+    gethomepage.dev/pod-selector: app=nextcloud
     gethomepage.dev/weight: "10"
     gethomepage.dev/widget.type: nextcloud
     gethomepage.dev/widget.url: http://nextcloud.nas.svc:8080

@@ -39,6 +39,7 @@ metadata:
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: ups.png
     gethomepage.dev/name: UPS
+    gethomepage.dev/pod-selector: ""
     gethomepage.dev/weight: "20"
 spec:
   tls:

@@ -94,6 +94,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: radarr.png
     gethomepage.dev/name: Radarr
+    gethomepage.dev/pod-selector: app=radarr
     gethomepage.dev/weight: "20"
     gethomepage.dev/widget.type: radarr
     gethomepage.dev/widget.url: http://radarr.entertainment.svc:7878

@@ -88,6 +88,7 @@ metadata:
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: hammond.png
     gethomepage.dev/name: Hammond
+    gethomepage.dev/pod-selector: app=hammond
     gethomepage.dev/weight: "20"
 spec:
   tls:

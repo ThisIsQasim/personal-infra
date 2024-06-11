@@ -154,6 +154,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: metube.png
     gethomepage.dev/name: Metube
+    gethomepage.dev/pod-selector: app=metube
     gethomepage.dev/weight: "40"
 spec:
   tls:

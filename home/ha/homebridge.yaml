@@ -114,7 +114,8 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: homebridge.png
-    gethomepage.dev/name: homebridge
+    gethomepage.dev/name: Homebridge
+    gethomepage.dev/pod-selector: app=homebridge
     gethomepage.dev/weight: "30"
     gethomepage.dev/widget.type: homebridge
     gethomepage.dev/widget.url: http://homebridge.ha.svc:8581

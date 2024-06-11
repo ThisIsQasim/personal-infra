@@ -94,6 +94,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: sonarr.png
     gethomepage.dev/name: Sonarr
+    gethomepage.dev/pod-selector: app=sonarr
     gethomepage.dev/weight: "30"
     gethomepage.dev/widget.type: sonarr
     gethomepage.dev/widget.url: http://sonarr.entertainment.svc:8989

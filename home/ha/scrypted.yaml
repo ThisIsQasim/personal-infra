@@ -108,6 +108,7 @@ metadata:
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: scrypted.png
     gethomepage.dev/name: Scrypted
+    gethomepage.dev/pod-selector: app=scrypted
     gethomepage.dev/weight: "10"
 spec:
   tls:

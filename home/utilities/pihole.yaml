@@ -305,7 +305,8 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Networking
     gethomepage.dev/icon: pi-hole.png
-    gethomepage.dev/name: pihole
+    gethomepage.dev/name: Pi-hole
+    gethomepage.dev/pod-selector: app=pihole
     gethomepage.dev/href: https://pihole.home.com/admin/
     gethomepage.dev/weight: "30"
     gethomepage.dev/widget.type: pihole

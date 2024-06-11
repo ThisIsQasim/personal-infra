@@ -85,12 +85,9 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: zigbee2mqtt.png
-    gethomepage.dev/name: zigbee2mqtt
+    gethomepage.dev/name: Zigbee2MQTT
+    gethomepage.dev/pod-selector: app=zigbee2mqtt
     gethomepage.dev/weight: "40"
-    # gethomepage.dev/widget.type: homebridge
-    # gethomepage.dev/widget.url: http://homebridge.ha.svc:8581
-    # gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_HOMEBRIDGE_USERNAME}}"
-    # gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_HOMEBRIDGE_PASSWORD}}"
 spec:
   tls:
   - hosts:

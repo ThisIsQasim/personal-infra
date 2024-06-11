@@ -14,6 +14,16 @@ metadata:
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: argocd.png
     gethomepage.dev/name: Argocd
+    gethomepage.dev/pod-selector: >-
+      app.kubernetes.io/name in (
+          argocd-application-controller,
+          argocd-applicationset-controller,
+          argocd-dex-server,
+          argocd-notifications-controller,
+          argocd-redis,
+          argocd-repo-server,
+          argocd-server
+      )
     gethomepage.dev/weight: "0"
 spec:
   rules:

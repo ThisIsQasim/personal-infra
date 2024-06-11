@@ -84,6 +84,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: ombi.png
     gethomepage.dev/name: Ombi
+    gethomepage.dev/pod-selector: app=ombi
     gethomepage.dev/weight: "91"
     gethomepage.dev/widget.type: ombi
     gethomepage.dev/widget.url: http://ombi.entertainment.svc:3579

@@ -103,6 +103,7 @@ metadata:
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: transmission.png
     gethomepage.dev/name: Transmission
+    gethomepage.dev/pod-selector: app=transmission
     gethomepage.dev/weight: "10"
     gethomepage.dev/widget.type: transmission
     gethomepage.dev/widget.url: http://transmission.entertainment.svc:9091
