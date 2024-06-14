@@ -1,0 +1,88 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apcupsd
+  labels:
+    app: apcupsd
+data:
+  apcupsd.conf: |
+    ## apcupsd.conf v1.1 ##
+    UPSNAME ups.home.com
+    UPSCABLE ether
+    UPSTYPE snmp
+    LOCKFILE /var/lock
+    SCRIPTDIR /etc/apcupsd
+    PWRFAILDIR /etc/apcupsd
+    NOLOGINDIR /etc
+    DEVICE y.y.y.y
+    UPSCLASS standalone
+    UPSMODE disable
+    BATTERYLEVEL 5
+    NETSERVER on
+    NISIP 0.0.0.0
+    NISPORT 3551
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: apcupsd
+  labels:
+    app: apcupsd
+spec:
+  selector:
+    matchLabels:
+      app: apcupsd
+  template:
+    metadata:
+      labels:
+        app: apcupsd
+    spec:
+      containers:
+      - name: apcupsd
+        image: ghcr.io/thisisqasim/apcupsd:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: Asia/Karachi
+        volumeMounts:
+        - name: config
+          mountPath: /etc/apcupsd/apcupsd.conf
+          subPath: apcupsd.conf
+        - name: dbus
+          mountPath: /var/run/dbus/system_bus_socket
+        ports:
+        - containerPort: 3551
+          name: server
+          protocol: TCP
+        securityContext:
+          privileged: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+      volumes:
+      - name: config
+        configMap:
+          defaultMode: 420
+          name: apcupsd
+      - name: dbus
+        hostPath:
+          path: /var/run/dbus/system_bus_socket
+          type: Socket
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apcupsd
+  labels:
+    app: apcupsd
+spec:
+  type: ClusterIP
+  ports:
+  - name: server
+    port: 3551
+    protocol: TCP
+    targetPort: server
+  selector:
+    app: apcupsd

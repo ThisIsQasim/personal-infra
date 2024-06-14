@@ -10,6 +10,7 @@ resources:
 - tailscale.yaml
 - ddclient.yaml
 - speedtest.yaml
+- apcupsd.yaml
 
 helmCharts:
 - name: oauth2-proxy
