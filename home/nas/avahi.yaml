@@ -59,7 +59,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: thisisqasim/avahi:latest
+      - image: ghcr.io/thisisqasim/avahi:latest
         imagePullPolicy: Always
         name: avahi
         command:

@@ -41,7 +41,7 @@ spec:
       hostNetwork: false
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: thisisqasim/dbus:latest
+      - image: ghcr.io/thisisqasim/dbus:latest
         imagePullPolicy: Always
         name: dbus
         command: ["dbus-daemon", "--config-file=/etc/dbus-1/system.conf", "--nosyslog", "--nofork", "--nopidfile"]

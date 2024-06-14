@@ -21,7 +21,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: thisisqasim/transmission:latest
+      - image: ghcr.io/thisisqasim/transmission:latest
         imagePullPolicy: Always
         name: transmission
         env:

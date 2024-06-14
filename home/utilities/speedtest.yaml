@@ -18,7 +18,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: thisisqasim/speedtest
+      - image: ghcr.io/thisisqasim/speedtest-go
         name: speedtest
         ports:
         - containerPort: 8989
