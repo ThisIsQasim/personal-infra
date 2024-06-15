@@ -58,16 +58,18 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - image: ghcr.io/thisisqasim/avahi:latest
+        name: clear-socket
+        command: ["rm", "-rf", "/run/avahi-daemon/pid", "/run/avahi-daemon/socket"]
+        volumeMounts:
+        - mountPath: /run/avahi-daemon
+          name: run
       containers:
       - image: ghcr.io/thisisqasim/avahi:latest
         imagePullPolicy: Always
         name: avahi
-        command:
-        - /bin/sh
-        - -cex
-        - |
-          rm -rf /run/avahi-daemon/pid /run/avahi-daemon/socket
-          exec avahi-daemon --no-chroot --no-proc-title --no-drop-root -f /etc/avahi/avahi-daemon.conf
+        command: ["avahi-daemon", "--no-chroot", "--no-proc-title", "--no-drop-root", "-f", "/etc/avahi/avahi-daemon.conf"]
         volumeMounts:
         - mountPath: /etc/avahi/avahi-daemon.conf
           subPath: avahi-daemon.conf
@@ -76,7 +78,6 @@ spec:
           subPath: smb.service
           name: config
         - mountPath: /run/avahi-daemon
-          subPath: avahi-daemon
           name: run
         - name: dbus-socket
           mountPath: /run/dbus/system_bus_socket
@@ -101,14 +102,14 @@ spec:
       - name: config
         configMap:
           name: avahi
-      - name: run
-        hostPath:
-          path: /host/run
-          type: DirectoryOrCreate
       - name: dbus-socket
         hostPath:
           path: /host/run/dbus/system_bus_socket
           type: Socket
+      - name: run
+        hostPath:
+          path: /host/run/avahi-daemon
+          type: DirectoryOrCreate
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
