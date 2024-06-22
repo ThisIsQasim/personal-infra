@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: entertainment
 resources:
 - namespace.yaml
-- heimdall.yaml
 - jellyfin.yaml
 - jellyseerr.yaml
 - prowlarr.yaml
