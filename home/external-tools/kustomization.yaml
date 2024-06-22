@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - external-dns.yaml
 - smarter-device-manager.yaml
-- github.com/rancher/local-path-provisioner/deploy?ref=v0.0.26
+- github.com/rancher/local-path-provisioner/deploy?ref=v0.0.28
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/namespace
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/default
 
