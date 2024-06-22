@@ -22,8 +22,8 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: homebridge
-        image: "ghcr.io/homebridge/homebridge:latest"
-        imagePullPolicy: Always
+        image: "ghcr.io/homebridge/homebridge:2024-06-20"
+        imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
         env:

@@ -267,8 +267,8 @@ spec:
     spec:
       containers:
       - name: frigate
-        image: "ghcr.io/blakeblackshear/frigate:stable"
-        imagePullPolicy: Always
+        image: "ghcr.io/blakeblackshear/frigate:0.13.2"
+        imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 5000
