@@ -11,25 +11,25 @@ resources:
 - redis.yaml
 
 generators:
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: secrets
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secrets
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  secretFrom:
+  - metadata:
+      name: mysql
       annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
-    secretFrom:
-    - metadata:
-        name: mysql
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./mysql.enc.env
-    - metadata:
-        name: samba-password
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./samba.enc.env
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./mysql.enc.env
+  - metadata:
+      name: samba-password
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./samba.enc.env

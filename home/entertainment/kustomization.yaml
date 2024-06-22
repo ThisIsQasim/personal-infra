@@ -13,19 +13,19 @@ resources:
 - metube.yaml
 
 generators:
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: secrets
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secrets
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  secretFrom:
+  - metadata:
+      name: metube
       annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
-    secretFrom:
-    - metadata:
-        name: metube
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "false"
-      envs:
-      - ./metube.enc.env
+        kustomize.config.k8s.io/needs-hash: "false"
+    envs:
+    - ./metube.enc.env

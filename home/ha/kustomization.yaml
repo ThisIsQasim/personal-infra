@@ -11,37 +11,37 @@ resources:
 - mpp-solar.yaml
 
 generators:
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: secrets
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secrets
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  secretFrom:
+  - metadata:
+      name: frigate
       annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
-    secretFrom:
-    - metadata:
-        name: frigate
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./frigate.enc.env
-    - metadata:
-        name: mqtt
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./mqtt.enc.env
-    - metadata:
-        name: scrypted
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./scrypted.enc.env
-    - metadata:
-        name: prometheus
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "false"
-      envs:
-      - ./prometheus.enc.env
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./frigate.enc.env
+  - metadata:
+      name: mqtt
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./mqtt.enc.env
+  - metadata:
+      name: scrypted
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./scrypted.enc.env
+  - metadata:
+      name: prometheus
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "false"
+    envs:
+    - ./prometheus.enc.env

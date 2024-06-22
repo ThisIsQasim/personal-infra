@@ -14,54 +14,54 @@ resources:
 
 helmCharts:
 - name: oauth2-proxy
-  repo: https://oauth2-proxy.github.io/manifests
   releaseName: oauth2-proxy
-  version: 7.7.4
+  repo: https://oauth2-proxy.github.io/manifests
   valuesFile: oauth2-proxy.yaml
+  version: 7.7.4
 
 generators:
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: secret-envs
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secret-envs
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  secretFrom:
+  - metadata:
+      name: homepage
       annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
-    secretFrom:
-    - metadata:
-        name: homepage
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./homepage.enc.env
-    - metadata:
-        name: pihole
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      envs:
-      - ./pihole.enc.env
-    - metadata:
-        name: tailscale
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "false"
-      envs:
-      - ./tailscale.enc.env
-    - metadata:
-        name: ddclient
-        annotations:
-          kustomize.config.k8s.io/needs-hash: "true"
-      files:
-      - ddclient.conf=./ddclient.enc.conf
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
-    metadata:
-      name: secret-files
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./homepage.enc.env
+  - metadata:
+      name: pihole
       annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./pihole.enc.env
+  - metadata:
+      name: tailscale
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "false"
+    envs:
+    - ./tailscale.enc.env
+  - metadata:
+      name: ddclient
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
     files:
-      - ./oauth2-proxy.enc.yaml
+    - ddclient.conf=./ddclient.enc.conf
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secret-files
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  files:
+    - ./oauth2-proxy.enc.yaml

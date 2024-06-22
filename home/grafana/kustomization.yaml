@@ -11,28 +11,28 @@ resources:
 
 helmCharts:
 - name: k8s-monitoring
-  repo: https://grafana.github.io/helm-charts
   releaseName: grafana-k8s-monitoring
-  version: 1.2.0
+  repo: https://grafana.github.io/helm-charts
   valuesFile: values.yaml
+  version: 1.2.0
 
-patchesStrategicMerge:
-- |-
-  $patch: delete
-  apiVersion: v1
-  kind: Secret
-  metadata:
-      name: grafana-agent-credentials
 
 generators:
-  - |
-    apiVersion: viaduct.ai/v1
-    kind: ksops
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secrets
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  files:
+    - ./grafana-cloud.enc.yaml
+patches:
+- patch: |-
+    $patch: delete
+    apiVersion: v1
+    kind: Secret
     metadata:
-      name: secrets
-      annotations:
-        config.kubernetes.io/function: |
-            exec:
-              path: ksops
-    files:
-      - ./grafana-cloud.enc.yaml
+        name: grafana-agent-credentials
