@@ -18,6 +18,10 @@ generators:
     kind: ksops
     metadata:
       name: secrets
+      annotations:
+        config.kubernetes.io/function: |
+            exec:
+              path: ksops
     secretFrom:
     - metadata:
         name: metube

@@ -33,5 +33,9 @@ generators:
     kind: ksops
     metadata:
       name: secrets
+      annotations:
+        config.kubernetes.io/function: |
+            exec:
+              path: ksops
     files:
       - ./repo-secret.enc.yaml
