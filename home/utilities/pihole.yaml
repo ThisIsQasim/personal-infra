@@ -130,7 +130,7 @@ spec:
     spec:
       initContainers:
       - name: copy-config
-        image: pihole/pihole:latest
+        image: ghcr.io/pi-hole/pihole:2024.06.0
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/pihole
@@ -143,7 +143,7 @@ spec:
         - cp /etc/pihole-lists/* /etc/pihole/ 
       containers:
       - name: pihole
-        image: pihole/pihole:latest
+        image: ghcr.io/pi-hole/pihole:2024.06.0
         imagePullPolicy: IfNotPresent
         env:
         - name: WEB_PORT
@@ -221,7 +221,7 @@ spec:
           subPath: 02-custom.conf
           readOnly: false
       - name: dnsproxy
-        image: adguard/dnsproxy
+        image: adguard/dnsproxy:v0.71.2
         imagePullPolicy: IfNotPresent
         args:
         - --port=5353
@@ -343,7 +343,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: pihole/pihole:latest
+      - image: ghcr.io/pi-hole/pihole:2024.06.0
         imagePullPolicy: IfNotPresent
         name: sysctler
         securityContext:
@@ -354,7 +354,8 @@ spec:
         - sysctl -w net.core.rmem_max=2500000 net.core.wmem_max=2500000 net.core.somaxconn=32768 net.ipv4.ip_local_port_range='1024 65000'
       containers:
       - name: dns-ip-fixer
-        image: pihole/pihole:latest
+        image: ghcr.io/pi-hole/pihole:2024.06.0
+        imagePullPolicy: IfNotPresent
         command: ["/bin/bash"]
         args:
         - -c
@@ -399,7 +400,7 @@ spec:
     - sh
     - -c
     - curl http://pihole-web:80/
-    image: curlimages/curl
+    image: ghcr.io/pi-hole/pihole:2024.06.0
     imagePullPolicy: IfNotPresent
     name: hook1-container
   restartPolicy: Never

@@ -18,8 +18,8 @@ spec:
         app: hammond
     spec:
       containers:
-      - image: ghcr.io/alfhou/hammond:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/alfhou/hammond:v0.0.24
+        imagePullPolicy: IfNotPresent
         name: hammond
         volumeMounts:
         - mountPath: /config
