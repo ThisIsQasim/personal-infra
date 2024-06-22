@@ -13,7 +13,7 @@ helmCharts:
 - name: k8s-monitoring
   repo: https://grafana.github.io/helm-charts
   releaseName: grafana-k8s-monitoring
-  version: 0.2.4
+  version: 0.13.4
   valuesFile: values.yaml
 
 patchesStrategicMerge:
