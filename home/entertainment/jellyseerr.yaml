@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyseerr
+  labels:
+    app: jellyseerr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyseerr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jellyseerr
+    spec:
+      containers:
+      - image: fallenbagel/jellyseerr:1.9.2
+        imagePullPolicy: IfNotPresent
+        name: jellyseerr
+        env:
+        - name: TZ
+          value: "Asia/Karachi"
+        volumeMounts:
+        - mountPath: /app/config
+          name: config
+        ports:
+        - containerPort: 5055
+        livenessProbe:
+          tcpSocket:
+            port: 5055
+          initialDelaySeconds: 600
+          periodSeconds: 5
+        readinessProbe:
+          tcpSocket:
+            port: 5055
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/entertainment/jellyseerr
+            type: DirectoryOrCreate
+      nodeSelector:
+        disk-type: media
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyseerr
+  labels:
+    app: jellyseerr
+spec:
+  ports:
+  - port: 5055
+    protocol: TCP
+    targetPort: 5055
+  selector:
+    app: jellyseerr
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyseerr
+  labels:
+    app: jellyseerr
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    gethomepage.dev/description: Media Requests
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Entertainment
+    gethomepage.dev/icon: jellyseerr.png
+    gethomepage.dev/name: jellyseerr
+    gethomepage.dev/pod-selector: app=jellyseerr
+    gethomepage.dev/weight: "94"
+    gethomepage.dev/widget.type: jellyseerr
+    gethomepage.dev/widget.url: http://jellyseerr.entertainment.svc:5055
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_JELLYSEERR_KEY}}"
+spec:
+  tls:
+  - hosts:
+    - jellyseerr.home.com
+  rules:
+  - host: jellyseerr.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jellyseerr
+            port:
+              number: 5055
