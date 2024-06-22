@@ -41,15 +41,16 @@ spec:
       hostNetwork: false
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/thisisqasim/dbus:latest
+      - image: ghcr.io/thisisqasim/dbus:0.0.1
+        imagePullPolicy: IfNotPresent
         name: clear-socket
         command: ["rm", "-rf", "/run/dbus/system_bus_socket"]
         volumeMounts:
         - mountPath: /run/dbus
           name: run
       containers:
-      - image: ghcr.io/thisisqasim/dbus:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/thisisqasim/dbus:0.0.1
+        imagePullPolicy: IfNotPresent
         name: dbus
         command: ["dbus-daemon", "--config-file=/etc/dbus-1/system.conf", "--nosyslog", "--nofork", "--nopidfile"]
         volumeMounts:

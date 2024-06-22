@@ -59,15 +59,16 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/thisisqasim/avahi:latest
+      - image: ghcr.io/thisisqasim/avahi:0.0.1
+        imagePullPolicy: IfNotPresent
         name: clear-socket
         command: ["rm", "-rf", "/run/avahi-daemon/pid", "/run/avahi-daemon/socket"]
         volumeMounts:
         - mountPath: /run/avahi-daemon
           name: run
       containers:
-      - image: ghcr.io/thisisqasim/avahi:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/thisisqasim/avahi:0.0.1
+        imagePullPolicy: IfNotPresent
         name: avahi
         command: ["avahi-daemon", "--no-chroot", "--no-proc-title", "--no-drop-root", "-f", "/etc/avahi/avahi-daemon.conf"]
         volumeMounts:
