@@ -279,6 +279,12 @@ spec:
         - name: webrtc-udp
           containerPort: 8555
           protocol: UDP
+        startupProbe:
+          failureThreshold: 20
+          httpGet:
+            path: /api/version
+            port: http
+            scheme: HTTP
         livenessProbe:
           httpGet:
             path: /api/version
