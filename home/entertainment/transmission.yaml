@@ -21,8 +21,8 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: ghcr.io/thisisqasim/transmission:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/thisisqasim/transmission:0.0.1
+        imagePullPolicy: IfNotPresent
         name: transmission
         env:
         - name: TRANSMISSION_DOWNLOAD_LIMIT

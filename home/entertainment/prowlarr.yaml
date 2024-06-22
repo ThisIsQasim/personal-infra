@@ -18,8 +18,8 @@ spec:
         app: prowlarr
     spec:
       containers:
-      - image: lscr.io/linuxserver/prowlarr:latest
-        imagePullPolicy: Always
+      - image: lscr.io/linuxserver/prowlarr:1.18.0
+        imagePullPolicy: IfNotPresent
         name: prowlarr
         env:
         - name: PUID

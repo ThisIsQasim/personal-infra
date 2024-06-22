@@ -18,8 +18,8 @@ spec:
         app: radarr
     spec:
       containers:
-      - image: lscr.io/linuxserver/radarr:latest
-        imagePullPolicy: Always
+      - image: lscr.io/linuxserver/radarr:5.7.0
+        imagePullPolicy: IfNotPresent
         name: radarr
         env:
         - name: PUID

@@ -50,7 +50,8 @@ spec:
     spec:
       serviceAccount: metube
       containers:
-      - image: ghcr.io/tailscale/tailscale
+      - image: ghcr.io/tailscale/tailscale:v1.68.1
+        imagePullPolicy: IfNotPresent
         name: tailscale
         env:
         - name: TS_HOSTNAME
@@ -78,8 +79,8 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
-      - image: ghcr.io/alexta69/metube:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/alexta69/metube:2024-06-16
+        imagePullPolicy: IfNotPresent
         name: metube
         env:
         - name: UID

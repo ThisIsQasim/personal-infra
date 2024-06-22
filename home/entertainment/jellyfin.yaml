@@ -21,8 +21,8 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: jellyfin/jellyfin:latest
-        imagePullPolicy: Always
+      - image: ghcr.io/jellyfin/jellyfin:10.9.6
+        imagePullPolicy: IfNotPresent
         name: jellyfin
         env:
         - name: JELLYFIN_PublishedServerUrl

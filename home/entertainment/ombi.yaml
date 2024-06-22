@@ -18,8 +18,8 @@ spec:
         app: ombi
     spec:
       containers:
-      - image: lscr.io/linuxserver/ombi:latest
-        imagePullPolicy: Always
+      - image: lscr.io/linuxserver/ombi:4.43.5
+        imagePullPolicy: IfNotPresent
         name: ombi
         env:
         - name: PUID
