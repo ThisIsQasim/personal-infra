@@ -6,7 +6,15 @@ resources:
 - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.28
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/namespace
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/default
-- authentik.yaml
+- authentikdb.yaml
+
+helmCharts:
+- name: authentik
+  namespace: authentik
+  releaseName: authentik
+  repo: https://charts.goauthentik.io
+  valuesFile: authentik.yaml
+  version: 2024.6.0
 
 patches:
 - target:
@@ -50,3 +58,8 @@ generators:
       namespace: external-dns
     envs:
     - pihole-password.enc.env
+  - metadata:
+      name: authentik-key
+      namespace: authentik
+    envs:
+    - authentik.enc.env

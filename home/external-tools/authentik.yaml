@@ -1,46 +1,42 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: authentik
----
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PostgresCluster
-metadata:
-  name: authentik
-  namespace: authentik
-spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
-  postgresVersion: 16
-  instances:
-    - replicas: 2
-      dataVolumeClaimSpec:
-        storageClassName: local-path
-        accessModes:
-        - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 1Gi
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  postgres-operator.crunchydata.com/cluster: authentik
-                  postgres-operator.crunchydata.com/instance-set: "00"
-  backups:
-    pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
-      repos:
-      - name: repo1
-        volume:
-          volumeClaimSpec:
-            storageClassName: local-path
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 1Gi
+global:
+  env:
+  - name: AUTHENTIK_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: authentik-key
+        key: secretkey
+
+authentik:
+  postgresql:
+    host: file:///postgres-creds/host
+    port: file:///postgres-creds/port
+    name: file:///postgres-creds/dbname
+    user: file:///postgres-creds/user
+    password: file:///postgres-creds/password
+  error_reporting:
+    enabled: true
+server:
+  ingress:
+    enabled: true
+    hosts:
+      - authentik.home.com
+  volumes:
+    - name: postgres-creds
+      secret:
+        secretName: authentik-db-pguser-authentik-db
+  volumeMounts:
+    - name: postgres-creds
+      mountPath: /postgres-creds
+      readOnly: true
+worker:
+  volumes:
+    - name: postgres-creds
+      secret:
+        secretName: authentik-db-pguser-authentik-db
+  volumeMounts:
+    - name: postgres-creds
+      mountPath: /postgres-creds
+      readOnly: true
+
+redis:
+  enabled: true
