@@ -17,7 +17,7 @@ helmCharts:
   releaseName: oauth2-proxy
   repo: https://oauth2-proxy.github.io/manifests
   valuesFile: oauth2-proxy.yaml
-  version: 7.7.4
+  version: 7.7.6
 
 generators:
 - |
