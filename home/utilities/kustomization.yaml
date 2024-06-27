@@ -12,13 +12,6 @@ resources:
 - speedtest.yaml
 - apcupsd.yaml
 
-helmCharts:
-- name: oauth2-proxy
-  releaseName: oauth2-proxy
-  repo: https://oauth2-proxy.github.io/manifests
-  valuesFile: oauth2-proxy.yaml
-  version: 7.7.6
-
 generators:
 - |
   apiVersion: viaduct.ai/v1
@@ -54,14 +47,3 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     files:
     - ddclient.conf=./ddclient.enc.conf
-- |
-  apiVersion: viaduct.ai/v1
-  kind: ksops
-  metadata:
-    name: secret-files
-    annotations:
-      config.kubernetes.io/function: |
-          exec:
-            path: ksops
-  files:
-    - ./oauth2-proxy.enc.yaml
