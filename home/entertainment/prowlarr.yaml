@@ -79,10 +79,12 @@ metadata:
     app: prowlarr
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/auth-signin: https://iap.home.com/oauth2/start?rd=https://$host$escaped_request_uri
-    nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.utilities.svc.cluster.local/oauth2/auth
-    nginx.ingress.kubernetes.io/auth-cache-key: $cookie__oauth2_proxy
-    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 0m
+    nginx.ingress.kubernetes.io/auth-url: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/nginx
+    nginx.ingress.kubernetes.io/auth-signin: https://authentik.home.com/outpost.goauthentik.io/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-snippet: |
+        proxy_set_header X-Forwarded-Host $http_host;
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie_authentik_proxy_EhWySFtO
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 5s
     gethomepage.dev/description: Torrent indexer for *arr stack
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Entertainment
