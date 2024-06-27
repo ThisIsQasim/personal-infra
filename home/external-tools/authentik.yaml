@@ -18,6 +18,17 @@ authentik:
 server:
   ingress:
     enabled: true
+    annotations:
+      gethomepage.dev/description: Authentication
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/group: Utilities
+      gethomepage.dev/icon: authentik.png
+      gethomepage.dev/name: authentik
+      gethomepage.dev/pod-selector: app.kubernetes.io/name=authentik
+      gethomepage.dev/weight: "5"
+      gethomepage.dev/widget.type: authentik
+      gethomepage.dev/widget.url: http://authentik-server.authentik.svc:80
+      gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_AUTHENTIK_KEY}}"
     hosts:
       - authentik.home.com
   volumes:
