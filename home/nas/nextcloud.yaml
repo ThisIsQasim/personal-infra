@@ -122,8 +122,8 @@ spec:
         - -c
         - |
           set -eu
-          ./occ maintenance:update:htaccess
           until ls /var/www/html/lib/versioncheck.php; do sleep 1; done
+          ./occ maintenance:update:htaccess
           ./occ upgrade
           ./occ db:add-missing-columns
           ./occ db:add-missing-primary-keys
