@@ -123,7 +123,8 @@ spec:
         - |
           set -eu
           ./occ maintenance:update:htaccess
-          # ./occ upgrade
+          until ls /var/www/html/lib/versioncheck.php; do sleep 1; done
+          ./occ upgrade
           ./occ db:add-missing-columns
           ./occ db:add-missing-primary-keys
           ./occ db:add-missing-indices
