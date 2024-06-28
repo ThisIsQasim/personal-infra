@@ -123,16 +123,18 @@ spec:
         - |
           set -eu
           ./occ maintenance:update:htaccess
-          sed -i '/protected \$allowedFormActionDomains = \[/a '\''\*.'$CSP_DOMAIN''\'',' \
-            lib/public/AppFramework/Http/ContentSecurityPolicy.php
-          sed -i '/protected \$allowedFormActionDomains = \[/a '\'''$CSP_DOMAIN''\'',' \
-            lib/public/AppFramework/Http/ContentSecurityPolicy.php
+          ./occ upgrade
+          ./occ db:add-missing-columns
+          ./occ db:add-missing-primary-keys
+          ./occ db:add-missing-indices
+          ./occ maintenance:mimetype:update-db
+          ./occ maintenance:mimetype:update-js
+          ./occ maintenance:repair
+          ./occ maintenance:update:htaccess
           while sleep 300;do php -f cron.php; done
         env:
         - name: PHP_MEMORY_LIMIT
           value: 1G
-        - name: CSP_DOMAIN
-          value: home.com
         resources:
           requests:
             cpu: 50m
@@ -214,13 +216,6 @@ spec:
   - host: cloud.home.com
     http:
       paths:
-      - path: /push
-        pathType: Prefix
-        backend:
-          service:
-            name: nextcloud
-            port:
-              number: 7867
       - path: /
         pathType: Prefix
         backend:
@@ -228,3 +223,29 @@ spec:
             name: nextcloud
             port:
               number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nextcloud-push
+  labels:
+    app: nextcloud
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  tls:
+  - hosts:
+    - cloud.home.com
+  rules:
+  - host: cloud.home.com
+    http:
+      paths:
+      - path: /push
+        pathType: Prefix
+        backend:
+          service:
+            name: nextcloud
+            port:
+              number: 7867
