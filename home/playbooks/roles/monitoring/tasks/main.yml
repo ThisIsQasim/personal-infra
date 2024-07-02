@@ -1,0 +1,38 @@
+---
+# Documentation for the community maintained prometheus role
+# https://prometheus-community.github.io/ansible/branch/main/prometheus_role.html
+- name: Include the community provided node_exporter role
+  ansible.builtin.import_role:
+    name: prometheus.prometheus.node_exporter
+  vars:
+    node_exporter_web_listen_address: "127.0.0.1:9100"
+  tags: monitoring
+
+- name: Include the community provided prometheus role
+  ansible.builtin.import_role:
+    name: prometheus.prometheus.prometheus
+  vars:
+    prometheus_agent_mode: true
+    prometheus_storage_retention: "7h"
+    prometheus_web_listen_address: "127.0.0.1:9090"
+    prometheus_scrape_configs:
+      - job_name: "node-exporter"
+        scrape_interval: 10s
+        static_configs:
+        - targets: ["{{ inventory_hostname }}:9100"]
+    prometheus_remote_write:
+      - url: "{{ prometheus_url }}"
+        basic_auth:
+          username: "{{ prometheus_username }}"
+          password: "{{ prometheus_password }}"
+  tags: monitoring
+
+- name: Copy rules for node exporter
+  ansible.builtin.copy:
+    src: node_rules.yaml
+    dest: "{{ prometheus_config_dir }}/rules/node_exporter.rules"
+    mode: '644'
+    backup: true
+  notify:
+    - restart prometheus
+  tags: monitoring

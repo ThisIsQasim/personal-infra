@@ -1,0 +1,27 @@
+---
+- name: Make sure ntp is installed
+  package:
+    name: ntp
+    state: present
+  tags: ntp
+
+- name: Make sure ntpd is running and enabled
+  ansible.builtin.service:
+    name: ntp
+    state: started
+    enabled: true
+  tags: ntp
+
+# Translate the ansible provided architecture name to debian style architecture names
+- name: Set DPKG architecture
+  set_fact:
+    dpkg_arch: '{{ {"x86_64": "amd64", "aarch64": "arm64"}[ansible_architecture] | default("") }}'
+  tags: always
+
+- name: Update the /etc/hosts file with node name
+  lineinfile:
+    dest: "/etc/hosts"
+    regexp: '.*{{ inventory_hostname }}$'
+    line: "127.0.0.1 {{ inventory_hostname }}"
+    state: present
+  tags: etchostsupdate

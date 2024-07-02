@@ -1,0 +1,18 @@
+---
+services:
+  mpp-solar:
+    build:
+      context: .
+      pull: true
+    pull_policy: build
+    privileged: true
+    restart: unless-stopped
+    volumes:
+    - ./mpp-solar.conf:/etc/mpp-solar/mpp-solar.conf
+    - /var/lib/node_exporter:/var/lib/node_exporter
+    devices:
+    - /dev/hidraw0:/dev/hidraw0
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"

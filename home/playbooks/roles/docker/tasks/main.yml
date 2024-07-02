@@ -1,0 +1,65 @@
+---
+- name: Setup the docker apt repo with signing keys
+  block:
+    - name: Create apt keyrings folder if it does not exist
+      ansible.builtin.file:
+        path: "/etc/apt/keyrings"
+        state: directory
+
+    - name: Download docker repo signing key
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/.docker.gpg.enarmored
+      register: gpg
+
+    - name: Dearmor docker repo signing key
+      ansible.builtin.command: /usr/bin/gpg --dearmor --yes --output /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/.docker.gpg.enarmored
+      when: gpg.changed
+
+    - name: Setup docker apt repo
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ dpkg_arch }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        filename: docker
+        state: present
+  tags: docker
+
+- name: Make sure docker is installed
+  ansible.builtin.package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - python3-pip
+    state: present
+  tags: docker
+
+- name: Install docker python package
+  ansible.builtin.pip:
+    name:
+      - docker==6.1.3
+      - docker-compose==1.29.2
+    extra_args: -i https://pypi.python.org/simple
+  tags: docker
+
+- name: Add deployment user to docker group
+  ansible.builtin.user:
+    name: "{{ deployment_username }}"
+    groups: docker
+    append: true
+  tags: docker
+
+- name: Reset the connection if the user changed
+  ansible.builtin.meta: reset_connection
+  tags: docker
+
+- name: Make sure docker is running and enabled
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+  tags: docker
+
+- name: Enable x86 emulation on ARM machines
+  ansible.builtin.command: docker run --privileged --rm tonistiigi/binfmt --install all
+  when: dpkg_arch == "arm64"

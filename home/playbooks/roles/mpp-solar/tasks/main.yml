@@ -1,0 +1,38 @@
+---
+- name: Copy mpp-solar files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ mpp_solar_project_directory }}/{{ item }}"
+    owner: "{{ deployment_username }}"
+    mode: '0644'
+    backup: true
+  with_items:
+    - Dockerfile
+    - prom_file.py
+    - docker-compose.yml
+  tags: mpp-solar
+
+- name: Write mpp-solar config
+  ansible.builtin.template:
+    src: mpp-solar.conf.j2
+    dest: "{{ mpp_solar_project_directory }}/mpp-solar.conf"
+    mode: '0644'
+  tags: mpp-solar
+
+- name: Bring up services
+  community.docker.docker_compose_v2:
+    project_src: "{{ mpp_solar_project_directory }}"
+    state: present
+  tags: mpp-solar
+  register: output
+
+- name: Show results
+  ansible.builtin.debug:
+    var: output
+  tags: mpp-solar
+
+- name: Verify that web and db services are running
+  ansible.builtin.assert:
+    that:
+      - "output.containers[0].State == 'running'"
+  tags: mpp-solar
