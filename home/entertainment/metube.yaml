@@ -9,7 +9,7 @@ rules:
   # Create can not be restricted to a resource name.
   verbs: ["create"]
 - apiGroups: [""] # "" indicates the core API group
-  resourceNames: ["metube"]
+  resourceNames: ["metube-tailscale-state"]
   resources: ["secrets"]
   verbs: ["get", "update", "patch"]
 ---
@@ -59,7 +59,7 @@ spec:
         - name: TS_EXTRA_ARGS
           value: "--login-server https://headscale.project.com:443"
         - name: TS_KUBE_SECRET
-          value: "metube"
+          value: "metube-tailscale-state"
         - name: TS_DEBUG_FIREWALL_MODE
           value: "auto"
         - name: TS_USERSPACE
