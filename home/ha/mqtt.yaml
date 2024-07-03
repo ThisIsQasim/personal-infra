@@ -147,7 +147,8 @@ spec:
           limits:
             memory: "1Gi"
         ports:
-        - containerPort: 1883
+        - name: mqtt
+          containerPort: 1883
         readinessProbe:
           tcpSocket:
             port: 1883
@@ -156,6 +157,33 @@ spec:
           mountPath: /mosquitto/config
         - name: database
           mountPath: /mosquitto/data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      - name: mqtt-exporter
+        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MQTT_ADDRESS
+          value: 127.0.0.1
+        - name: ZIGBEE2MQTT_AVAILABILITY
+          value: "True"
+        envFrom:
+        - secretRef:
+            name: mqtt
+        resources:
+          requests:
+            cpu: 20m
+          limits:
+            memory: "200Mi"
+        ports:
+        - name: metrics
+          containerPort: 9000
+        readinessProbe:
+          tcpSocket:
+            port: 9000
         securityContext:
           capabilities:
             drop:
@@ -234,7 +262,8 @@ spec:
           limits:
             memory: "1Gi"
         ports:
-        - containerPort: 1883
+        - name: mqtt
+          containerPort: 1883
         readinessProbe:
           tcpSocket:
             port: 1883
@@ -243,6 +272,33 @@ spec:
           mountPath: /mosquitto/config
         - name: database
           mountPath: /mosquitto/data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      - name: mqtt-exporter
+        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MQTT_ADDRESS
+          value: 127.0.0.1
+        - name: ZIGBEE2MQTT_AVAILABILITY
+          value: "True"
+        envFrom:
+        - secretRef:
+            name: mqtt
+        resources:
+          requests:
+            cpu: 20m
+          limits:
+            memory: "200Mi"
+        ports:
+        - name: metrics
+          containerPort: 9000
+        readinessProbe:
+          tcpSocket:
+            port: 9000
         securityContext:
           capabilities:
             drop:
@@ -265,3 +321,17 @@ spec:
         runAsUser: 1883
       nodeSelector:
         kubernetes.io/hostname: node3
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: mqtt
+  labels:
+    app: mqtt
+    release: kube-prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app: mqtt
+  podMetricsEndpoints:
+  - port: metrics
