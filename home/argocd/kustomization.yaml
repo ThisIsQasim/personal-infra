@@ -24,6 +24,7 @@ generators:
             path: ksops
   files:
     - ./repo-secret.enc.yaml
+    - ./argocd-secret.enc.yaml
 patches:
 - path: argocd-clusterrole.yaml
   target:
@@ -33,5 +34,6 @@ patches:
     version: v1
 - path: argocd-cm.yaml
 - path: argocd-cmd-params-cm.yaml
+- path: argocd-rbac-cm.yaml
 - path: argocd-repo-server.yaml
 - path: argocd-ssh-known-hosts-cm.yaml

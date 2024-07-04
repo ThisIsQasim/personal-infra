@@ -8,3 +8,18 @@ metadata:
 data:
   kustomize.buildOptions: "--enable-alpha-plugins --enable-exec --enable-helm"
   exec.enabled: "true"
+  url: https://argocd.home.com
+  dex.config: |
+    connectors:
+    - config:
+        issuer: https://authentik.home.com/application/o/argocd/
+        clientID: jGZ27ECFCA252P7FaPW3cMhVy8aZnqZpLrJQPbbJ
+        clientSecret: $dex.authentik.clientSecret
+        insecureEnableGroups: true
+        scopes:
+          - openid
+          - profile
+          - email
+      name: authentik
+      type: oidc
+      id: authentik
