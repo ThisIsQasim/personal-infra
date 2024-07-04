@@ -79,7 +79,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Entertainment
     gethomepage.dev/icon: jellyseerr.png
-    gethomepage.dev/name: jellyseerr
+    gethomepage.dev/name: Jellyseerr
     gethomepage.dev/pod-selector: app=jellyseerr
     gethomepage.dev/weight: "94"
     gethomepage.dev/widget.type: jellyseerr

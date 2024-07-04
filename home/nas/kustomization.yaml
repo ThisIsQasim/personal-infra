@@ -9,6 +9,7 @@ resources:
 - mysql.yaml
 - nextcloud.yaml
 - redis.yaml
+- minio.yaml
 
 generators:
 - |
@@ -33,3 +34,9 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     envs:
     - ./samba.enc.env
+  - metadata:
+      name: minio
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./minio.enc.env
