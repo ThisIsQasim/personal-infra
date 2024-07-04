@@ -168,6 +168,8 @@ spec:
         env:
         - name: MQTT_ADDRESS
           value: 127.0.0.1
+        - name: MQTT_IGNORED_TOPICS
+          value: "frigate/stats,frigate/events,frigate/*snapshot,zigbee2mqtt/bridge/*"
         - name: ZIGBEE2MQTT_AVAILABILITY
           value: "True"
         envFrom:
@@ -283,6 +285,8 @@ spec:
         env:
         - name: MQTT_ADDRESS
           value: 127.0.0.1
+        - name: MQTT_IGNORED_TOPICS
+          value: "frigate/stats,frigate/events,frigate/*snapshot,zigbee2mqtt/bridge/*"
         - name: ZIGBEE2MQTT_AVAILABILITY
           value: "True"
         envFrom:
