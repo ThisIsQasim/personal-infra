@@ -47,6 +47,11 @@ spec:
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+      configuration:
+      - secret:
+          name: authentik-s3-creds
+      global:
+        repo2-s3-uri-style: path
       repos:
       - name: repo1
         volume:
@@ -57,3 +62,8 @@ spec:
             resources:
               requests:
                 storage: 1Gi
+      - name: repo2
+        s3:
+          bucket: "authentik-postgres-backup"
+          endpoint: "s3.home.com"
+          region: "eu-central-1"

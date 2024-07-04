@@ -63,3 +63,8 @@ generators:
       namespace: authentik
     envs:
     - authentik.enc.env
+  - metadata:
+      name: authentik-s3-creds
+      namespace: authentik
+    files:
+      - s3.conf=./authentik-s3.enc.conf
