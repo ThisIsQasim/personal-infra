@@ -8,7 +8,6 @@
     backup: true
   with_items:
     - Dockerfile
-    - prom_file.py
     - docker-compose.yml
   tags: mpp-solar
 
