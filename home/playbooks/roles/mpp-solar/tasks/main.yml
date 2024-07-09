@@ -9,6 +9,7 @@
   with_items:
     - Dockerfile
     - docker-compose.yml
+    - stale-metrics-cleaner.sh
   tags: mpp-solar
 
 - name: Write mpp-solar config
@@ -34,4 +35,5 @@
   ansible.builtin.assert:
     that:
       - "output.containers[0].State == 'running'"
+      - "output.containers[1].State == 'running'"
   tags: mpp-solar

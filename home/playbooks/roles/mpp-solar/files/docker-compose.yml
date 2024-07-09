@@ -16,3 +16,11 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+  stale-metrics-cleaner:
+    image: alpine
+    command:
+    - /bin/sh
+    - /stale-metrics-cleaner.sh
+    volumes:
+    - ./stale-metrics-cleaner.sh:/stale-metrics-cleaner.sh
+    - /var/lib/node_exporter:/var/lib/node_exporter
