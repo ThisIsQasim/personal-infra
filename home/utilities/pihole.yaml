@@ -230,7 +230,7 @@ spec:
         - --fallback=https://8.8.4.4/dns-query 
         - --http3
         - --bootstrap=8.8.8.8:53
-        - --all-servers
+        - --upstream-mode=load_balance
         livenessProbe:
           exec:
             command:
