@@ -381,6 +381,9 @@ metadata:
     gethomepage.dev/name: Frigate
     gethomepage.dev/pod-selector: app=frigate
     gethomepage.dev/weight: "0"
+    gethomepage.dev/widget.type: frigate
+    gethomepage.dev/widget.url: http://frigate.ha.svc:5000
+    gethomepage.dev/widget.enableRecentEvents: "true"
 spec:
   tls:
   - hosts:
