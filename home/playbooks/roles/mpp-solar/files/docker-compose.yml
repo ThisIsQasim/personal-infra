@@ -17,7 +17,7 @@ services:
         max-size: "10m"
         max-file: "3"
   stale-metrics-cleaner:
-    image: alpine
+    image: python:3.12-slim
     command:
     - /bin/sh
     - /stale-metrics-cleaner.sh

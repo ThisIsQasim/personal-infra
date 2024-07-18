@@ -1,14 +1,24 @@
 {
   "extends": [
-    "config:base"  
+    "config:base"
   ],
-  "packageRules": [
-    {
-      "updateTypes": ["minor", "patch", "pin", "digest"],
-      "automerge": false
-    }
-  ],
+  "packageRules": [{
+    "updateTypes": ["minor", "patch", "pin", "digest"],
+    "automerge": false
+  }, {
+    "matchDatasources": ["docker"],
+    "matchPackageNames": ["ghcr.io/homebridge/homebridge"],
+    "versioning": "loose"
+  }, {
+    "matchDatasources": ["docker"],
+    "matchPackageNames": ["quay.io/minio/minio"],
+    "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+).*"
+  }, {
+    "matchDatasources": ["docker"],
+    "matchPackageNames": ["ghcr.io/servercontainers/samba"],
+    "versioning": "regex:^smbd-only-.*-s(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-r(?<revision>\\d+)?$"
+  }],
   "kubernetes": {
     "fileMatch": ["home/.+\\.yaml$", "prod1-eu1/.+\\.yaml$"]
-  }  
+  }
 }
