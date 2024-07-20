@@ -132,7 +132,7 @@ data:
             - detect
         motion:
           mask:
-          - 330,21,374,21,375,47,330,46
+          - 325,17,375,17,375,51,325,51
       hikvision-5:
         ffmpeg:
           inputs:
