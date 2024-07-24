@@ -1,0 +1,33 @@
+---
+prometheus:
+  prometheusSpec:
+    externalLabels:
+      cluster: home
+    remoteWrite:
+    - url: "https://prometheus.work.com/api/v1/write"
+      basicAuth:
+          username:
+            name: kubepromsecret
+            key: username
+          password:
+            name: kubepromsecret
+            key: password
+      # queueConfig: #2x the default
+      #   capacity: 5000
+      #   maxSamplesPerSend: 1000
+      #   maxShards: 400
+    retention: 1d
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: NotIn
+              values:
+              - node2
+prometheus-node-exporter:
+  extraArgs:
+    - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+    - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+    - --collector.textfile.directory=/host/root/var/lib/node_exporter/

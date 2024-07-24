@@ -1,0 +1,23 @@
+---
+image:
+  repository: ghcr.io/thisisqasim/node-exporter-textfiles
+  tag: fork
+textfiles:
+- name: "smartmon"
+  script: "smartmon.sh"
+  outputFilename: "smartmon"
+  interval: 900
+  additionalEnv: []
+  additionalVolumeMounts:
+  - mountPath: "/dev"
+    name: "host-dev"
+    readOnly: true
+  resources: {}
+additionalVolumes:
+  - name: textfile
+    hostPath:
+      path: /var/lib/node_exporter
+      type: DirectoryOrCreate
+  - hostPath:
+      path: /dev
+    name: host-dev

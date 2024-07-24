@@ -8,9 +8,9 @@ spec:
       elements:
       - app: entertainment
       - app: external-tools
-      # - app: grafana
       - app: ha
       - app: nas
+      - app: prometheus
       - app: utilities
   template:
     metadata:

@@ -41,7 +41,7 @@ patches:
       name: local-path
       annotations:
         storageclass.kubernetes.io/is-default-class: "true"
-  
+
 generators:
 - |
   apiVersion: viaduct.ai/v1

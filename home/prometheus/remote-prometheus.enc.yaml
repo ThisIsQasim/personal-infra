@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: kubepromsecret
+    namespace: monitoring
+type: Opaque
+stringData:
+    username: ENC[AES256_GCM,data:lHKJsPUkVA==,iv:tfYPUjlWGcRSHC6LR1vwMZJ36IzKWDspVeq9Lr9ayL8=,tag:mr1M5UBSKKiYznN0vWvCww==,type:str]
+    password: ENC[AES256_GCM,data:oee5lFnV+nyanLRLTu0+62ADUKIpyBwRtEp03YzehQJiG+/5yN64t+Se44jhAuhKMx9HCmr1,iv:l9FA8B9baRk0H4XasDsi6v0WbyjHuWZrBBvcgU0pWN4=,tag:/za5h+U73Rko9TSsHWr13Q==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1y5rqvlhmmfjs5xugxte9j4djl9ztk9v3w6n7sjg32pst5gw4vq5sey3mhy
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0dk1ZemdXVFNBcmlJaFVC
+            STM2TktQR3V6MmpPdVZNQ2VReFVvQ3NvelhjCkxUcDhsSGpuM2s2WjJZSzFyY1d0
+            T3RYeitqdGw0WkpucW9idThGY2NFYk0KLS0tIFNXaUtJU3BjMzRmYWxWWldlaFlp
+            R0hhTlZUWHVVa2lHRmJqS3d3c0pYbTAKpxkA6ZALcoPbyqTggCoEyrtjDHirW/rG
+            DW+cdQncJswj9Z1Ge+fozpUKL51N9fJyev28zF0G9hcJc5MCpN6GlA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-07-24T11:28:58Z"
+    mac: ENC[AES256_GCM,data:E2QQ35tORwIA46AucnsDhtjbHivWCbQ5ANIVSjIlLxiICBCWRp60wJhM5vTXdLdkNAoqqjp3TvUPjc6Ou5QxF1om0C76j3/j6maAmd57qizsZJHoiDLwAG3wkNmbSk70JnDvzcquPsnvOKu3sJequk7aq65og0FwXALNwZGvY+A=,iv:jrKU+OOh0wdLv+I68aNsroOZEOIREyhnU5Ue/hFIb+o=,tag:vHllNTGo7G/gx8quDyV3Zg==,type:str]
+    pgp: []
+    unencrypted_regex: ^(apiVersion|metadata|kind|type)$
+    version: 3.7.3
