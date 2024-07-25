@@ -51,8 +51,9 @@ spec:
         resources:
           requests:
             cpu: 200m
+            memory: "2Gi"
           limits:
-            memory: "1.2Gi"
+            memory: "4Gi"
         ports:
         - containerPort: 8080
           name: http
