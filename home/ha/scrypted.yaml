@@ -22,7 +22,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: scrypted
-        image: "ghcr.io/koush/scrypted:v0.114.0-jammy-lite"
+        image: "ghcr.io/koush/scrypted:v0.115.0-jammy-lite"
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
