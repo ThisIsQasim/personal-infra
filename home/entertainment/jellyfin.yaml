@@ -49,11 +49,11 @@ spec:
         resources:
           requests:
             cpu: "250m"
-            memory: "1Gi"
+            memory: "2Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
-            memory: "2Gi"
+            memory: "4Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
       volumes:
