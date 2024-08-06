@@ -59,7 +59,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/thisisqasim/avahi:0.0.2
+      - image: ghcr.io/thisisqasim/avahi:0.0.3
         imagePullPolicy: IfNotPresent
         name: clear-socket
         command: ["rm", "-rf", "/run/avahi-daemon/pid", "/run/avahi-daemon/socket"]
@@ -67,7 +67,7 @@ spec:
         - mountPath: /run/avahi-daemon
           name: run
       containers:
-      - image: ghcr.io/thisisqasim/avahi:0.0.2
+      - image: ghcr.io/thisisqasim/avahi:0.0.3
         imagePullPolicy: IfNotPresent
         name: avahi
         command: ["avahi-daemon", "--no-chroot", "--no-proc-title", "--no-drop-root", "-f", "/etc/avahi/avahi-daemon.conf"]
@@ -82,12 +82,17 @@ spec:
           name: run
         - name: dbus-socket
           mountPath: /run/dbus/system_bus_socket
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         livenessProbe:
           exec:
             command:
             - sh
             - -c
-            - test -S /run/avahi-daemon/socket
+            - avahi-resolve --name ${NODE_NAME}.local
         readinessProbe:
           exec:
             command:
