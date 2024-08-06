@@ -60,16 +60,26 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /homebridge
-        - name: avahi-socket
+        - name: host-sockets
           mountPath: /run/avahi-daemon/socket
-        - name: dbus-socket
+          subPath: avahi-daemon/socket
+        - name: host-sockets
           mountPath: /run/dbus/system_bus_socket
+          subPath: dbus/system_bus_socket
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/homebridge
           type: Directory
+      - name: host-sockets
+        hostPath:
+          path: /host/run/
+          type: Directory
+      # These sockets aren't mounted in the actual container because on
+      # dbus and avahi restarts they would not remount the socket and
+      # leave a stale file. But they are kept so the container waits
+      # for the sockets to come up before starting.
       - name: dbus-socket
         hostPath:
           path: /host/run/dbus/system_bus_socket
