@@ -17,9 +17,11 @@ spec:
     metadata:
       labels:
         app: homebridge
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[
+          { "name" : "macvlan-conf", "namespace": "kube-system", "interface": "macvlan0", "ips": [ "y.y.y.y
+          { "name" : "macvlan-iot", "namespace": "kube-system", "interface": "macvlan1", "ips": [ "y.y.y.y
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: homebridge
         image: "ghcr.io/homebridge/homebridge:2024-06-27"
@@ -38,7 +40,7 @@ spec:
         - name: HOMEBRIDGE_CONFIG_UI_PORT
           value: "8581"
         - name: ENABLE_AVAHI
-          value: "0"
+          value: "1"
         ports:
         - name: http
           containerPort: 8581
@@ -60,34 +62,12 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /homebridge
-        - name: host-sockets
-          mountPath: /run/avahi-daemon/socket
-          subPath: avahi-daemon/socket
-        - name: host-sockets
-          mountPath: /run/dbus/system_bus_socket
-          subPath: dbus/system_bus_socket
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/homebridge
           type: Directory
-      - name: host-sockets
-        hostPath:
-          path: /host/run/
-          type: Directory
-      # These sockets aren't mounted in the actual container because on
-      # dbus and avahi restarts they would not remount the socket and
-      # leave a stale file. But they are kept so the container waits
-      # for the sockets to come up before starting.
-      - name: dbus-socket
-        hostPath:
-          path: /host/run/dbus/system_bus_socket
-          type: Socket
-      - name: avahi-socket
-        hostPath:
-          path: /host/run/avahi-daemon/socket
-          type: Socket
       nodeSelector:
         disk-type: backups
 ---

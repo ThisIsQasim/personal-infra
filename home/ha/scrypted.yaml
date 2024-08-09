@@ -17,15 +17,18 @@ spec:
     metadata:
       labels:
         app: scrypted
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[{ "name" : "macvlan-conf", "namespace": "kube-system", "interface": "macvlan0", "ips": [ "y.y.y.y
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: scrypted
         image: "ghcr.io/koush/scrypted:v0.115.3-jammy-full"
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
+        env:
+        - name: SCRYPTED_DOCKER_AVAHI
+          value: "true"
         envFrom:
         - secretRef:
             name: scrypted
@@ -53,34 +56,12 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /server/volume
-        - name: host-sockets
-          mountPath: /var/run/avahi-daemon/socket
-          subPath: avahi-daemon/socket
-        - name: host-sockets
-          mountPath: /run/dbus/system_bus_socket
-          subPath: dbus/system_bus_socket
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/scrypted
           type: Directory
-      - name: host-sockets
-        hostPath:
-          path: /host/run/
-          type: Directory
-      # These sockets aren't mounted in the actual container because on
-      # dbus and avahi restarts they would not remount the socket and
-      # leave a stale file. But they are kept so the container waits
-      # for the sockets to come up before starting.
-      - name: dbus-socket
-        hostPath:
-          path: /host/run/dbus/system_bus_socket
-          type: Socket
-      - name: avahi-socket
-        hostPath:
-          path: /host/run/avahi-daemon/socket
-          type: Socket
       nodeSelector:
         disk-type: recordings
 ---
