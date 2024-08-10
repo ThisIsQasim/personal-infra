@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zte-hack
+  labels:
+    app: zte-hack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zte-hack
+  template:
+    metadata:
+      labels:
+        app: zte-hack
+    spec:
+      containers:
+      - image: ghcr.io/thisisqasim/zte-hack:0.0.4
+        imagePullPolicy: IfNotPresent
+        name: zte-hack
+        envFrom:
+        - secretRef:
+            name: zte-hack
+        env:
+        - name: ROUTER_IP
+          value: "y.y.y.y
+        resources:
+          requests:
+            cpu: "10m"
+          limits:
+            memory: "128Mi"
+        securityContext:
+          runAsNonRoot: false
+          capabilities:
+            add:
+            - NET_RAW
+            drop:
+            - ALL

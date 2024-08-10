@@ -11,6 +11,7 @@ resources:
 - ddclient.yaml
 - speedtest.yaml
 - apcupsd.yaml
+- zte-hack.yaml
 
 generators:
 - |
@@ -41,6 +42,12 @@ generators:
         kustomize.config.k8s.io/needs-hash: "false"
     envs:
     - ./tailscale.enc.env
+  - metadata:
+      name: zte-hack
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "false"
+    envs:
+    - ./zte-hack.enc.env
   - metadata:
       name: ddclient
       annotations:
