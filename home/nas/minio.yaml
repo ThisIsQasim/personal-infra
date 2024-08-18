@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
       - name: minio
-        image: quay.io/minio/minio:RELEASE.2024-08-03T04-33-23Z
+        image: quay.io/minio/minio:RELEASE.2024-08-17T01-24-54Z
         imagePullPolicy: IfNotPresent
         args:
         - server
