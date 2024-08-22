@@ -221,7 +221,7 @@ spec:
           subPath: 02-custom.conf
           readOnly: false
       - name: dnsproxy
-        image: adguard/dnsproxy:v0.73.0
+        image: adguard/dnsproxy:v0.73.1
         imagePullPolicy: IfNotPresent
         args:
         - --port=5353
