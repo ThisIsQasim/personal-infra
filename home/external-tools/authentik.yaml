@@ -51,3 +51,6 @@ worker:
 
 redis:
   enabled: true
+  master:
+    persistence:
+      enabled: false
