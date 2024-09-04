@@ -14,7 +14,7 @@ helmCharts:
   releaseName: authentik
   repo: https://charts.goauthentik.io
   valuesFile: authentik.yaml
-  version: 2024.6.4
+  version: 2024.8.0
 
 patches:
 - target:
