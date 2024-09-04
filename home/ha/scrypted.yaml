@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: scrypted
-        image: "ghcr.io/koush/scrypted:v0.116.0-jammy-full"
+        image: "ghcr.io/koush/scrypted:v0.117.2-jammy-full"
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
