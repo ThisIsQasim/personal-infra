@@ -17,7 +17,7 @@ spec:
         app: zigbee2mqtt
     spec:
       containers:
-      - image: koenkk/zigbee2mqtt:1.40.0
+      - image: koenkk/zigbee2mqtt:1.40.1
         imagePullPolicy: IfNotPresent
         name: zigbee2mqtt
         env:
