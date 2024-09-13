@@ -30,10 +30,10 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            smarter-devices/serial_by-path_pci-0000_00_14_0-usb-0_5_1_0-port: 1
+            smarter-devices/ttyUSB0: 1
           limits:
             memory: "1Gi"
-            smarter-devices/serial_by-path_pci-0000_00_14_0-usb-0_5_1_0-port: 1
+            smarter-devices/ttyUSB0: 1
         volumeMounts:
         - name: data
           mountPath: /app/data
