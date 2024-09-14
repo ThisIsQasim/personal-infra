@@ -76,7 +76,7 @@ spec:
         - name: data
           hostPath:
             path: /mnt/external/backups/s3
-            type: DirectoryOrCreate
+            type: Directory
       enableServiceLinks: false
       terminationGracePeriodSeconds: 30
       securityContext:
@@ -84,7 +84,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       nodeSelector:
-        disk-type: media
+        kubernetes.io/hostname: node1
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

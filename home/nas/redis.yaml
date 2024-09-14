@@ -62,4 +62,4 @@ spec:
         fsGroup: 999
         runAsUser: 999
       nodeSelector:
-        disk-type: media
+        kubernetes.io/hostname: node3

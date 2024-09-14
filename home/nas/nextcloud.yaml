@@ -189,7 +189,7 @@ spec:
         fsGroup: 1001
         runAsUser: 1001
       nodeSelector:
-        disk-type: media
+        kubernetes.io/hostname: node3
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
