@@ -50,7 +50,7 @@ spec:
             path: /home/entertainment/jellyseerr
             type: DirectoryOrCreate
       nodeSelector:
-        disk-type: media
+        kubernetes.io/hostname: node3
 ---
 apiVersion: v1
 kind: Service
