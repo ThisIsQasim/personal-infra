@@ -217,7 +217,7 @@ metadata:
     app: mqtt
     node: node2
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:

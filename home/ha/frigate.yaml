@@ -28,7 +28,7 @@ data:
     detectors:
       coral1:
         type: edgetpu
-        device: pci:0
+        device: pci
     detect:
       enabled: True
       width: 1280
