@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /mnt/external/backups/s3
+            path: /mnt/external/s3
             type: Directory
       enableServiceLinks: false
       terminationGracePeriodSeconds: 30
@@ -84,7 +84,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       nodeSelector:
-        kubernetes.io/hostname: node1
+        kubernetes.io/hostname: node3
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
