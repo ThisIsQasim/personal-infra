@@ -50,9 +50,9 @@ spec:
           protocol: TCP
         resources:
           requests:
-            cpu: "1"
+            cpu: "200m"
           limits:
-            memory: "2Gi"
+            memory: "1Gi"
         livenessProbe:
           tcpSocket:
             port: 8581
