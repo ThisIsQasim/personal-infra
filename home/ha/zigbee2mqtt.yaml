@@ -51,7 +51,7 @@ spec:
           path: /run/udev
           type: Directory
       nodeSelector:
-        disk-type: backups
+        kubernetes.io/hostname: node2
 ---
 apiVersion: v1
 kind: Service

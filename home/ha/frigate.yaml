@@ -372,7 +372,7 @@ spec:
           medium: Memory
           sizeLimit: 1Gi
       nodeSelector:
-        disk-type: recordings
+        kubernetes.io/hostname: node1
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

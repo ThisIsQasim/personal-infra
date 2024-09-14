@@ -23,12 +23,12 @@ data:
 
     echo "Running on $MY_NODE_NAME"
 
-    if [ "${MY_NODE_NAME}" == "node3" ]; then
+    if [ "${MY_NODE_NAME}" == "node2" ]; then
       echo "Adding bridge config"
       cat <<EOF >> /runtime/mosquitto.conf;
 
     connection ha-bridge
-    address mqtt-node2:1883
+    address mqtt-node1:1883
     bridge_insecure false
     remote_username ${MQTT_USERNAME}
     remote_password ${MQTT_PASSWORD}
@@ -48,7 +48,7 @@ metadata:
   name: mqtt
   labels:
     app: mqtt
-    node: node2
+    node: node1
   annotations:
     kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
@@ -58,7 +58,23 @@ spec:
   externalTrafficPolicy: Local
   selector:
     app: mqtt
-    node: node2
+    node: node1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-node1
+  labels:
+    app: mqtt
+    node: node1
+spec:
+  ports:
+  - port: 1883
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: mqtt
+    node: node1
 ---
 apiVersion: v1
 kind: Service
@@ -76,21 +92,122 @@ spec:
     app: mqtt
     node: node2
 ---
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: mqtt-node3
+  name: mqtt-node1
   labels:
     app: mqtt
-    node: node3
+    node: node1
 spec:
-  ports:
-  - port: 1883
-  type: ClusterIP
-  clusterIP: None
+  replicas: 1
+  strategy:
+    type: Recreate
   selector:
-    app: mqtt
-    node: node3
+    matchLabels:
+      app: mqtt
+      node: node1
+  template:
+    metadata:
+      labels:
+        app: mqtt
+        node: node1
+    spec:
+      initContainers:
+      - name: config
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - /configure.sh
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        envFrom:
+        - secretRef:
+            name: mqtt
+        volumeMounts:
+        - name: runtime
+          mountPath: /runtime
+        - name: config
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
+        - name: config
+          mountPath: /configure.sh
+          subPath: configure.sh
+      containers:
+      - name: mqtt
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 200m
+          limits:
+            memory: "256Mi"
+        ports:
+        - name: mqtt
+          containerPort: 1883
+        readinessProbe:
+          tcpSocket:
+            port: 1883
+        volumeMounts:
+        - name: runtime
+          mountPath: /mosquitto/config
+        - name: database
+          mountPath: /mosquitto/data
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      - name: mqtt-exporter
+        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MQTT_ADDRESS
+          value: 127.0.0.1
+        - name: MQTT_IGNORED_TOPICS
+          value: "frigate/stats,frigate/events,frigate/*snapshot,zigbee2mqtt/bridge/*"
+        - name: ZIGBEE2MQTT_AVAILABILITY
+          value: "True"
+        envFrom:
+        - secretRef:
+            name: mqtt
+        resources:
+          requests:
+            cpu: 20m
+          limits:
+            memory: "64Mi"
+        ports:
+        - name: metrics
+          containerPort: 9000
+        readinessProbe:
+          tcpSocket:
+            port: 9000
+        securityContext:
+          capabilities:
+            drop:
+            - ALL
+          runAsNonRoot: true
+      volumes:
+      - name: config
+        configMap:
+          name: mqtt
+      - name: runtime
+        emptyDir: {}
+      - name: database
+        hostPath:
+          path: /home/ha/mqtt
+          type: Directory
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 1883
+        runAsUser: 1883
+      nodeSelector:
+        kubernetes.io/hostname: node1
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -100,7 +217,7 @@ metadata:
     app: mqtt
     node: node2
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
@@ -208,123 +325,6 @@ spec:
         runAsUser: 1883
       nodeSelector:
         kubernetes.io/hostname: node2
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mqtt-node3
-  labels:
-    app: mqtt
-    node: node3
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: mqtt
-      node: node3
-  template:
-    metadata:
-      labels:
-        app: mqtt
-        node: node3
-    spec:
-      initContainers:
-      - name: config
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
-        imagePullPolicy: IfNotPresent
-        command:
-        - /bin/sh
-        - /configure.sh
-        env:
-        - name: MY_NODE_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
-        envFrom:
-        - secretRef:
-            name: mqtt
-        volumeMounts:
-        - name: runtime
-          mountPath: /runtime
-        - name: config
-          mountPath: /mosquitto/config/mosquitto.conf
-          subPath: mosquitto.conf
-        - name: config
-          mountPath: /configure.sh
-          subPath: configure.sh
-      containers:
-      - name: mqtt
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
-        imagePullPolicy: IfNotPresent
-        resources:
-          requests:
-            cpu: 200m
-          limits:
-            memory: "256Mi"
-        ports:
-        - name: mqtt
-          containerPort: 1883
-        readinessProbe:
-          tcpSocket:
-            port: 1883
-        volumeMounts:
-        - name: runtime
-          mountPath: /mosquitto/config
-        - name: database
-          mountPath: /mosquitto/data
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          runAsNonRoot: true
-      - name: mqtt-exporter
-        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
-        imagePullPolicy: IfNotPresent
-        env:
-        - name: MQTT_ADDRESS
-          value: 127.0.0.1
-        - name: MQTT_IGNORED_TOPICS
-          value: "frigate/stats,frigate/events,frigate/*snapshot,zigbee2mqtt/bridge/*"
-        - name: ZIGBEE2MQTT_AVAILABILITY
-          value: "True"
-        envFrom:
-        - secretRef:
-            name: mqtt
-        resources:
-          requests:
-            cpu: 20m
-          limits:
-            memory: "64Mi"
-        ports:
-        - name: metrics
-          containerPort: 9000
-        readinessProbe:
-          tcpSocket:
-            port: 9000
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          runAsNonRoot: true
-      volumes:
-      - name: config
-        configMap:
-          name: mqtt
-      - name: runtime
-        emptyDir: {}
-      - name: database
-        hostPath:
-          path: /home/ha/mqtt
-          type: Directory
-      enableServiceLinks: false
-      terminationGracePeriodSeconds: 30
-      securityContext:
-        fsGroup: 1883
-        runAsUser: 1883
-      nodeSelector:
-        kubernetes.io/hostname: node3
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
