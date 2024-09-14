@@ -23,6 +23,8 @@ spec:
         env:
         - name: MODEL
           value: "Macmini"
+        - name: SAMBA_GLOBAL_STANZA
+          value: "aio read size = 1; aio write size = 1; server multi channel support = yes; socket options = SO_RCVBUF=8192 SO_SNDBUF=8192"
         - name: SAMBA_CONF_ENABLE_NTLM_AUTH
           value: "y"
         - name: ACCOUNT_qasim
