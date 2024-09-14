@@ -1,0 +1,147 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lubelogger
+  labels:
+    app: lubelogger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lubelogger
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: lubelogger
+    spec:
+      containers:
+      - image: ghcr.io/hargata/lubelogger:v1.3.6
+        imagePullPolicy: IfNotPresent
+        name: lubelogger
+        volumeMounts:
+        - mountPath: /App/config
+          name: config
+        - mountPath: /App/data
+          name: data
+        - mountPath: /App/wwwroot/translations
+          name: translations
+        - mountPath: /App/wwwroot/documents
+          name: documents
+        - mountPath: /App/wwwroot/images
+          name: images
+        - mountPath: /App/wwwroot/temp
+          name: temp
+        - mountPath: /App/log
+          name: log
+        - mountPath: /root/.aspnet/DataProtection-Keys
+          name: keys
+        ports:
+        - name: http
+          containerPort: 8080
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: http
+            path: /defaults/plansample.csv
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+      volumes:
+        - name: config
+          hostPath:
+            path: /home/utilities/lubelogger/config
+            type: DirectoryOrCreate
+        - name: data
+          hostPath:
+            path: /home/utilities/lubelogger/data
+            type: DirectoryOrCreate
+        - name: translations
+          hostPath:
+            path: /home/utilities/lubelogger/translations
+            type: DirectoryOrCreate
+        - name: documents
+          hostPath:
+            path: /home/utilities/lubelogger/documents
+            type: DirectoryOrCreate
+        - name: images
+          hostPath:
+            path: /home/utilities/lubelogger/images
+            type: DirectoryOrCreate
+        - name: temp
+          hostPath:
+            path: /home/utilities/lubelogger/temp
+            type: DirectoryOrCreate
+        - name: log
+          hostPath:
+            path: /home/utilities/lubelogger/log
+            type: DirectoryOrCreate
+        - name: keys
+          hostPath:
+            path: /home/utilities/lubelogger/keys
+            type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: node2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lubelogger
+  labels:
+    app: lubelogger
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: lubelogger
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lubelogger
+  labels:
+    app: lubelogger
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/auth-url: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/nginx
+    nginx.ingress.kubernetes.io/auth-signin: https://authentik.home.com/outpost.goauthentik.io/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-snippet: |
+        proxy_set_header X-Forwarded-Host $http_host;
+    nginx.ingress.kubernetes.io/auth-cache-key: $cookie_authentik_proxy_EhWySFtO
+    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 5s
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    gethomepage.dev/description: Car Log
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Utilities
+    gethomepage.dev/icon: lubelogger.png
+    gethomepage.dev/name: lubelogger
+    gethomepage.dev/pod-selector: app=lubelogger
+    gethomepage.dev/weight: "20"
+spec:
+  tls:
+  - hosts:
+    - lubelogger.home.com
+  rules:
+  - host: lubelogger.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lubelogger
+            port:
+              number: 80

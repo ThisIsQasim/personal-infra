@@ -12,6 +12,7 @@ resources:
 - speedtest.yaml
 - apcupsd.yaml
 - zte-hack.yaml
+- lubelogger.yaml
 
 generators:
 - |
