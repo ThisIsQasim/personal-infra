@@ -21,6 +21,14 @@ spec:
       - image: ghcr.io/hargata/lubelogger:v1.3.6
         imagePullPolicy: IfNotPresent
         name: lubelogger
+        env:
+        - name: LC_ALL
+          value: pa_PK.UTF-8
+        - name: LANG
+          value: pa_PK.UTF-8
+        envFrom:
+        - secretRef:
+            name: lubelogger        
         volumeMounts:
         - mountPath: /App/config
           name: config

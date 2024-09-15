@@ -38,6 +38,12 @@ generators:
     envs:
     - ./pihole.enc.env
   - metadata:
+      name: lubelogger
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./lubelogger.enc.env
+  - metadata:
       name: tailscale
       annotations:
         kustomize.config.k8s.io/needs-hash: "false"
@@ -46,7 +52,7 @@ generators:
   - metadata:
       name: zte-hack
       annotations:
-        kustomize.config.k8s.io/needs-hash: "false"
+        kustomize.config.k8s.io/needs-hash: "true"
     envs:
     - ./zte-hack.enc.env
   - metadata:
