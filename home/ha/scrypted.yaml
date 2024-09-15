@@ -63,7 +63,7 @@ spec:
           path: /home/ha/scrypted
           type: Directory
       nodeSelector:
-        kubernetes.io/hostname: node1
+        kubernetes.io/hostname: node2
 ---
 apiVersion: v1
 kind: Service

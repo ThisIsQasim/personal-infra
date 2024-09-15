@@ -48,7 +48,7 @@ metadata:
   name: mqtt
   labels:
     app: mqtt
-    node: node1
+    node: node2
   annotations:
     kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
@@ -58,7 +58,7 @@ spec:
   externalTrafficPolicy: Local
   selector:
     app: mqtt
-    node: node1
+    node: node2
 ---
 apiVersion: v1
 kind: Service

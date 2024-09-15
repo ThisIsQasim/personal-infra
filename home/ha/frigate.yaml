@@ -372,7 +372,7 @@ spec:
           medium: Memory
           sizeLimit: 1Gi
       nodeSelector:
-        kubernetes.io/hostname: node1
+        kubernetes.io/hostname: node2
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
