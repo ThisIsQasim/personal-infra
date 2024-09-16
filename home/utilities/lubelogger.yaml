@@ -23,9 +23,9 @@ spec:
         name: lubelogger
         env:
         - name: LC_ALL
-          value: pa_PK.UTF-8
+          value: en_GB.UTF-8
         - name: LANG
-          value: pa_PK.UTF-8
+          value: en_GB.UTF-8
         envFrom:
         - secretRef:
             name: lubelogger        
