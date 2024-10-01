@@ -371,6 +371,9 @@ spec:
             mountPath: /media/frigate/exports
           - name: dshm
             mountPath: /dev/shm
+          - name: dshm
+            mountPath: /tmp/cache
+            subPath: tmp
         resources:
           requests:
             cpu: "1.5"
@@ -409,7 +412,7 @@ spec:
       - name: dshm
         emptyDir:
           medium: Memory
-          sizeLimit: 1Gi
+          sizeLimit: 1.5Gi
       nodeSelector:
         kubernetes.io/hostname: node2
 ---
