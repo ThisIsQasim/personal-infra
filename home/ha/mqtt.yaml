@@ -115,7 +115,7 @@ spec:
     spec:
       initContainers:
       - name: config
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.19
         imagePullPolicy: IfNotPresent
         command:
         - /bin/sh
@@ -139,7 +139,7 @@ spec:
           subPath: configure.sh
       containers:
       - name: mqtt
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.19
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -232,7 +232,7 @@ spec:
     spec:
       initContainers:
       - name: config
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.19
         imagePullPolicy: IfNotPresent
         command:
         - /bin/sh
@@ -256,7 +256,7 @@ spec:
           subPath: configure.sh
       containers:
       - name: mqtt
-        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.18
+        image: public.ecr.aws/docker/library/eclipse-mosquitto:2.0.19
         imagePullPolicy: IfNotPresent
         resources:
           requests:
