@@ -134,7 +134,7 @@ metadata:
   name: homebridge
   labels:
     app: homebridge
-    release: kube-prometheus-stack
+    release: prometheus
 spec:
   selector:
     matchLabels:

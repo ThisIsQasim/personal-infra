@@ -332,7 +332,7 @@ metadata:
   name: mqtt
   labels:
     app: mqtt
-    release: kube-prometheus-stack
+    release: prometheus
 spec:
   selector:
     matchLabels:
