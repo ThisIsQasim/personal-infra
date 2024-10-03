@@ -337,5 +337,6 @@ spec:
   selector:
     matchLabels:
       app: mqtt
+      node: node2
   podMetricsEndpoints:
   - port: metrics
