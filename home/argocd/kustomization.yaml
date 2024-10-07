@@ -36,4 +36,5 @@ patches:
 - path: argocd-cmd-params-cm.yaml
 - path: argocd-rbac-cm.yaml
 - path: argocd-repo-server.yaml
+- path: argocd-dex-server.yaml
 - path: argocd-ssh-known-hosts-cm.yaml
