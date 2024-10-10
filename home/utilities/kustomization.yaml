@@ -4,7 +4,6 @@ namespace: utilities
 resources:
 - namespace.yaml
 - homepage.yaml
-- hammond.yaml
 - ups.yaml
 - pihole.yaml
 - tailscale.yaml
