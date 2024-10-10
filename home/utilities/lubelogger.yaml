@@ -99,7 +99,7 @@ spec:
             path: /home/utilities/lubelogger/keys
             type: DirectoryOrCreate
       nodeSelector:
-        kubernetes.io/hostname: node2
+        kubernetes.io/hostname: node1
 ---
 apiVersion: v1
 kind: Service
