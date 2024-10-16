@@ -4,6 +4,34 @@ kind: Namespace
 metadata:
   name: authentik
 ---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+spec:
+  instances: 2
+  bootstrap:
+    initdb:
+      import:
+        type: microservice
+        databases:
+          - authentik-db
+        source:
+          externalCluster: crunchydata
+  storage:
+    size: 1Gi
+    storageClass: local-path
+  externalClusters:
+    - name: crunchydata
+      connectionParameters:
+        host: authentik-db-primary.authentik.svc
+        user: authentik-db
+        dbname: authentik-db
+      password:
+        name: authentik-db-pguser-authentik-db
+        key: password
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
