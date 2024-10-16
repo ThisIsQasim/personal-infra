@@ -4,8 +4,6 @@ resources:
 - external-dns.yaml
 - smarter-device-manager.yaml
 - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.30
-- github.com/CrunchyData/postgres-operator-examples/kustomize/install/namespace
-- github.com/CrunchyData/postgres-operator-examples/kustomize/install/default
 - https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml
 - authentikdb.yaml
 
@@ -18,18 +16,6 @@ helmCharts:
   version: 2024.8.3
 
 patches:
-- target:
-    group: apiextensions.k8s.io
-    kind: CustomResourceDefinition
-    name: .*.postgres-operator.crunchydata.com
-    version: v1
-  patch: |-
-    apiVersion: apiextensions.k8s.io/v1
-    kind: CustomResourceDefinition
-    metadata:
-      name: postgres-operator.crunchydata.com
-      annotations:
-        argocd.argoproj.io/sync-options: ServerSideApply=true
 - target:
     group: apiextensions.k8s.io
     kind: CustomResourceDefinition
@@ -81,8 +67,3 @@ generators:
       namespace: authentik
     envs:
     - authentik-pgsql-s3.enc.env
-  - metadata:
-      name: authentik-s3-creds
-      namespace: authentik
-    files:
-      - s3.conf=./authentik-s3.enc.conf
