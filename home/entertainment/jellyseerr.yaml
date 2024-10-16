@@ -18,7 +18,7 @@ spec:
         app: jellyseerr
     spec:
       containers:
-      - image: fallenbagel/jellyseerr:1.9.2
+      - image: fallenbagel/jellyseerr:2.0.0
         imagePullPolicy: IfNotPresent
         name: jellyseerr
         env:
