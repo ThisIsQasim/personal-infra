@@ -6,6 +6,7 @@ resources:
 - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.30
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/namespace
 - github.com/CrunchyData/postgres-operator-examples/kustomize/install/default
+- https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.0/cnpg-1.24.0.yaml
 - authentikdb.yaml
 
 helmCharts:
