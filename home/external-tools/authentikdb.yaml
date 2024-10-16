@@ -35,3 +35,14 @@ spec:
           name: authentik-pgsql-s3
           key: ACCESS_SECRET_KEY
     retentionPolicy: "30d"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: authentik-pgsql
+  namespace: authentik
+spec:
+  schedule: "0 0 0 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: authentik-pgsql
