@@ -77,6 +77,11 @@ generators:
     envs:
     - authentik.enc.env
   - metadata:
+      name: authentik-pgsql-s3
+      namespace: authentik
+    envs:
+    - authentik-pgsql-s3.enc.env
+  - metadata:
       name: authentik-s3-creds
       namespace: authentik
     files:

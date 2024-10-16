@@ -11,7 +11,7 @@ authentik:
     host: file:///postgres-creds/host
     port: file:///postgres-creds/port
     name: file:///postgres-creds/dbname
-    user: file:///postgres-creds/user
+    user: file:///postgres-creds/username
     password: file:///postgres-creds/password
   error_reporting:
     enabled: true
@@ -34,7 +34,7 @@ server:
   volumes:
     - name: postgres-creds
       secret:
-        secretName: authentik-db-pguser-authentik-db
+        secretName: authentik-pgsql-app
   volumeMounts:
     - name: postgres-creds
       mountPath: /postgres-creds
@@ -43,7 +43,7 @@ worker:
   volumes:
     - name: postgres-creds
       secret:
-        secretName: authentik-db-pguser-authentik-db
+        secretName: authentik-pgsql-app
   volumeMounts:
     - name: postgres-creds
       mountPath: /postgres-creds

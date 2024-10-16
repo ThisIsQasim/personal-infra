@@ -1,0 +1,47 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-pgsql
+  namespace: authentik
+spec:
+  instances: 2
+  bootstrap:
+    initdb:
+      database: authentik
+      import:
+        type: microservice
+        databases:
+          - authentik-db
+        source:
+          externalCluster: crunchydata
+  postgresql:
+    parameters:
+      "pgaudit.log": "all, -misc"
+      "pgaudit.log_catalog": "off"
+      "pgaudit.log_parameter": "on"
+      "pgaudit.log_relation": "on"
+  storage:
+    size: 1Gi
+    storageClass: local-path
+  externalClusters:
+    - name: crunchydata
+      connectionParameters:
+        host: authentik-db-primary.authentik.svc
+        user: authentik-db
+        dbname: authentik-db
+      password:
+        name: authentik-db-pguser-authentik-db
+        key: password
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://authentik-postgres-backup/
+      endpointURL: https://s3.home.com
+      s3Credentials:
+        accessKeyId:
+          name: authentik-pgsql-s3
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: authentik-pgsql-s3
+          key: ACCESS_SECRET_KEY
+    retentionPolicy: "30d"
