@@ -1,29 +1,65 @@
 {
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
-  "packageRules": [{
-    "updateTypes": ["major", "minor", "patch", "pin", "digest"],
-    "automerge": false
-  }, {
-    "matchDatasources": ["docker"],
-    "matchPackageNames": ["ghcr.io/renovatebot/renovate"],
-    "updateTypes": ["minor", "patch", "pin", "digest"],
-    "automerge": true
-  }, {
-    "matchDatasources": ["docker"],
-    "matchPackageNames": ["ghcr.io/homebridge/homebridge"],
-    "versioning": "loose"
-  }, {
-    "matchDatasources": ["docker"],
-    "matchPackageNames": ["quay.io/minio/minio"],
-    "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+).*"
-  }, {
-    "matchDatasources": ["docker"],
-    "matchPackageNames": ["ghcr.io/servercontainers/samba"],
-    "versioning": "regex:^smbd-only-.*-s(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-r(?<revision>\\d+)?$"
-  }],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": false
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/renovatebot/renovate"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/homebridge/homebridge"
+      ],
+      "versioning": "loose"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "quay.io/minio/minio"
+      ],
+      "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+).*"
+    },
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/servercontainers/samba"
+      ],
+      "versioning": "regex:^smbd-only-.*-s(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-r(?<revision>\\d+)?$"
+    }
+  ],
   "kubernetes": {
-    "fileMatch": ["home/.+\\.yaml$", "prod1-eu1/.+\\.yaml$"]
+    "fileMatch": [
+      "home/.+\\.yaml$",
+      "prod1-eu1/.+\\.yaml$"
+    ]
   }
 }
