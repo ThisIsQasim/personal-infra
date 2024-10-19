@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: nextcloud
-        image: public.ecr.aws/docker/library/nextcloud:30.0.0
+        image: public.ecr.aws/docker/library/nextcloud:30.0.1
         imagePullPolicy: IfNotPresent
         env:
         - name: PHP_MEMORY_LIMIT
@@ -83,7 +83,7 @@ spec:
         - name: nextcloud
           mountPath: /var/www/html
       - name: push
-        image: public.ecr.aws/docker/library/nextcloud:30.0.0
+        image: public.ecr.aws/docker/library/nextcloud:30.0.1
         imagePullPolicy: IfNotPresent
         command:
         - /var/www/html/custom_apps/notify_push/bin/x86_64/notify_push
@@ -118,7 +118,7 @@ spec:
         - name: data
           mountPath: /var/www/html/data
       - name: cron
-        image: public.ecr.aws/docker/library/nextcloud:30.0.0
+        image: public.ecr.aws/docker/library/nextcloud:30.0.1
         imagePullPolicy: IfNotPresent
         command:
         - /bin/bash
