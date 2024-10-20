@@ -12,6 +12,7 @@ resources:
 - apcupsd.yaml
 - zte-hack.yaml
 - lubelogger.yaml
+- httpbin.yaml
 
 generators:
 - |
