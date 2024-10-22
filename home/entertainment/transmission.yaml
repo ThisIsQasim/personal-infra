@@ -21,7 +21,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: ghcr.io/thisisqasim/transmission:0.0.4
+      - image: ghcr.io/thisisqasim/transmission:0.0.5
         imagePullPolicy: IfNotPresent
         name: transmission
         env:
