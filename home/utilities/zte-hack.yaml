@@ -16,7 +16,7 @@ spec:
         app: zte-hack
     spec:
       containers:
-      - image: ghcr.io/thisisqasim/zte-hack:0.0.4
+      - image: ghcr.io/thisisqasim/zte-hack:0.0.5
         imagePullPolicy: IfNotPresent
         name: zte-hack
         envFrom:
