@@ -77,4 +77,5 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: node1
           restartPolicy: Never
+  timeZone: 'Asia/Karachi'
   schedule: '15 5 * * *'
