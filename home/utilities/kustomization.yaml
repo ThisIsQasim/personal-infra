@@ -13,6 +13,7 @@ resources:
 - zte-hack.yaml
 - lubelogger.yaml
 - httpbin.yaml
+- backups.yaml
 
 generators:
 - |
@@ -61,3 +62,9 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     files:
     - ddclient.conf=./ddclient.enc.conf
+  - metadata:
+      name: backups
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    files:
+    - id_rsa=./backups.enc.pem

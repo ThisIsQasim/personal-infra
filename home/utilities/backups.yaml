@@ -1,0 +1,80 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backups
+spec:
+  jobTemplate:
+    metadata:
+      name: backups
+    spec:
+      completionMode: Indexed
+      completions: 6
+      parallelism: 1
+      backoffLimit: 0
+      backoffLimitPerIndex: 0
+      template:
+        metadata:
+          labels:
+            app: backups
+        spec:
+          containers:
+          - name: backups
+            image: ghcr.io/thisisqasim/rsync:0.0.5
+            command:
+            - /bin/sh
+            - -c
+            - |
+              case $JOB_COMPLETION_INDEX in
+                0) SERVER_NAME=reich SERVER_HOST=reich.project.com ;;
+                1) SERVER_NAME=node1 SERVER_HOST=y.y.y.y
+                2) SERVER_NAME=node2 SERVER_HOST=y.y.y.y
+                3) SERVER_NAME=node3 SERVER_HOST=y.y.y.y
+                4) SERVER_NAME=raspberrypi-zigbee SERVER_HOST=y.y.y.y
+                5) SERVER_NAME=raspberrypi-solar SERVER_HOST=y.y.y.y
+                *) echo "Unknown index ${JOB_COMPLETION_INDEX}" && exit 1 ;;
+              esac
+
+              TARGET_DIR=/mnt/backups/${SERVER_NAME}
+
+              mkdir -p ${TARGET_DIR}
+              alias rsync='rsync --delete --archive --relative \
+                        --rsync-path="sudo rsync" \
+                        -e "ssh -o StrictHostKeyChecking=no -i /root/id_rsa"'
+
+              case $SERVER_NAME in
+                reich)
+                   rsync backups@${SERVER_HOST}:/root \
+                             :/var/www \
+                             :/opt \
+                             :/etc/nginx/conf.d \
+                             :/etc/letsencrypt \
+                             :/var/spool/cron/ \
+                             :/mnt/nextcloud ${TARGET_DIR}/;;
+                node1|node2|node3|raspberrypi-zigbee|raspberrypi-solar)
+                   rsync backups@${SERVER_HOST}:/root \
+                             :/home \
+                             :/var/spool/cron/ ${TARGET_DIR}/;;
+
+                *) echo "Unknown server" &&  exit 1 ;;
+              esac
+            volumeMounts:
+            - name: sshkey
+              mountPath: /root/id_rsa
+              subPath: id_rsa
+              readOnly: true
+            - mountPath: /mnt/backups
+              name: external
+          volumes:
+          - name: sshkey
+            secret:
+              secretName: backups
+              defaultMode: 0400
+          - name: external
+            hostPath:
+              path: /mnt/external/backups
+              type: Directory
+          nodeSelector:
+            kubernetes.io/hostname: node1
+          restartPolicy: Never
+  schedule: '15 5 * * *'
