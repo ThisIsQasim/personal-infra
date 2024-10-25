@@ -26,9 +26,12 @@ data:
         frigate.mqtt: debug
         frigate.object_detection: debug
     detectors:
-      coral1:
-        type: edgetpu
-        device: pci
+      ov:
+        type: openvino
+        device: GPU
+      # coral1:
+      #   type: edgetpu
+      #   device: pci
     detect:
       enabled: True
       width: 1280
@@ -377,15 +380,15 @@ spec:
         resources:
           requests:
             cpu: "1.5"
-            memory: "4Gi"
+            memory: "7Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
-            smarter-devices/apex_0: 1
+            # smarter-devices/apex_0: 1
           limits:
-            memory: "8Gi"
+            memory: "10Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
-            smarter-devices/apex_0: 1
+            # smarter-devices/apex_0: 1
         securityContext:
           capabilities:
             add: ["SYS_ADMIN", "CAP_PERFMON"]
