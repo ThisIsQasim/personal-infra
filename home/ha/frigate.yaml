@@ -20,14 +20,14 @@ data:
       header_map:
         user: X-authentik-username
     logger:
-      default: debug
-      logs:
-        frigate.app: debug
-        frigate.mqtt: debug
-        frigate.object_detection: debug
-        detector.ov: debug
-        watchdog.hikvision-1: debug
-        ffmpeg.hikvision-1.detect: debug
+      default: info
+      # logs:
+      #   frigate.app: debug
+      #   frigate.mqtt: debug
+      #   frigate.object_detection: debug
+      #   detector.ov: debug
+      #   watchdog.hikvision-1: debug
+      #   ffmpeg.hikvision-1.detect: debug
     model:
       width: 300
       height: 300
