@@ -58,7 +58,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/tailscale/tailscale:v1.76.1
+      - image: ghcr.io/tailscale/tailscale:v1.76.6
         imagePullPolicy: IfNotPresent
         name: sysctler
         securityContext:
@@ -67,7 +67,7 @@ spec:
         args:
           - -c
           - sysctl -w net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1
-      - image: ghcr.io/tailscale/tailscale:v1.76.1
+      - image: ghcr.io/tailscale/tailscale:v1.76.6
         imagePullPolicy: IfNotPresent
         name: modprobe
         securityContext:
@@ -81,7 +81,7 @@ spec:
           - -c
           - modprobe tun ip_tables ip6_tables
       containers:
-      - image: ghcr.io/tailscale/tailscale:v1.76.1
+      - image: ghcr.io/tailscale/tailscale:v1.76.6
         imagePullPolicy: IfNotPresent
         name: tailscale
         env:
