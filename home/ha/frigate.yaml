@@ -28,20 +28,20 @@ data:
       #   detector.ov: debug
       #   watchdog.hikvision-1: debug
       #   ffmpeg.hikvision-1.detect: debug
-    model:
-      width: 300
-      height: 300
-      input_tensor: nhwc
-      input_pixel_format: bgr
-      path: /openvino-model/ssdlite_mobilenet_v2.xml
-      labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+    # model:
+    #   width: 300
+    #   height: 300
+    #   input_tensor: nhwc
+    #   input_pixel_format: bgr
+    #   path: /openvino-model/ssdlite_mobilenet_v2.xml
+    #   labelmap_path: /openvino-model/coco_91cl_bkgr.txt
     detectors:
-      ov:
-        type: openvino
-        device: GPU
-      # coral1:
-      #   type: edgetpu
-      #   device: pci
+      # ov:
+      #   type: openvino
+      #   device: GPU
+      coral1:
+        type: edgetpu
+        device: pci
     detect:
       enabled: True
       width: 1280
@@ -393,12 +393,12 @@ spec:
             memory: "7Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
-            # smarter-devices/apex_0: 1
+            smarter-devices/apex_0: 1
           limits:
             memory: "10Gi"
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
-            # smarter-devices/apex_0: 1
+            smarter-devices/apex_0: 1
         securityContext:
           capabilities:
             add: ["SYS_ADMIN", "CAP_PERFMON"]
