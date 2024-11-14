@@ -2,6 +2,24 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: pihole-static-files
+  labels:
+    app: pihole
+data:
+  proxy.pac: |
+    function FindProxyForURL(url, host) {
+      if (
+        dnsDomainIs(host, ".home.com") ||
+        isInNet(host, "y.y.y.y
+        ) {
+        return "DIRECT";
+      }
+      return "PROXY y.y.y.y
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: pihole-custom-dnsmasq
   labels:
     app: pihole
@@ -220,6 +238,8 @@ spec:
           name: custom-dnsmasq
           subPath: 02-custom.conf
           readOnly: false
+        - mountPath: /var/www/html/static
+          name: static-files
       - name: dnsproxy
         image: adguard/dnsproxy:v0.73.3
         imagePullPolicy: IfNotPresent
@@ -269,6 +289,7 @@ spec:
                 operator: In
                 values:
                 - node3
+                - node1
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -289,6 +310,10 @@ spec:
           defaultMode: 420
           name: pihole-custom-lists
         name: custom-lists
+      - configMap:
+          defaultMode: 420
+          name: pihole-static-files
+        name: static-files
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
