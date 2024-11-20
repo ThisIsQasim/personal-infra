@@ -10,6 +10,8 @@ data:
     function FindProxyForURL(url, host) {
       if (
         dnsDomainIs(host, ".home.com") ||
+        dnsDomainIs(host, ".mask.icloud.com") ||
+        dnsDomainIs(host, ".mask-h2.icloud.com") ||
         isInNet(host, "y.y.y.y
         ) {
         return "DIRECT";
