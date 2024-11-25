@@ -14,6 +14,9 @@ metadata:
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: argocd.png
     gethomepage.dev/name: Argocd
+    gethomepage.dev/widget.type: argocd
+    gethomepage.dev/widget.url: http://argocd-server.argocd.svc:80
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_ARGOCD_KEY}}"
     gethomepage.dev/pod-selector: >-
       app.kubernetes.io/name in (
           argocd-application-controller,
