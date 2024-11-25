@@ -9,6 +9,7 @@ data:
   kustomize.buildOptions: "--enable-alpha-plugins --enable-exec --enable-helm"
   exec.enabled: "true"
   url: https://argocd.home.com
+  accounts.readonly: apiKey
   dex.config: |
     connectors:
     - config:
