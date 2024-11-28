@@ -3,15 +3,15 @@ prometheus:
   prometheusSpec:
     externalLabels:
       cluster: home
-    remoteWrite:
-    - url: "https://prometheus.work.com/api/v1/write"
-      basicAuth:
-          username:
-            name: kubepromsecret
-            key: username
-          password:
-            name: kubepromsecret
-            key: password
+    # remoteWrite:
+    # - url: "https://prometheus.work.com/api/v1/write"
+    #   basicAuth:
+    #       username:
+    #         name: kubepromsecret
+    #         key: username
+    #       password:
+    #         name: kubepromsecret
+    #         key: password
       # queueConfig: #2x the default
       #   capacity: 5000
       #   maxSamplesPerSend: 1000
