@@ -46,8 +46,6 @@ data:
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
     (^|\.)home\.com;querytype=HTTPS
-    (^|\.)siasat\.pk;reply=y.y.y.y
-    (^|\.)siasat\.pk;querytype=HTTPS
     (^|\.)twitter\.com;reply=y.y.y.y
     (^|\.)twitter\.com;querytype=HTTPS
     (^|\.)twimg\.com;reply=y.y.y.y
@@ -67,7 +65,6 @@ data:
     pro.ip-api.com
     one.newrelic.com
     trace.svc.ui.com
-    api.keen.io
     cdn.jsdelivr.net
 ---
 apiVersion: v1
