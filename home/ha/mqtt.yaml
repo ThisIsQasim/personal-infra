@@ -163,7 +163,7 @@ spec:
             - ALL
           runAsNonRoot: true
       - name: mqtt-exporter
-        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
+        image: ghcr.io/kpetremann/mqtt-exporter:1.5.0
         imagePullPolicy: IfNotPresent
         env:
         - name: MQTT_ADDRESS
@@ -280,7 +280,7 @@ spec:
             - ALL
           runAsNonRoot: true
       - name: mqtt-exporter
-        image: ghcr.io/kpetremann/mqtt-exporter:1.4.7
+        image: ghcr.io/kpetremann/mqtt-exporter:1.5.0
         imagePullPolicy: IfNotPresent
         env:
         - name: MQTT_ADDRESS
