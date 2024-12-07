@@ -16,7 +16,7 @@ data:
         ) {
         return "DIRECT";
       }
-      return "SOCKS5 y.y.y.y
+      return "SOCKS y.y.y.y
     }
 ---
 apiVersion: v1
