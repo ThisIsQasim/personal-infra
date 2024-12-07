@@ -47,8 +47,8 @@ spec:
         - --disorder
         - "1"
         - --auto=torst
-        - --tlsrec 
-		- "1+s"
+        - --tlsrec
+        - "1+s"
         ports:
         - containerPort: 1080
           name: socks
