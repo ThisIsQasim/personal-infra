@@ -9,10 +9,10 @@ spec:
   externalTrafficPolicy: Local
   loadBalancerIP: y.y.y.y
   ports:
-  - name: socks-proxy
+  - name: socks
     port: 1080
     protocol: TCP
-    targetPort: socks-proxy
+    targetPort: socks
   selector:
     app: byedpi
   type: LoadBalancer
@@ -43,15 +43,15 @@ spec:
         name: byedpi
         args:
         - --ip=0.0.0.0
-				- --port=8080
+        - --port=8080
         - --disorder
-				- "1"
-			  -	--auto=torst 
-				- --tlsrec 
-				- "1+s"
+        - "1"
+        - --auto=torst
+        - --tlsrec 
+		- "1+s"
         ports:
         - containerPort: 1080
-          name: socks-proxy
+          name: socks
           protocol: TCP          
         resources:
           requests:
