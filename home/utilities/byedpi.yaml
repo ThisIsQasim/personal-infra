@@ -43,7 +43,7 @@ spec:
         name: byedpi
         args:
         - --ip=0.0.0.0
-        - --port=8080
+        - --port=1080
         - --disorder
         - "1"
         - --auto=torst
