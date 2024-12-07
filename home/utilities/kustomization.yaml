@@ -14,7 +14,7 @@ resources:
 - lubelogger.yaml
 - httpbin.yaml
 - backups.yaml
-- spoofdpi.yaml
+- byedpi.yaml
 
 generators:
 - |

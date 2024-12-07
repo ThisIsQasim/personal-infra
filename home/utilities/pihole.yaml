@@ -16,7 +16,7 @@ data:
         ) {
         return "DIRECT";
       }
-      return "PROXY y.y.y.y
+      return "SOCKS5 y.y.y.y
     }
 ---
 apiVersion: v1
