@@ -50,7 +50,7 @@ spec:
     spec:
       serviceAccount: metube
       containers:
-      - image: ghcr.io/tailscale/tailscale:v1.76.6
+      - image: ghcr.io/tailscale/tailscale:v1.78.1
         imagePullPolicy: IfNotPresent
         name: tailscale
         env:
