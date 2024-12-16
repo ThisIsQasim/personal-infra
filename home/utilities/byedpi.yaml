@@ -49,6 +49,7 @@ spec:
         - --auto=torst
         - --tlsrec
         - "1+s"
+        - --no-domain
         # - --debug=2
         ports:
         - containerPort: 1080
