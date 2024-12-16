@@ -4,7 +4,7 @@ prometheus:
     externalLabels:
       cluster: home
     remoteWrite:
-    - url: "https://vm-demo.work.com/api/v1/write"
+    - url: "https://vm-demo.work.com/prometheus/api/v1/write"
       basicAuth:
           username:
             name: kubepromsecret
