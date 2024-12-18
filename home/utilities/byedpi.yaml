@@ -41,7 +41,7 @@ spec:
       dnsPolicy: "None"
       dnsConfig:
         nameservers:
-        - y.y.y.y
+        - pihole-dns.utilities.svc
       containers:
       - image: tazihad/byedpi:v0.15
         name: byedpi
