@@ -18,7 +18,7 @@ spec:
         app: radarr
     spec:
       containers:
-      - image: lscr.io/linuxserver/radarr:5.15.1
+      - image: lscr.io/linuxserver/radarr:5.16.3
         imagePullPolicy: IfNotPresent
         name: radarr
         env:
