@@ -38,6 +38,10 @@ spec:
       labels:
         app: byedpi
     spec:
+      dnsPolicy: "None"
+      dnsConfig:
+        nameservers:
+        - y.y.y.y
       containers:
       - image: tazihad/byedpi:v0.15
         name: byedpi
@@ -49,7 +53,7 @@ spec:
         - --auto=torst
         - --tlsrec
         - "1+s"
-        - --no-domain
+        # - --no-domain
         # - --debug=2
         ports:
         - containerPort: 1080
