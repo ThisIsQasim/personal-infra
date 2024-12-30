@@ -11,6 +11,9 @@ data:
       if (
         dnsDomainIs(host, ".home.com") ||
         dnsDomainIs(host, ".slack.com") ||
+        dnsDomainIs(host, ".slackb.com") ||
+        dnsDomainIs(host, ".slack-edge.com") ||
+        dnsDomainIs(host, ".slack-imgs.com") ||
         dnsDomainIs(host, ".mask.icloud.com") ||
         dnsDomainIs(host, ".mask-h2.icloud.com") ||
         isInNet(host, "y.y.y.y
