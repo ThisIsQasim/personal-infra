@@ -107,8 +107,10 @@ spec:
         resources:
           requests:
             cpu: "100m"
+            smarter-devices/net_tun: 1
           limits:
             memory: "512Mi"
+            smarter-devices/net_tun: 1
         securityContext:
           runAsUser: 1001
           runAsGroup: 1001

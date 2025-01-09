@@ -115,15 +115,11 @@ spec:
         resources:
           requests:
             cpu: 100m
+            smarter-devices/net_tun: 1
           limits:
             memory: 512M
-        volumeMounts:
-        - mountPath: /dev/net/tun
-          name: tun-device
+            smarter-devices/net_tun: 1
       volumes:
-      - name: tun-device
-        hostPath:
-          path: /dev/net/tun
       - name: modules
         hostPath:
           path: /lib/modules
