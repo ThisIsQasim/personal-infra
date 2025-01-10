@@ -9,6 +9,9 @@ rules:
   # Create can not be restricted to a resource name.
   verbs: ["create"]
 - apiGroups: [""] # "" indicates the core API group
+  resources: ["events"]
+  verbs: ["get", "create", "patch"]
+- apiGroups: [""] # "" indicates the core API group
   resourceNames: ["metube-tailscale-state"]
   resources: ["secrets"]
   verbs: ["get", "update", "patch"]
@@ -63,22 +66,26 @@ spec:
         - name: TS_DEBUG_FIREWALL_MODE
           value: "auto"
         - name: TS_USERSPACE
-          value: "false"
+          value: "true"
         - name: TS_AUTHKEY
           valueFrom:
             secretKeyRef:
               name: metube
               key: TS_AUTHKEY
               optional: true
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
         resources:
           requests:
             cpu: "50m"
           limits:
             memory: "64Mi"
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
       - image: ghcr.io/alexta69/metube:2024-06-16
         imagePullPolicy: IfNotPresent
         name: metube
@@ -107,10 +114,8 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            smarter-devices/net_tun: 1
           limits:
             memory: "512Mi"
-            smarter-devices/net_tun: 1
         securityContext:
           runAsUser: 1001
           runAsGroup: 1001

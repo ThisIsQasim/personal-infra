@@ -11,6 +11,9 @@ rules:
   # Create can not be restricted to a resource name.
   verbs: ["create"]
 - apiGroups: [""] # "" indicates the core API group
+  resources: ["events"]
+  verbs: ["get", "create", "patch"]
+- apiGroups: [""] # "" indicates the core API group
   resourceNames: ["tailscale"]
   resources: ["secrets"]
   verbs: ["get", "update", "patch"]
@@ -105,6 +108,14 @@ spec:
               optional: true
         - name: TS_ROUTES
           value: ""
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
         securityContext:
           runAsUser: 0
           runAsGroup: 0
