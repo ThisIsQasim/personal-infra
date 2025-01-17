@@ -4,14 +4,14 @@ services:
     build:
       context: .
       pull: true
-    pull_policy: build
+    pull_policy: missing
     privileged: true
     restart: unless-stopped
     volumes:
     - ./mpp-solar.conf:/etc/mpp-solar/mpp-solar.conf
     - /var/lib/node_exporter:/var/lib/node_exporter
     devices:
-    - /dev/hidraw0:/dev/hidraw0
+    - /dev/ttyUSB0:/dev/ttyUSB0
     logging:
       options:
         max-size: "10m"
