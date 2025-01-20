@@ -18,7 +18,7 @@ spec:
         app: ddclient
     spec:
       containers:
-      - image: lscr.io/linuxserver/ddclient:3.11.2
+      - image: lscr.io/linuxserver/ddclient:4.0.0
         imagePullPolicy: IfNotPresent
         name: ddclient
         command: ["/usr/bin/ddclient","-foreground","-noquiet","-file","/etc/ddclient.conf"]
