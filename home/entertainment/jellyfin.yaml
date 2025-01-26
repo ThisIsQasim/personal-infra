@@ -21,7 +21,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: ghcr.io/jellyfin/jellyfin:10.10.4
+      - image: ghcr.io/jellyfin/jellyfin:10.10.5
         imagePullPolicy: IfNotPresent
         name: jellyfin
         env:
