@@ -12,7 +12,7 @@ metadata:
     gethomepage.dev/description: GitOps
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Utilities
-    gethomepage.dev/icon: argocd.png
+    gethomepage.dev/icon: argo-cd.png
     gethomepage.dev/name: Argocd
     gethomepage.dev/widget.type: argocd
     gethomepage.dev/widget.url: http://argocd-server.argocd.svc:80
