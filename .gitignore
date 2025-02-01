@@ -16,3 +16,8 @@ crash.log
 # Helm charts
 charts
 !/charts
+
+# Terraform state
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
