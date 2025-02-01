@@ -16,6 +16,24 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    healthcheck:
+      test: ls /var/lib/node_exporter/mpp-solar-*.prom
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      autoheal-app: true
+
+  autoheal:
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal-app
+    image: willfarrell/autoheal:latest
+    network_mode: none
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
   stale-metrics-cleaner:
     image: python:3.13-slim
     command:
