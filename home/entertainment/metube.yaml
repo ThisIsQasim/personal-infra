@@ -60,7 +60,7 @@ spec:
         - name: TS_HOSTNAME
           value: "metube"
         - name: TS_EXTRA_ARGS
-          value: "--login-server https://headscale.project.com:443"
+          value: "--login-server https://headscale.home.com:443"
         - name: TS_KUBE_SECRET
           value: "metube-tailscale-state"
         - name: TS_DEBUG_FIREWALL_MODE
