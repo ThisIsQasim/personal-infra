@@ -15,6 +15,7 @@ resources:
 - httpbin.yaml
 - backups.yaml
 - byedpi.yaml
+- actualbudget.yaml
 
 generators:
 - |

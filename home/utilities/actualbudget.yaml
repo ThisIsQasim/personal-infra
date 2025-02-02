@@ -1,0 +1,109 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actualbudget
+  labels:
+    app: actualbudget
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actualbudget
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: actualbudget
+    spec:
+      containers:
+      - image: ghcr.io/actualbudget/actual-server:25.1.0
+        imagePullPolicy: IfNotPresent
+        name: actualbudget
+        env:
+        - name: LC_ALL
+          value: en_GB.UTF-8
+        - name: LANG
+          value: en_GB.UTF-8
+        - name: ACTUAL_LOGIN_METHOD
+          value: "openid"
+        - name: ACTUAL_ALLOWED_LOGIN_METHODS
+          value: "openid,password"
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        ports:
+        - name: http
+          containerPort: 5006
+        livenessProbe:
+          tcpSocket:
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - node
+            - src/scripts/health-check.js
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+      volumes:
+        - name: data
+          hostPath:
+            path: /home/utilities/actualbudget/data
+            type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: node1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: actualbudget
+  labels:
+    app: actualbudget
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: actualbudget
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: actualbudget
+  labels:
+    app: actualbudget
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+    gethomepage.dev/description: Budgeting
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Utilities
+    gethomepage.dev/icon: actual-budget.png
+    gethomepage.dev/name: actualbudget
+    gethomepage.dev/pod-selector: app=actualbudget
+    gethomepage.dev/weight: "25"
+spec:
+  tls:
+  - hosts:
+    - actualbudget.home.com
+  rules:
+  - host: actualbudget.home.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: actualbudget
+            port:
+              number: 80
