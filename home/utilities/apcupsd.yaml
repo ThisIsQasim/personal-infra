@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: apcupsd
-        image: ghcr.io/thisisqasim/apcupsd:0.0.5
+        image: ghcr.io/thisisqasim/apcupsd:0.0.6
         imagePullPolicy: IfNotPresent
         env:
         - name: TZ
