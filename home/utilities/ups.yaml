@@ -42,7 +42,7 @@ metadata:
     gethomepage.dev/icon: ups.png
     gethomepage.dev/name: UPS
     gethomepage.dev/pod-selector: ""
-    gethomepage.dev/weight: "20"
+    gethomepage.dev/weight: "40"
 spec:
   tls:
   - hosts:
