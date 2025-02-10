@@ -28,17 +28,7 @@ data:
       #   detector.ov: debug
       #   watchdog.hikvision-1: debug
       #   ffmpeg.hikvision-1.detect: debug
-    # model:
-    #   width: 300
-    #   height: 300
-    #   input_tensor: nhwc
-    #   input_pixel_format: bgr
-    #   path: /openvino-model/ssdlite_mobilenet_v2.xml
-    #   labelmap_path: /openvino-model/coco_91cl_bkgr.txt
     detectors:
-      # ov:
-      #   type: openvino
-      #   device: GPU
       coral1:
         type: edgetpu
         device: pci
@@ -328,6 +318,21 @@ spec:
       labels:
         app: frigate
     spec:
+      initContainers:
+      - name: copy-config
+        image: "ghcr.io/blakeblackshear/frigate:0.14.1"
+        imagePullPolicy: IfNotPresent
+        command:
+          - cp
+          - /tmp/config.yml
+          - /config/config.yml
+        volumeMounts:
+          - name: config
+            mountPath: /tmp/config.yml
+            subPath: config.yml
+          - name: media
+            mountPath: /config
+            subPath: config
       containers:
       - name: frigate
         image: "ghcr.io/blakeblackshear/frigate:0.14.1"
@@ -368,9 +373,6 @@ spec:
         - secretRef:
             name: frigate
         volumeMounts:
-          - name: config
-            mountPath: /config/config.yml
-            subPath: config.yml
           - name: media
             mountPath: /config
             subPath: config
