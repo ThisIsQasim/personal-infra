@@ -320,7 +320,7 @@ spec:
     spec:
       initContainers:
       - name: copy-config
-        image: "ghcr.io/blakeblackshear/frigate:0.14.1"
+        image: "ghcr.io/blakeblackshear/frigate:0.15.0"
         imagePullPolicy: IfNotPresent
         command:
           - cp
@@ -335,7 +335,7 @@ spec:
             subPath: config
       containers:
       - name: frigate
-        image: "ghcr.io/blakeblackshear/frigate:0.14.1"
+        image: "ghcr.io/blakeblackshear/frigate:0.15.0"
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
