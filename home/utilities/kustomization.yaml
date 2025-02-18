@@ -16,6 +16,7 @@ resources:
 - backups.yaml
 - byedpi.yaml
 - actualbudget.yaml
+- mealie.yaml
 
 generators:
 - |
@@ -70,3 +71,9 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     files:
     - id_rsa=./backups.enc.pem
+  - metadata:
+      name: mealie
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./mealie.enc.env
