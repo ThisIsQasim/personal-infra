@@ -10,7 +10,7 @@ resources:
 - radarr.yaml
 - transmission.yaml
 - metube.yaml
-- flaresolverr.yaml
+- flare-bypasser.yaml
 
 generators:
 - |

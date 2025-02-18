@@ -2,25 +2,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flaresolverr
+  name: flare-bypasser
   labels:
-    app: flaresolverr
+    app: flare-bypasser
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flaresolverr
+      app: flare-bypasser
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: flaresolverr
+        app: flare-bypasser
     spec:
       containers:
       - image: ghcr.io/yoori/flare-bypasser:v0.1.53
         imagePullPolicy: IfNotPresent
-        name: flaresolverr
+        name: flare-bypasser
         env:
         - name: TZ
           value: "Asia/Karachi"
@@ -47,14 +47,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: flaresolverr
+  name: flare-bypasser
   labels:
-    app: flaresolverr
+    app: flare-bypasser
 spec:
   ports:
-  - port: 8191
+  - port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
-    app: flaresolverr
+    app: flare-bypasser
   type: ClusterIP
