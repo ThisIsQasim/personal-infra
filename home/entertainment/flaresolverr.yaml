@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolverr
+  labels:
+    app: flaresolverr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flaresolverr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: flaresolverr
+    spec:
+      containers:
+      - image: ghcr.io/yoori/flare-bypasser:v0.1.53
+        imagePullPolicy: IfNotPresent
+        name: flaresolverr
+        env:
+        - name: TZ
+          value: "Asia/Karachi"
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: "/docs/openapi.json"
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "512Mi"
+          limits:
+            memory: "2Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaresolverr
+  labels:
+    app: flaresolverr
+spec:
+  ports:
+  - port: 8191
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: flaresolverr
+  type: ClusterIP
