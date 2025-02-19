@@ -154,7 +154,7 @@ spec:
     spec:
       initContainers:
       - name: copy-config
-        image: ghcr.io/pi-hole/pihole:2024.07.0
+        image: ghcr.io/pi-hole/pihole:2025.02.1
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/pihole
@@ -167,28 +167,30 @@ spec:
         - cp /etc/pihole-lists/* /etc/pihole/ 
       containers:
       - name: pihole
-        image: ghcr.io/pi-hole/pihole:2024.07.0
+        image: ghcr.io/pi-hole/pihole:2025.02.1
         imagePullPolicy: IfNotPresent
         env:
-        - name: WEB_PORT
-          value: "80"
-        - name: VIRTUAL_HOST
-          value: pi.hole
-        - name: PIHOLE_DNS_
-          value: 127.0.0.1#5353
         - name: TZ
           value: 'Asia/Karachi'
-        - name: RESOLVE_IPV6
-          value: "no"
-        - name: DNSMASQ_LISTENING
-          value: "all"
-        - name: FTLCONF_BLOCK_ESNI
+        - name: FTLCONF_webserver_domain
+          value: "pihole.home.com"
+        - name: FTLCONF_webserver_port
+          value: "80"
+        - name: FTLCONF_dns_upstreams
+          value: 127.0.0.1#5353
+        - name: FTLCONF_dhcp_active
           value: "false"
-        - name: FTLCONF_EDNS0_ECS
+        - name: FTLCONF_resolver_resolveIPv6
           value: "false"
-        - name: FTLCONF_BLOCK_ICLOUD_PR
+        - name: FTLCONF_dns_listeningMode
+          value: "ALL"
+        - name: FTLCONF_dns_blockESNI
           value: "false"
-        - name: DNSSEC
+        - name: FTLCONF_dns_EDNS0ECS
+          value: "false"
+        - name: FTLCONF_dns_specialDomains_iCloudPrivateRelay
+          value: "false"
+        - name: FTLCONF_dns_dnssec
           value: "false"
         envFrom:
         - secretRef:
@@ -210,10 +212,11 @@ spec:
           name: client-udp
           protocol: UDP
         startupProbe:
-          httpGet:
-            path: /admin/index.php
-            port: http
-            scheme: HTTP
+          exec:
+            command:
+            - /usr/bin/nslookup
+            - pi.hole
+            - 127.0.0.1
           failureThreshold: 60
           periodSeconds: 5
         livenessProbe:
@@ -237,6 +240,8 @@ spec:
             memory: 100Mi
         securityContext:
           privileged: false
+          capabilities:
+            add: ["SYS_NICE", "SYS_TIME"]
         volumeMounts:
         - mountPath: /etc/pihole
           name: config
@@ -376,7 +381,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/pi-hole/pihole:2024.07.0
+      - image: ghcr.io/pi-hole/pihole:2025.02.1
         imagePullPolicy: IfNotPresent
         name: sysctler
         securityContext:
@@ -387,7 +392,7 @@ spec:
         - sysctl -w net.core.rmem_max=7500000 net.core.wmem_max=7500000 net.core.somaxconn=32768 net.ipv4.ip_local_port_range='1024 65000'
       containers:
       - name: dns-ip-fixer
-        image: ghcr.io/pi-hole/pihole:2024.07.0
+        image: ghcr.io/pi-hole/pihole:2025.02.1
         imagePullPolicy: IfNotPresent
         command: ["/bin/bash"]
         args:
@@ -433,7 +438,7 @@ spec:
     - sh
     - -c
     - curl http://pihole-web:80/
-    image: ghcr.io/pi-hole/pihole:2024.07.0
+    image: ghcr.io/pi-hole/pihole:2025.02.1
     imagePullPolicy: IfNotPresent
     name: hook1-container
   restartPolicy: Never
