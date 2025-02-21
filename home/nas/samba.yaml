@@ -17,14 +17,22 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: ghcr.io/servercontainers/samba:smbd-only-a3.21.0-s4.20.6-r1
+      - image: ghcr.io/servercontainers/samba:smbd-only-a3.21.3-s4.20.6-r1
         imagePullPolicy: IfNotPresent
         name: samba
         env:
         - name: MODEL
           value: "Macmini"
         - name: SAMBA_GLOBAL_STANZA
-          value: "aio read size = 1; aio write size = 1; server multi channel support = yes; socket options = SO_RCVBUF=8192 SO_SNDBUF=8192"
+          value: >-
+            read raw = Yes;
+            write raw = Yes;
+            socket options = TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=8192 SO_RCVBUF=8192;
+            min receivefile size = 16384;
+            use sendfile = true;
+            aio read size = 16384;
+            aio write size = 16384;
+            server multi channel support = yes
         - name: SAMBA_CONF_ENABLE_NTLM_AUTH
           value: "y"
         - name: ACCOUNT_qasim
