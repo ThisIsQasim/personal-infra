@@ -97,6 +97,7 @@ metadata:
 spec:
   externalTrafficPolicy: Local
   loadBalancerIP: y.y.y.y
+  clusterIP: y.y.y.y
   ports:
   - name: dns
     port: 53
