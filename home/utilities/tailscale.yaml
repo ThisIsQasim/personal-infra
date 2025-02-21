@@ -57,10 +57,6 @@ spec:
       labels:
         app: tailscale
     spec:
-      hostAliases:
-      - ip: "x.x.x.x"
-        hostnames:
-        - "headscale.home.com"
       serviceAccount: tailscale
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
