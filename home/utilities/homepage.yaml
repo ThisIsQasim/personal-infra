@@ -175,6 +175,13 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/healthcheck
+              port: http
           volumeMounts:
             - name: homepage-config
               mountPath: /app/config
