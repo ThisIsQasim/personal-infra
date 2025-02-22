@@ -203,7 +203,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     gethomepage.dev/description: File Storage
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: Storage
     gethomepage.dev/icon: nextcloud.png
     gethomepage.dev/name: Nextcloud
     gethomepage.dev/pod-selector: app=nextcloud

@@ -15,6 +15,7 @@ data:
     - Entertainment:
     - Home Automation:
     - Networking:
+        Storage:
     - Utilities:
   docker.yaml: ""
   custom.css: ""

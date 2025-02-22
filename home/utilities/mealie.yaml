@@ -108,7 +108,7 @@ metadata:
     gethomepage.dev/icon: mealie.png
     gethomepage.dev/name: mealie
     gethomepage.dev/pod-selector: app=mealie
-    gethomepage.dev/weight: "125"
+    gethomepage.dev/weight: "30"
 spec:
   tls:
   - hosts:
