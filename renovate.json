@@ -27,7 +27,7 @@
         "digest"
       ],
       "automerge": true,
-      "schedule": ["* 0-5 * * 0"]
+      "schedule": ["* 4-6 * * 0"]
     },
     {
       "matchDatasources": [
