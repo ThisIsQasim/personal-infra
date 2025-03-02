@@ -34,7 +34,8 @@
         "docker"
       ],
       "matchPackageNames": [
-        "ghcr.io/homebridge/homebridge"
+        "ghcr.io/homebridge/homebridge",
+        "ghcr.io/alexta69/metube"
       ],
       "versioning": "loose"
     },
