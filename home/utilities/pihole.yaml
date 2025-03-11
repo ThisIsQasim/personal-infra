@@ -247,7 +247,7 @@ spec:
         - mountPath: /var/www/html/static
           name: static-files
       - name: dnsproxy
-        image: adguard/dnsproxy:v0.75.0
+        image: adguard/dnsproxy:v0.75.1
         imagePullPolicy: IfNotPresent
         args:
         - --port=5353
