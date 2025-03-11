@@ -16,6 +16,7 @@ spec:
       database: authentik
   postgresql:
     parameters:
+      max_wal_size: 2GB
       "pgaudit.log": "all, -misc"
       "pgaudit.log_catalog": "off"
       "pgaudit.log_parameter": "on"
@@ -24,6 +25,7 @@ spec:
     size: 1Gi
     storageClass: local-path
   backup:
+    retentionPolicy: "7d"
     barmanObjectStore:
       destinationPath: s3://authentik-postgres-backup/
       endpointURL: https://s3.home.com
@@ -34,7 +36,8 @@ spec:
         secretAccessKey:
           name: authentik-pgsql-s3
           key: ACCESS_SECRET_KEY
-    retentionPolicy: "30d"
+      wal:
+        compression: gzip
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
