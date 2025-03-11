@@ -57,9 +57,7 @@ spec:
         readinessProbe:
           httpGet:
             port: http
-            path: /defaults/plansample.csv
-          initialDelaySeconds: 15
-          periodSeconds: 5
+            path: /manifest.json
         resources:
           requests:
             cpu: "100m"
