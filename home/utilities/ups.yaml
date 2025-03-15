@@ -43,6 +43,8 @@ metadata:
     gethomepage.dev/name: UPS
     gethomepage.dev/pod-selector: ""
     gethomepage.dev/weight: "40"
+    gethomepage.dev/widget.type: apcups
+    gethomepage.dev/widget.url: tcp://apcupsd.utilities.svc:3551
 spec:
   tls:
   - hosts:
