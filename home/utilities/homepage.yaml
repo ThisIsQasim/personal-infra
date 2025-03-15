@@ -168,7 +168,10 @@ spec:
       containers:
         - name: homepage
           image: ghcr.io/gethomepage/homepage:v1.0.1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent Ye
+          env:
+          - name: HOMEPAGE_ALLOWED_HOSTS
+            value: "home.com"
           envFrom:
           - secretRef:
               name: homepage
