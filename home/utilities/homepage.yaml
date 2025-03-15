@@ -8,6 +8,7 @@ metadata:
 data:
   kubernetes.yaml: |
     mode: cluster
+    ingress: true
   settings.yaml: |
     headerStyle: clean
     target: _self
@@ -15,7 +16,7 @@ data:
     - Entertainment:
     - Home Automation:
     - Networking:
-        Storage:
+      - Storage:
     - Utilities:
   docker.yaml: ""
   custom.css: ""
@@ -171,7 +172,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
           - name: HOMEPAGE_ALLOWED_HOSTS
-            value: "home.com"
+            value: home.com
           envFrom:
           - secretRef:
               name: homepage
@@ -186,6 +187,9 @@ spec:
             httpGet:
               path: /api/healthcheck
               port: http
+              httpHeaders:
+              - name: Host
+                value: home.com
           volumeMounts:
             - name: homepage-config
               mountPath: /app/config
