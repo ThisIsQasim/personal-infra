@@ -16,7 +16,7 @@ data:
     - Entertainment:
     - Home Automation:
     - Networking:
-      - Storage:
+        Storage:
     - Utilities:
   docker.yaml: ""
   custom.css: ""
@@ -30,6 +30,7 @@ data:
             href: https://y.y.y.y
             icon: unifi-controller.png
             description: Network Management Console
+        - Storage: []
     - Utilities:
         - Gitea:
             href: https://git.project.com/
