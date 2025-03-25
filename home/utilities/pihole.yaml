@@ -384,7 +384,7 @@ spec:
         command: ["/bin/bash"]
         args:
         - -c
-        - sysctl -w net.core.rmem_max=2500000 net.core.wmem_max=2500000 net.core.somaxconn=32768 net.ipv4.ip_local_port_range='1024 65000'
+        - sysctl -w net.core.rmem_max=7500000 net.core.wmem_max=7500000 net.core.somaxconn=32768 net.ipv4.ip_local_port_range='1024 65000'
       containers:
       - name: dns-ip-fixer
         image: ghcr.io/pi-hole/pihole:2024.07.0
