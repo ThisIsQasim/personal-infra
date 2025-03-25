@@ -251,6 +251,8 @@ spec:
         imagePullPolicy: IfNotPresent
         args:
         - --port=5353
+        - --upstream=https://1.1.1.1/dns-query
+        - --upstream=https://1.0.0.1/dns-query
         - --upstream=https://dns.cloudflare.com/dns-query
         - --fallback=https://8.8.8.8/dns-query
         - --fallback=https://8.8.4.4/dns-query 
