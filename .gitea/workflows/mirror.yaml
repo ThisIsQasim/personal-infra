@@ -27,8 +27,18 @@ jobs:
           chmod 0600 ~/.ssh/id_rsa
 
           git status
+
+          echo '
+          project==>project
+          work==>work
+          home==>home
+          x.x.x.x==>x.x.x.x
+          x.x.x.x==>x.x.x.x
+          glob:y.y.y.y
+          ' > replacements.txt
+
           git filter-repo \
-              --replace-text <(echo -e 'project==>project\nwork==>work\nhome==>home') \
+              --replace-text replacements.txt \
               --commit-callback '
           msg = commit.message.decode("utf-8")
           author = commit.author_name.decode("utf-8")
