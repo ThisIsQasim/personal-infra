@@ -39,15 +39,13 @@ jobs:
 
           git filter-repo \
               --replace-text replacements.txt \
+              --replace-message replacements.txt \
               --commit-callback '
-          msg = commit.message.decode("utf-8")
           author = commit.author_name.decode("utf-8")
           email = commit.author_email.decode("utf-8")
           author = author.replace("project", "project").replace("work", "work").replace("home", "home")
-          newmsg = msg.replace("project", "project").replace("work", "work").replace("home", "home")
           email_user, email_domain, *_ = email.split("@") + [None]
           email = email if email_domain == "users.noreply.github.com" else email_user+"@home.com"
-          commit.message = newmsg.encode("utf-8")
           commit.author_name = author.encode("utf-8")
           commit.author_email = email.encode("utf-8")
           ' --force
