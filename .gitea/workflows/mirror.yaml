@@ -1,0 +1,48 @@
+name: mirror
+
+on:
+  schedule:
+    - cron: "@daily"
+  workflow_dispatch:
+
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - shell: bash
+        run: |
+          curl -L -o /usr/local/bin/git-filter-repo https://raw.githubusercontent.com/newren/git-filter-repo/main/git-filter-repo
+          chmod +x /usr/local/bin/git-filter-repo
+
+      - shell: bash
+        run: |
+          mkdir ~/.ssh
+          base64 -d <<<${MIRROR_REPO_KEY} > ~/.ssh/id_rsa
+          chmod 0600 ~/.ssh/id_rsa
+
+          git status
+          git filter-repo \
+              --replace-text <(echo -e 'project==>project\nwork==>work\nhome==>home') \
+              --commit-callback '
+          msg = commit.message.decode("utf-8")
+          author = commit.author_name.decode("utf-8")
+          email = commit.author_email.decode("utf-8")
+          author = author.replace("project", "project").replace("work", "work").replace("home", "home")
+          newmsg = msg.replace("project", "project").replace("work", "work").replace("home", "home")
+          email_user, email_domain, *_ = email.split("@") + [None]
+          email = email if email_domain == "users.noreply.github.com" else email_user+"@home.com"
+          commit.message = newmsg.encode("utf-8")
+          commit.author_name = author.encode("utf-8")
+          commit.author_email = email.encode("utf-8")
+          ' --force
+
+          git remote add mirror ${MIRROR_REPO_URL}
+          git push -f -u mirror main
+        env:
+          MIRROR_REPO_KEY: ${{ secrets.MIRROR_REPO_KEY }}
+          MIRROR_REPO_URL: ${{ secrets.MIRROR_REPO_URL }}
+          GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
