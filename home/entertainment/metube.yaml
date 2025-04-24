@@ -51,10 +51,6 @@ spec:
       labels:
         app: metube
     spec:
-      hostAliases:
-      - ip: "x.x.x.x"
-        hostnames:
-        - "headscale.home.com"
       serviceAccount: metube
       containers:
       - image: ghcr.io/tailscale/tailscale:v1.82.0
