@@ -1,0 +1,265 @@
+# Ansible inventory file for kubespray and other playbooks
+---
+ungrouped:
+  hosts:
+    node1:
+      ansible_host: y.y.y.y
+      ip: y.y.y.y
+      etcd_member_name: etcd1
+      node_labels:
+        disk-type: 'media'
+        smarter-device-manager: 'enabled'
+    node2:
+      ansible_host: y.y.y.y
+      ip: y.y.y.y
+      etcd_member_name: etcd2
+      node_labels:
+        disk-type: 'recordings'
+        smarter-device-manager: 'enabled'
+    node3:
+      ansible_host: y.y.y.y
+      ip: y.y.y.y
+      etcd_member_name: etcd3
+      node_labels:
+        disk-type: 'backups'
+        smarter-device-manager: 'enabled'
+
+kube_control_plane:
+  hosts:
+    node1:
+    node2:
+    node3:
+
+etcd:
+  hosts:
+    node1:
+    node2:
+    node3:
+
+kube_node:
+  hosts:
+    node1:
+    node2:
+    node3:
+
+k8s_cluster:
+  children:
+    kube_control_plane:
+    kube_node:
+  vars:
+    ansible_become: true
+    loadbalancer_apiserver_localhost: false
+    use_localhost_as_kubeapi_loadbalancer: false
+    ingress_nginx_service_type: LoadBalancer
+    ingress_nginx_service_annotations:
+      kube-vip.io/loadbalancerIPs: y.y.y.y
+    ingress_nginx_host_network: false
+    ingress_nginx_configmap:
+      map-hash-bucket-size: '128'
+      ssl-protocols: 'TLSv1.2 TLSv1.3'
+      use-forwarded-headers: 'true'
+      forwarded-for-header: 'CF-Connecting-IP'
+      proxy-buffering: "off"
+      proxy-request-buffering: "off"
+      allow-snippet-annotations: "true"
+      annotations-risk-level: "Critical"
+    kube_vip_enabled: true
+    kube_vip_image_tag: v0.8.2
+    kube_vip_controlplane_enabled: true
+    kube_vip_address: y.y.y.y
+    loadbalancer_apiserver:
+      address: "{{ kube_vip_address }}"
+      port: 6443
+    supplementary_addresses_in_ssl_keys:
+    - kubernetes.home.com
+    kube_vip_services_enabled: true
+    kube_vip_enableServicesElection: true
+    kube_vip_arp_enabled: true
+    kube_network_plugin: cilium
+    kube_network_plugin_multus: true
+    cilium_cni_exclusive: false
+    container_manager: containerd # apparently it is needed for multus
+    cilium_pool_cidr: y.y.y.y
+    cilium_encryption_enabled: false
+    cilium_encryption_type: "wireguard"
+    cluster_domain: home.com
+    skip_apps: openebs,external-dns,kube-prometheus
+    whitelisted_ips:
+    - y.y.y.y
+    whitelisted_tcp_ports:
+    - 53
+    - 139
+    - 445
+    whitelisted_udp_ports:
+    - 53
+    - 5353
+    - 39034
+    coredns_rewrite_block: |
+      rewrite stop name exact headscale.home.com headscale.home.com
+      rewrite stop name regex home\.com\.$ ingress-nginx.ingress-nginx.svc.cluster.local answer auto
+    nodelocaldns_external_zones:
+    - zones:
+      - home.com
+      nameservers:
+      - y.y.y.y
+      cache: 3600
+    custom_apps_manifest: |
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: kubevip
+        namespace: kube-system
+      data:
+        range-global: y.y.y.y
+      ---
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: kube-vip-cloud-controller
+        namespace: kube-system
+      ---
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      metadata:
+        annotations:
+          rbac.authorization.kubernetes.io/autoupdate: "true"
+        name: system:kube-vip-cloud-controller-role
+      rules:
+        - apiGroups: ["coordination.k8s.io"]
+          resources: ["leases"]
+          verbs: ["get", "create", "update", "list", "put"]
+        - apiGroups: [""]
+          resources: ["configmaps", "endpoints","events","services/status", "leases"]
+          verbs: ["*"]
+        - apiGroups: [""]
+          resources: ["nodes", "services"]
+          verbs: ["list","get","watch","update"]
+      ---
+      kind: ClusterRoleBinding
+      apiVersion: rbac.authorization.k8s.io/v1
+      metadata:
+        name: system:kube-vip-cloud-controller-binding
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: system:kube-vip-cloud-controller-role
+      subjects:
+      - kind: ServiceAccount
+        name: kube-vip-cloud-controller
+        namespace: kube-system
+      ---
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: kube-vip-cloud-provider
+        namespace: kube-system
+      spec:
+        replicas: 1
+        revisionHistoryLimit: 10
+        selector:
+          matchLabels:
+            app: kube-vip
+            component: kube-vip-cloud-provider
+        strategy:
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+          type: RollingUpdate
+        template:
+          metadata:
+            labels:
+              app: kube-vip
+              component: kube-vip-cloud-provider
+          spec:
+            containers:
+            - command:
+              - /kube-vip-cloud-provider
+              - --leader-elect-resource-name=kube-vip-cloud-controller
+              image: ghcr.io/kube-vip/kube-vip-cloud-provider:v0.0.10
+              name: kube-vip-cloud-provider
+              imagePullPolicy: Always
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            terminationGracePeriodSeconds: 30
+            serviceAccountName: kube-vip-cloud-controller
+            tolerations:
+            - key: node-role.kubernetes.io/master
+              effect: NoSchedule
+            - key: node-role.kubernetes.io/control-plane
+              effect: NoSchedule
+            affinity:
+              nodeAffinity:
+                preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 10
+                  preference:
+                    matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+                - weight: 10
+                  preference:
+                    matchExpressions:
+                    - key: node-role.kubernetes.io/master
+                      operator: Exists
+      ---
+      # device rename rule in /etc/udev/rules.d/70-persistent-net.rules
+      apiVersion: "k8s.cni.cncf.io/v1"
+      kind: NetworkAttachmentDefinition
+      metadata:
+        name: macvlan-conf
+        namespace: kube-system
+      spec:
+        config: '{
+            "cniVersion": "0.4.0",
+            "type": "macvlan",
+            "master": "eno1",
+            "mode": "bridge",
+            "ipam": {
+              "type": "host-local",
+              "subnet": "y.y.y.y
+              "rangeStart": "y.y.y.y
+              "rangeEnd": "y.y.y.y
+              "gateway": "y.y.y.y
+            }
+          }'
+      ---
+      apiVersion: "k8s.cni.cncf.io/v1"
+      kind: NetworkAttachmentDefinition
+      metadata:
+        name: macvlan-iot
+        namespace: kube-system
+      spec:
+        config: '{
+            "cniVersion": "0.4.0",
+            "type": "macvlan",
+            "master": "eno1.110",
+            "mode": "bridge",
+            "ipam": {
+              "type": "host-local",
+              "subnet": "y.y.y.y
+              "rangeStart": "y.y.y.y
+              "rangeEnd": "y.y.y.y
+              "gateway": "y.y.y.y
+            }
+          }'
+      ---
+      apiVersion: "k8s.cni.cncf.io/v1"
+      kind: NetworkAttachmentDefinition
+      metadata:
+        name: vlan-iot
+        namespace: kube-system
+      spec:
+        config: '{
+            "cniVersion": "0.4.0",
+            "type": "vlan",
+            "master": "macvlan0",
+            "vlanId": 110,
+            "mtu": 1500,
+            "linkInContainer": true,
+            "ipam": {
+              "type": "host-local",
+              "subnet": "y.y.y.y
+              "rangeStart": "y.y.y.y
+              "rangeEnd": "y.y.y.y
+              "gateway": "y.y.y.y
+            }
+          }'
