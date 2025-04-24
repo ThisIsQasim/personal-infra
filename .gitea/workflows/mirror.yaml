@@ -50,6 +50,11 @@ jobs:
           commit.author_email = email.encode("utf-8")
           ' --force
 
+          echo 'The following apps are deployed' >> README.md
+          grep -r image: . | grep -v README | grep -oE '/[a-zA-Z0-9]*:.*' | uniq | sed -e 's:/:- :g' -e 's/:v/:/g' -e 's/:/ /g' -e 's/"$//g' >> README.md
+
+          git add README.md && git commit -m "Update deployed apps list"
+
           git remote add mirror ${MIRROR_REPO_URL}
           git push -f -u mirror main
         env:
