@@ -53,6 +53,8 @@ jobs:
           echo 'The following apps are deployed' >> README.md
           grep -r image: . | grep -v README | grep -oE '/[a-zA-Z0-9]*:.*' | uniq | sed -e 's:/:- :g' -e 's/:v/:/g' -e 's/:/ /g' -e 's/"$//g' >> README.md
 
+          git config --global user.email "workflow@gitea.com"
+          git config --global user.name "Gitea Workflow"
           git add README.md && git commit -m "Update deployed apps list"
 
           git remote add mirror ${MIRROR_REPO_URL}
