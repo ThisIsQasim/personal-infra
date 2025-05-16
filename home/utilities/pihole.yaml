@@ -95,13 +95,43 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: pihole-dns
+  name: pihole
   labels:
     app: pihole
 spec:
   externalTrafficPolicy: Local
   loadBalancerIP: y.y.y.y
   clusterIP: y.y.y.y
+  ports:
+  - name: dns
+    port: 53
+    protocol: TCP
+    targetPort: dns
+  - name: dns-udp
+    port: 53
+    protocol: UDP
+    targetPort: dns-udp
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: https
+  selector:
+    app: pihole
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pihole-alt
+  labels:
+    app: pihole
+spec:
+  externalTrafficPolicy: Local
+  loadBalancerIP: y.y.y.y
   ports:
   - name: dns
     port: 53
