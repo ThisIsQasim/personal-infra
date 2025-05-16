@@ -247,7 +247,7 @@ spec:
           name: tls-cert
           subPath: tls-combined.pem
           readOnly: true
-        - mountPath: /var/www/html/static
+        - mountPath: /var/www/html/admin/static
           name: static-files
       - name: dnsproxy
         image: adguard/dnsproxy:v0.75.5
