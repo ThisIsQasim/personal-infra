@@ -46,6 +46,7 @@ data:
   custom.list: |
     y.y.y.y
     y.y.y.y
+    y.y.y.y
   regex.list: |
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
@@ -71,22 +72,25 @@ data:
     trace.svc.ui.com
     cdn.jsdelivr.net
 ---
-apiVersion: v1
-kind: Service
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
-  name: pihole-dhcp
+  name: pihole
   labels:
     app: pihole
 spec:
-  externalTrafficPolicy: Local
-  ports:
-  - name: client-udp
-    port: 67
-    protocol: UDP
-    targetPort: client-udp
-  selector:
-    app: pihole
-  type: NodePort
+  dnsNames:
+  - "pihole.home.com"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: pihole-cert
+  additionalOutputFormats:
+  - type: CombinedPEM
+  usages:
+  - digital signature
+  - key encipherment
 ---
 apiVersion: v1
 kind: Service
@@ -107,18 +111,6 @@ spec:
     port: 53
     protocol: UDP
     targetPort: dns-udp
-  selector:
-    app: pihole
-  type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: pihole
-  name: pihole-web
-spec:
-  ports:
   - name: http
     port: 80
     protocol: TCP
@@ -129,7 +121,7 @@ spec:
     targetPort: https
   selector:
     app: pihole
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -174,8 +166,6 @@ spec:
           value: 'Asia/Karachi'
         - name: FTLCONF_webserver_domain
           value: "pihole.home.com"
-        - name: FTLCONF_webserver_port
-          value: "80"
         - name: FTLCONF_dns_upstreams
           value: 127.0.0.1#5353
         - name: FTLCONF_dhcp_active
@@ -194,6 +184,8 @@ spec:
           value: "false"
         - name: FTLCONF_misc_etc_dnsmasq_d
           value: "true"
+        - name: "FTLCONF_webserver_tls_cert"
+          value: "/etc/pihole/tls.pem"
         envFrom:
         - secretRef:
             name: pihole
@@ -247,10 +239,17 @@ spec:
         volumeMounts:
         - mountPath: /etc/pihole
           name: config
+        - mountPath: /etc/pihole/hosts/custom.list
+          name: config
+          subPath: custom.list
         - mountPath: /etc/dnsmasq.d/02-custom.conf
           name: custom-dnsmasq
           subPath: 02-custom.conf
           readOnly: false
+        - mountPath: /etc/pihole/tls.pem
+          name: tls-cert
+          subPath: tls-combined.pem
+          readOnly: true
         - mountPath: /var/www/html/static
           name: static-files
       - name: dnsproxy
@@ -329,41 +328,9 @@ spec:
           defaultMode: 420
           name: pihole-static-files
         name: static-files
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: pihole
-  labels:
-    app: pihole
-  annotations:
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-name: "PHPSESSID"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "7200"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "7200"
-    gethomepage.dev/description: DNS & Ad Blocker
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Networking
-    gethomepage.dev/icon: pi-hole.png
-    gethomepage.dev/name: Pi-hole
-    gethomepage.dev/pod-selector: app=pihole
-    gethomepage.dev/href: https://pihole.home.com/admin/
-    gethomepage.dev/weight: "30"
-    gethomepage.dev/widget.type: pihole
-    gethomepage.dev/widget.url: http://pihole-web.utilities.svc:80
-    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
-spec:
-  rules:
-  - host: pihole.home.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: pihole-web
-            port:
-              name: http
-        path: /
-        pathType: ImplementationSpecific
+      - secret:
+          secretName: pihole-cert
+        name: tls-cert
 ---
 apiVersion: apps/v1
 kind: DaemonSet
