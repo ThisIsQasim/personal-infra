@@ -34,7 +34,8 @@ data:
     rev-server=y.y.y.y
     server=/home.home.com/y.y.y.y
     server=//y.y.y.y
-  05-pihole-custom-cname.conf: ""
+  05-custom-list.conf: |
+    addn-hosts=/etc/pihole/custom.list
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -123,36 +124,6 @@ spec:
     app: pihole
   type: LoadBalancer
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: pihole-alt
-  labels:
-    app: pihole
-spec:
-  externalTrafficPolicy: Local
-  loadBalancerIP: y.y.y.y
-  ports:
-  - name: dns
-    port: 53
-    protocol: TCP
-    targetPort: dns
-  - name: dns-udp
-    port: 53
-    protocol: UDP
-    targetPort: dns-udp
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: http
-  - name: https
-    port: 443
-    protocol: TCP
-    targetPort: https
-  selector:
-    app: pihole
-  type: LoadBalancer
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -186,7 +157,7 @@ spec:
         command: ["/bin/bash"]
         args:
         - -c
-        - cp /etc/pihole-lists/* /etc/pihole/ 
+        - cp /etc/pihole-lists/* /etc/pihole/
       containers:
       - name: pihole
         image: ghcr.io/pi-hole/pihole:2025.04.0
@@ -214,7 +185,7 @@ spec:
           value: "false"
         - name: FTLCONF_misc_etc_dnsmasq_d
           value: "true"
-        - name: "FTLCONF_webserver_tls_cert"
+        - name: FTLCONF_webserver_tls_cert
           value: "/etc/pihole/tls.pem"
         envFrom:
         - secretRef:
@@ -269,12 +240,8 @@ spec:
         volumeMounts:
         - mountPath: /etc/pihole
           name: config
-        - mountPath: /etc/pihole/hosts/custom.list
-          name: config
-          subPath: custom.list
-        - mountPath: /etc/dnsmasq.d/02-custom.conf
+        - mountPath: /etc/dnsmasq.d/
           name: custom-dnsmasq
-          subPath: 02-custom.conf
           readOnly: false
         - mountPath: /etc/pihole/tls.pem
           name: tls-cert

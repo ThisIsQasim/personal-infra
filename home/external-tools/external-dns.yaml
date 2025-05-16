@@ -54,8 +54,6 @@ spec:
       labels:
         app: external-dns
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       serviceAccountName: external-dns
       containers:
       - name: external-dns
@@ -81,6 +79,6 @@ spec:
         - --provider=pihole
         - --pihole-api-version=6
         # Change this to the actual address of your Pi-hole web server
-        - --pihole-server=http://y.y.y.y
+        - --pihole-server=http://pihole.utilities.svc
       securityContext:
         fsGroup: 65534 # For ExternalDNS to be able to read Kubernetes token files
