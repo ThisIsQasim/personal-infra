@@ -192,6 +192,8 @@ spec:
           value: "false"
         - name: FTLCONF_dns_dnssec
           value: "false"
+        - name: FTLCONF_misc_etc_dnsmasq_d
+          value: "true"
         envFrom:
         - secretRef:
             name: pihole
