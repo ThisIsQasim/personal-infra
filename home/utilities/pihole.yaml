@@ -366,7 +366,7 @@ spec:
         - |
           set -ex
           INTERFACE=$(ip route show | grep default | awk '{print $5}')
-          GATEWAY=$(ip route show default | awk '{print $3}')
+          GATEWAY=$(ip route show | grep default | awk '{print $3}')
           TABLE=10
           ip route show table ${TABLE} | grep "default via ${GATEWAY} dev ${INTERFACE}" || \
             ip route add default via ${GATEWAY} dev ${INTERFACE} table ${TABLE}
