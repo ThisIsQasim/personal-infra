@@ -91,7 +91,7 @@ spec:
         - name: TS_HOSTNAME
           value: f8k
         - name: TS_EXTRA_ARGS
-          value: "--login-server https://headscale.home.com:443 --advertise-routes=y.y.y.y
+          value: "--login-server https://headscale.home.com:443 --advertise-exit-node --accept-routes --stateful-filtering=false"
         - name: TS_TAILSCALED_EXTRA_ARGS
           value: "--port=31643"
         - name: TS_KUBE_SECRET
@@ -107,7 +107,7 @@ spec:
               key: TS_AUTHKEY
               optional: true
         - name: TS_ROUTES
-          value: ""
+          value: "y.y.y.y
         - name: POD_NAME
           valueFrom:
             fieldRef:
