@@ -53,6 +53,8 @@ spec:
           value: policy
         - name: MINIO_IDENTITY_OPENID_SCOPES
           value: "openid, email, profile, minio"
+        - name: MINIO_IDENTITY_OPENID_COMMENT
+          value: "Login with SSO"
         envFrom:
         - secretRef:
             name: minio        
