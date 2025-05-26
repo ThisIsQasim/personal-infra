@@ -47,8 +47,12 @@ spec:
         env:
         - name: MINIO_REGION
           value: eu-central-1
+        - name: MINIO_IDENTITY_OPENID_CONFIG_URL
+          value: https://authentik.home.com/application/o/minio/.well-known/openid-configuration
         - name: MINIO_IDENTITY_OPENID_CLAIM_NAME
           value: policy
+        - name: MINIO_IDENTITY_OPENID_SCOPES
+          value: "openid, email, profile, minio"
         envFrom:
         - secretRef:
             name: minio        
