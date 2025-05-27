@@ -158,3 +158,23 @@ spec:
             name: minio
             port:
               name: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: minio
+  labels:
+    app: minio
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  podMetricsEndpoints:
+  - port: http
+    path: /minio/metrics/v3/cluster
+    authorization:
+      type: Bearer
+      credentials:
+        name: minio
+        key: MINIO_MONITORING_TOKEN

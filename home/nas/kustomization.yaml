@@ -11,6 +11,9 @@ resources:
 - redis.yaml
 - minio.yaml
 
+configurations:
+- kustomizeconfig.yaml
+
 generators:
 - |
   apiVersion: viaduct.ai/v1

@@ -1,0 +1,6 @@
+---
+nameReference:
+- kind: Secret
+  fieldSpecs:
+  - path: spec/podMetricsEndpoints/authorization/credentials/name
+    kind: PodMonitor
