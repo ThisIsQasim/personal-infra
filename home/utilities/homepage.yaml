@@ -26,16 +26,6 @@ data:
   bookmarks.yaml: ""
   services.yaml: |
     - Networking:
-        - Pi-hole:
-            description: DNS & Ad Blocker
-            href: https://pihole.home.com/admin/
-            podSelector: app=pihole
-            icon: pi-hole.png
-            widget:
-              type: pihole
-              version: 6
-              url: http://pihole.utilities.svc:80
-              key: {{HOMEPAGE_VAR_PIHOLE_KEY}}
         - Unifi:
             href: https://y.y.y.y
             icon: unifi-controller.png
