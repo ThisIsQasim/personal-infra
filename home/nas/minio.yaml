@@ -172,7 +172,7 @@ spec:
       app: minio
   podMetricsEndpoints:
   - port: http
-    path: /minio/metrics/v3/cluster
+    path: /minio/metrics/v3
     authorization:
       type: Bearer
       credentials:
