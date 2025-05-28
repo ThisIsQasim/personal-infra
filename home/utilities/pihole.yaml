@@ -52,12 +52,6 @@ data:
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
     (^|\.)home\.com;querytype=HTTPS
-    (^|\.)twitter\.com;reply=y.y.y.y
-    (^|\.)twitter\.com;querytype=HTTPS
-    (^|\.)twimg\.com;reply=y.y.y.y
-    (^|\.)twimg\.com;querytype=HTTPS
-    (^|\.)x\.com;reply=y.y.y.y
-    (^|\.)x\.com;querytype=HTTPS 
   blacklist.txt: |
     www.hibids10.com
     api.tunnelbear.com
