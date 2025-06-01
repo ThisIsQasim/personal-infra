@@ -141,7 +141,7 @@ spec:
     spec:
       initContainers:
       - name: copy-config
-        image: ghcr.io/pi-hole/pihole:2025.05.0
+        image: ghcr.io/pi-hole/pihole:2025.05.1
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - mountPath: /etc/pihole
@@ -154,7 +154,7 @@ spec:
         - cp /etc/pihole-lists/* /etc/pihole/
       containers:
       - name: pihole
-        image: ghcr.io/pi-hole/pihole:2025.05.0
+        image: ghcr.io/pi-hole/pihole:2025.05.1
         imagePullPolicy: IfNotPresent
         env:
         - name: TZ
@@ -378,7 +378,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
-      - image: ghcr.io/pi-hole/pihole:2025.05.0
+      - image: ghcr.io/pi-hole/pihole:2025.05.1
         imagePullPolicy: IfNotPresent
         name: sysctler
         securityContext:
@@ -389,7 +389,7 @@ spec:
         - sysctl -w net.core.rmem_max=7500000 net.core.wmem_max=7500000 net.core.somaxconn=32768 net.ipv4.ip_local_port_range='1024 65000'
       containers:
       - name: dns-ip-fixer
-        image: ghcr.io/pi-hole/pihole:2025.05.0
+        image: ghcr.io/pi-hole/pihole:2025.05.1
         imagePullPolicy: IfNotPresent
         command: ["/bin/bash"]
         args:
@@ -435,7 +435,7 @@ spec:
     - sh
     - -c
     - curl http://pihole-web:80/
-    image: ghcr.io/pi-hole/pihole:2025.05.0
+    image: ghcr.io/pi-hole/pihole:2025.05.1
     imagePullPolicy: IfNotPresent
     name: hook1-container
   restartPolicy: Never
