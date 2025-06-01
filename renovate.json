@@ -27,7 +27,9 @@
         "digest"
       ],
       "automerge": true,
-      "schedule": ["* 0-2 * * 0"]
+      "schedule": [
+        "* 0-2 * * 0"
+      ]
     },
     {
       "matchDatasources": [
@@ -59,9 +61,9 @@
     }
   ],
   "kubernetes": {
-    "fileMatch": [
-      "home/.+\\.yaml$",
-      "prod1-eu1/.+\\.yaml$"
+    "managerFilePatterns": [
+      "/home/.+\\.yaml$/",
+      "/prod1-eu1/.+\\.yaml$/"
     ]
   }
 }
