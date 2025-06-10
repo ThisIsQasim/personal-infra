@@ -43,7 +43,7 @@ spec:
         nameservers:
         - y.y.y.y
       containers:
-      - image: tazihad/byedpi:v0.16
+      - image: tazihad/byedpi:v0.17
         name: byedpi
         args:
         - --ip=0.0.0.0
