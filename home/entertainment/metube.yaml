@@ -95,7 +95,7 @@ spec:
         - name: GID
           value: "1001"
         - name: YTDL_OPTIONS
-          value: '{"proxy": "socks5://100.64.0.6:1055/", "concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "nopart": true, "verbose": true}'
+          value: '{"proxy": "socks5://100.64.0.5:1055/", "concurrent_fragment_downloads": 1, "sleep_interval_requests": 5, "throttledratelimit": 400000, "nopart": true, "verbose": true}'
         volumeMounts:
         - mountPath: /downloads
           name: downloads
