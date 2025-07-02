@@ -63,6 +63,8 @@ k8s_cluster:
       proxy-request-buffering: "off"
       allow-snippet-annotations: "true"
       annotations-risk-level: "Critical"
+      use-gzip: "true"
+      enable-brotli: "true"
     kube_vip_enabled: true
     kube_vip_image_tag: v0.8.2
     kube_vip_controlplane_enabled: true
