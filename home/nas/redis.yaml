@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: redis
-        image: public.ecr.aws/docker/library/redis:8.0.2
+        image: public.ecr.aws/docker/library/redis:8.0.3
         imagePullPolicy: IfNotPresent
         command:
         - redis-server
