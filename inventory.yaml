@@ -54,6 +54,7 @@ k8s_cluster:
     ingress_nginx_service_annotations:
       kube-vip.io/loadbalancerIPs: y.y.y.y
     ingress_nginx_host_network: false
+    ingress_nginx_publish_service: ingress-nginx/ingress-nginx
     ingress_nginx_configmap:
       map-hash-bucket-size: '128'
       ssl-protocols: 'TLSv1.2 TLSv1.3'
