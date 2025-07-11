@@ -13,13 +13,16 @@ helmCharts:
   namespace: authentik
   releaseName: authentik
   repo: https://charts.goauthentik.io
-  valuesFile: authentik.yaml
   version: 2025.6.3
+  valuesFile: authentik.yaml
 - name: spegel
   namespace: spegel
   releaseName: spegel
   repo: oci://ghcr.io/spegel-org/helm-charts
   version: 0.3.0
+  valuesInline:
+    spegel:
+      resolveLatestTag: false
 
 patches:
 - target:
