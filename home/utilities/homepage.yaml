@@ -24,6 +24,7 @@ data:
     const element = document.getElementById("information-widgets-right");
     element.remove();
   bookmarks.yaml: ""
+  proxmox.yaml: ""
   services.yaml: |
     - Networking:
         - Unifi:
