@@ -92,7 +92,7 @@ spec:
             command:
             - sh
             - -c
-            - avahi-resolve --name ${NODE_NAME}.local
+            - avahi-resolve --name 4k.local
         readinessProbe:
           exec:
             command:
