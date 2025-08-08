@@ -405,6 +405,7 @@ spec:
             ip route add default via ${GATEWAY} dev ${INTERFACE} table ${TABLE}
           ip rule show table ${TABLE} | grep "from y.y.y.y
             ip rule add from y.y.y.y
+            ip rule add from y.y.y.y
           sleep inf
         securityContext:
           runAsUser: 0
