@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: homebridge
-        image: "ghcr.io/homebridge/homebridge:2025-07-25"
+        image: "ghcr.io/homebridge/homebridge:2025-08-07"
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: false
