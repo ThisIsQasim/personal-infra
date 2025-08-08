@@ -94,9 +94,10 @@ metadata:
   name: pihole
   labels:
     app: pihole
+  annotations:
+    kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
   externalTrafficPolicy: Local
-  loadBalancerIP: y.y.y.y
   clusterIP: y.y.y.y
   ports:
   - name: dns
