@@ -260,7 +260,6 @@ spec:
       - name: pihole
         image: ghcr.io/pi-hole/pihole:2025.08.0
         imagePullPolicy: IfNotPresent
-        restartPolicy: Always
         env:
         - name: TZ
           value: 'Asia/Karachi'
