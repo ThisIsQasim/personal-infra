@@ -1,4 +1,65 @@
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: external-dns
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - pods
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - extensions
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - networking.istio.io
+  resources:
+  - gateways
+  - virtualservices
+  verbs:
+  - get
+  - watch
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: external-dns-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: external-dns
+subjects:
+- kind: ServiceAccount
+  name: external-dns
+  namespace: utilities
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -280,12 +341,39 @@ spec:
             cpu: 50m
           limits:
             memory: 200Mi
+      - name: external-dns
+        image: registry.k8s.io/external-dns/external-dns:v0.18.0
+        # If authentication is disabled and/or you didn't create
+        # a secret, you can remove this block.
+        envFrom:
+        - secretRef:
+            # Change this if you gave the secret a different name
+            name: pihole-password
+        args:
+        - --source=service
+        - --source=ingress
+        - --domain-filter=home.com
+        - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
+        # Pihole only supports A/CNAME records so there is no mechanism to track ownership.
+        # You don't need to set this flag, but if you leave it unset, you will receive warning
+        # logs when ExternalDNS attempts to create TXT records.
+        - --registry=noop
+        # IMPORTANT: If you have records that you manage manually in Pi-hole, set
+        # the policy to upsert-only so they do not get deleted.
+        - --policy=upsert-only
+        - --provider=pihole
+        - --pihole-api-version=6
+        # Change this to the actual address of your Pi-hole web server
+        - --pihole-server=http://127.0.0.1
       dnsConfig:
         nameservers:
         - 127.0.0.1
         - 8.8.8.8
       dnsPolicy: None
       hostNetwork: false
+      serviceAccountName: external-dns
+      securityContext:
+        fsGroup: 65534 # For ExternalDNS to be able to read Kubernetes token files
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

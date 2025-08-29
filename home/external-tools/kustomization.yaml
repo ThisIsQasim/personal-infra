@@ -2,7 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - namespace.yaml
-- external-dns.yaml
 - smarter-device-manager.yaml
 - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.32&timeout=90s
 - https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.24.1/cnpg-1.24.1.yaml
