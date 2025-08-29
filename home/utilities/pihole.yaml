@@ -256,6 +256,7 @@ spec:
             cpu: 50m
           limits:
             memory: 200Mi
+      containers:
       - name: pihole
         image: ghcr.io/pi-hole/pihole:2025.08.0
         imagePullPolicy: IfNotPresent
@@ -347,7 +348,6 @@ spec:
           readOnly: true
         - mountPath: /var/www/html/admin/static
           name: static-files
-      containers:
       - name: external-dns
         image: registry.k8s.io/external-dns/external-dns:v0.18.0
         # If authentication is disabled and/or you didn't create
