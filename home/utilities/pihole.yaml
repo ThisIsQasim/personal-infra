@@ -345,10 +345,13 @@ spec:
         image: registry.k8s.io/external-dns/external-dns:v0.18.0
         # If authentication is disabled and/or you didn't create
         # a secret, you can remove this block.
-        envFrom:
-        - secretRef:
-            # Change this if you gave the secret a different name
-            name: pihole-password
+        env:
+        - name: EXTERNAL_DNS_PIHOLE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pihole
+              key: FTLCONF_webserver_api_password
+              optional: true
         args:
         - --source=service
         - --source=ingress

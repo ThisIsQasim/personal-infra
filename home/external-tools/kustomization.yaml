@@ -61,11 +61,6 @@ generators:
             path: ksops
   secretFrom:
   - metadata:
-      name: pihole-password
-      namespace: external-dns
-    envs:
-    - pihole-password.enc.env
-  - metadata:
       name: authentik-key
       namespace: authentik
     envs:
