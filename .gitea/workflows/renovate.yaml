@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     container: ghcr.io/renovatebot/renovate:41.82.6-full
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: renovate
         env:
           RENOVATE_CONFIG_FILE: "renovate-config.js"
