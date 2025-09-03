@@ -326,6 +326,13 @@ spec:
             - pi.hole
             - 127.0.0.1
           failureThreshold: 2
+        lifecycle:
+          postStart:
+            exec:
+              command:
+              - "/bin/bash"
+              - "-c"
+              - "until /usr/bin/nslookup pi.hole 127.0.0.1; do sleep 0.5; done"
         resources:
           requests:
             cpu: 50m
