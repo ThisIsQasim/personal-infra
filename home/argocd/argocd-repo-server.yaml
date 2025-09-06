@@ -6,30 +6,49 @@ metadata:
 spec:
   template:
     spec:
-      # 1. Define a volume from the ksops container image
+      # 1. Define an emptyDir volume which will hold the custom binaries
       volumes:
         - name: ksops
           image:
             reference: viaductoss/ksops:v4.4.0
             pullPolicy: IfNotPresent
+        - name: custom-tools
+          emptyDir: {}
         - name: age-private-key
           secret:
             secretName: age-private-key
             optional: false
-      # 2. Volume mount the custom binary to the bin directory (overriding the existing version)
+      # 2. Use an init container to download/copy custom binaries into the emptyDir
+      initContainers:
+        - name: install-ksops
+          image: quay.io/argoproj/argocd:v3.1.4
+          command:
+            - /bin/bash
+            - -c
+            - |
+              echo "Installing KSOPS..."
+              cd /ksops/usr/local/bin/
+              cp ksops kustomize /custom-tools/
+              echo "Done."
+          volumeMounts:
+            - mountPath: /ksops
+              name: ksops
+            - mountPath: /custom-tools
+              name: custom-tools
+      # 3. Volume mount the custom binary to the bin directory (overriding the existing version)
       containers:
         - name: argocd-repo-server
           volumeMounts:
             - mountPath: /usr/local/bin/kustomize
-              name: ksops
-              subPath: /go/bin/kustomize
+              name: custom-tools
+              subPath: kustomize
             - mountPath: /usr/local/bin/ksops
-              name: ksops
-              subPath: /go/bin/ksops
+              name: custom-tools
+              subPath: ksops
             - mountPath: /.config/sops/age/keys.txt
               name: age-private-key
               subPath: keys.txt
-          # 3. Set the XDG_CONFIG_HOME env variable to allow kustomize to detect the plugin
+          # 4. Set the XDG_CONFIG_HOME env variable to allow kustomize to detect the plugin
           env:
             - name: SOPS_AGE_KEY_FILE
               value: /.config/sops/age/keys.txt
