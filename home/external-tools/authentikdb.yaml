@@ -26,7 +26,6 @@ spec:
       parameters:
         barmanObjectName: minio-store
         serverName: authentik-pgsql-recovery
-
   postgresql:
     parameters:
       max_wal_size: 2GB
