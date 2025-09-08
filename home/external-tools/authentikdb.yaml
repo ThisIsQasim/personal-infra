@@ -18,6 +18,7 @@ spec:
     major: 17
   bootstrap:
     recovery:
+      database: authentik
       source: source
   externalClusters:
   - name: source

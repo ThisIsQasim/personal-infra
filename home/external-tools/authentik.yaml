@@ -8,9 +8,9 @@ global:
 
 authentik:
   postgresql:
-    name: authentik
     host: file:///postgres-creds/host
     port: file:///postgres-creds/port
+    name: file:///postgres-creds/dbname
     user: file:///postgres-creds/username
     password: file:///postgres-creds/password
   error_reporting:
