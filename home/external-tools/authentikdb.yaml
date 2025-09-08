@@ -11,7 +11,7 @@ metadata:
   namespace: authentik
 spec:
   instances: 2
-  # imageName: ghcr.io/cloudnative-pg/postgresql:17.4
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
   bootstrap:
     initdb:
       database: authentik
