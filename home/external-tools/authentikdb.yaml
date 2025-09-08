@@ -39,6 +39,7 @@ metadata:
   name: minio-store
   namespace: authentik
 spec:
+  retentionPolicy: "30d"
   configuration:
     destinationPath: s3://authentik-postgres-backup/
     endpointURL: https://s3.home.com
