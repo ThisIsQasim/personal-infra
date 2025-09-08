@@ -5,6 +5,8 @@ resources:
 - smarter-device-manager.yaml
 - github.com/rancher/local-path-provisioner/deploy?ref=v0.0.32&timeout=90s
 - https://github.com/cloudnative-pg/cloudnative-pg/releases/download/v1.27.0/cnpg-1.27.0.yaml
+- https://raw.githubusercontent.com/cloudnative-pg/postgres-containers/main/Debian/ClusterImageCatalog-bookworm.yaml
+- https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.6.0/manifest.yaml
 - authentikdb.yaml
 
 helmCharts:
