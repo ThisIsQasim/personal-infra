@@ -11,17 +11,17 @@ metadata:
   namespace: authentik
 spec:
   instances: 2
-  imageName: ghcr.io/cloudnative-pg/postgresql:17.4
+  # imageName: ghcr.io/cloudnative-pg/postgresql:17.4
   bootstrap:
     initdb:
       database: authentik
   postgresql:
     parameters:
       max_wal_size: 2GB
-      "pgaudit.log": "all, -misc"
-      "pgaudit.log_catalog": "off"
-      "pgaudit.log_parameter": "on"
-      "pgaudit.log_relation": "on"
+      # "pgaudit.log": "all, -misc"
+      # "pgaudit.log_catalog": "off"
+      # "pgaudit.log_parameter": "on"
+      # "pgaudit.log_relation": "on"
   storage:
     size: 1Gi
     storageClass: local-path
