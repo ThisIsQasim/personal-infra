@@ -15,34 +15,43 @@ spec:
     apiGroup: postgresql.cnpg.io
     kind: ClusterImageCatalog
     name: postgresql
-    major: 16
+    major: 17
   bootstrap:
-    initdb:
-      database: authentik
+    recovery:
+      backup:
+        name: authentik-pgsql-recovery
   postgresql:
     parameters:
       max_wal_size: 2GB
-      # "pgaudit.log": "all, -misc"
-      # "pgaudit.log_catalog": "off"
-      # "pgaudit.log_parameter": "on"
-      # "pgaudit.log_relation": "on"
   storage:
     size: 1Gi
     storageClass: local-path
   backup:
     retentionPolicy: "7d"
-    barmanObjectStore:
-      destinationPath: s3://authentik-postgres-backup/
-      endpointURL: https://s3.home.com
-      s3Credentials:
-        accessKeyId:
-          name: authentik-pgsql-s3
-          key: ACCESS_KEY_ID
-        secretAccessKey:
-          name: authentik-pgsql-s3
-          key: ACCESS_SECRET_KEY
-      wal:
-        compression: gzip
+  plugins:
+  - name: barman-cloud.cloudnative-pg.io
+    isWALArchiver: true
+    parameters:
+      barmanObjectName: minio-store
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: minio-store
+  namespace: authentik
+spec:
+  configuration:
+    destinationPath: s3://authentik-postgres-backup/
+    endpointURL: https://s3.home.com
+    s3Credentials:
+      accessKeyId:
+        name: authentik-pgsql-s3
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: authentik-pgsql-s3
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
@@ -54,3 +63,6 @@ spec:
   backupOwnerReference: self
   cluster:
     name: authentik-pgsql
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
