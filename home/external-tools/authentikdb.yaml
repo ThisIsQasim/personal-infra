@@ -17,16 +17,8 @@ spec:
     name: postgresql
     major: 17
   bootstrap:
-    recovery:
-      source: source
-  externalClusters:
-  - name: source
-    plugin:
-      name: barman-cloud.cloudnative-pg.io
-      parameters:
-        barmanObjectName: minio-store
-        serverName: authentik-pgsql-recovery
-
+    initdb:
+      database: authentik
   postgresql:
     parameters:
       max_wal_size: 2GB
