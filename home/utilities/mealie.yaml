@@ -18,7 +18,7 @@ spec:
         app: mealie
     spec:
       containers:
-      - image: ghcr.io/mealie-recipes/mealie:v3.1.2
+      - image: ghcr.io/mealie-recipes/mealie:v3.2.0
         imagePullPolicy: IfNotPresent
         name: mealie
         envFrom:
