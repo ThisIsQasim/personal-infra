@@ -26,6 +26,8 @@ helmCharts:
       resolveLatestTag: false
     serviceMonitor:
       enabled: true
+      labels:
+        release: prometheus
 
 patches:
 - target:
