@@ -24,6 +24,8 @@ helmCharts:
   valuesInline:
     spegel:
       resolveLatestTag: false
+    serviceMonitor:
+      enabled: true
 
 patches:
 - target:
