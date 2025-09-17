@@ -14,7 +14,7 @@ helmCharts:
   namespace: authentik
   releaseName: authentik
   repo: https://charts.goauthentik.io
-  version: 2025.8.2
+  version: 2025.8.3
   valuesFile: authentik.yaml
 - name: spegel
   namespace: spegel
