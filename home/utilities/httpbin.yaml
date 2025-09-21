@@ -40,7 +40,12 @@ metadata:
   labels:
     app: httpbin
   annotations:
-    nginx.ingress.kubernetes.io/whitelist-source-range: "y.y.y.y
+    nginx.ingress.kubernetes.io/auth-response-headers: Set-Cookie,X-authentik-username,X-authentik-email,X-App-User,X-authentik-name
+    nginx.ingress.kubernetes.io/auth-signin: https://authentik.home.com/outpost.goauthentik.io/start?rd=https://$host$escaped_request_uri
+    nginx.ingress.kubernetes.io/auth-snippet: |
+      proxy_set_header X-Forwarded-Host $http_host;
+    nginx.ingress.kubernetes.io/auth-url: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/nginx
+    # nginx.ingress.kubernetes.io/whitelist-source-range: y.y.y.y
 spec:
   ingressClassName: nginx
   tls:
