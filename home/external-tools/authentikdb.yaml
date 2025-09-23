@@ -40,6 +40,8 @@ spec:
     isWALArchiver: true
     parameters:
       barmanObjectName: minio-store
+  monitoring:
+    enablePodMonitor: true
 ---
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
