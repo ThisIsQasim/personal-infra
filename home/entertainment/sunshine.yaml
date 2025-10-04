@@ -22,7 +22,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: lizardbyte/sunshine:v2025.930.130407-debian-trixie
+      - image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
         name: sunshine
         env:
         - name: PUID
