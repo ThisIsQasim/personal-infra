@@ -33,7 +33,7 @@ spec:
           value: "Asia/Karachi"
         ports:
         - name: http
-          containerPort: 48010
+          containerPort: 47990
           protocol: TCP
         startupProbe:
           tcpSocket:
