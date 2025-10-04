@@ -11,6 +11,7 @@ resources:
 - transmission.yaml
 - metube.yaml
 - flare-bypasser.yaml
+- sunshine.yaml
 
 generators:
 - |
