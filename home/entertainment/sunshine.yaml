@@ -30,8 +30,12 @@ spec:
           value: "1001"
         - name: PGID
           value: "1001"
+        - name: UMASK
+          value: '000'
         - name: TZ
           value: "Asia/Karachi"
+        - name: SHM_SIZE
+          value: '2G'
         ports:
         - name: http
           containerPort: 47990
