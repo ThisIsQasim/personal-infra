@@ -21,8 +21,9 @@ spec:
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
+        fsGroup: 1001
       containers:
-      - image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
+      - image: ghcr.io/steam-headless/steam-headless:debian@sha256:453e03d7a7e948db9f9c78569f3936561472797159dcf415a8ba89a20b68ca72
         name: sunshine
         env:
         - name: PUID
@@ -58,19 +59,25 @@ spec:
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
-        - mountPath: /config
-          name: config
-        - mountPath: /external
+        - mountPath: /mnt/games
           name: external
+          subPath: games
+        - mountPath: /home/default/
+          name: config
+        - name: dshm
+          mountPath: /dev/shm 
       volumes:
-        - name: config
-          hostPath:
-            path: /home/entertainment/sunshine/config
-            type: Directory
-        - name: external
-          hostPath:
-            path: /mnt/external
-            type: Directory
+      - name: config
+        hostPath:
+          path: /home/entertainment/sunshine/config
+          type: Directory
+      - name: external
+        hostPath:
+          path: /mnt/external
+          type: Directory
+      - name: dshm
+        emptyDir:
+          medium: Memory
       nodeSelector:
         kubernetes.io/hostname: node3
 ---
