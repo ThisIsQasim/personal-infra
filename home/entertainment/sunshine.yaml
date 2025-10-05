@@ -36,8 +36,6 @@ spec:
           value: "Asia/Karachi"
         - name: SHM_SIZE
           value: '2G'
-        - name: USER_PASSWORD
-          value: 'password' #changeme
         - name: MODE
           value: 'primary'
         - name: WEB_UI_MODE
@@ -50,12 +48,11 @@ spec:
           value: ''
         - name: ENABLE_SUNSHINE
           value: 'true'
-        - name: SUNSHINE_USER
-          value: 'sam'
-        - name: SUNSHINE_PASS
-          value: 'password'
         - name: ENABLE_EVDEV_INPUTS
           value: 'false'
+        envFrom:
+        - secretRef:
+            name: sunshine
         ports:
         - name: http
           containerPort: 47990
@@ -136,12 +133,6 @@ metadata:
     gethomepage.dev/icon: sunshine.png
     gethomepage.dev/name: sunshine
     gethomepage.dev/pod-selector: app=sunshine
-    # gethomepage.dev/weight: "0"
-    # gethomepage.dev/widget.type: sunshine
-    # gethomepage.dev/widget.url: http://sunshine.entertainment.svc:47990
-    # gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_sunshine_KEY}}"
-    # gethomepage.dev/widget.enableBlocks: "true"
-    # gethomepage.dev/widget.enableNowPlaying: "true"
 spec:
   tls:
   - hosts:
