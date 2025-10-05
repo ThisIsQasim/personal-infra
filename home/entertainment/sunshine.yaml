@@ -26,6 +26,8 @@ spec:
         securityContext:
           privileged: true
         env:
+        - name: USER_LOCALES
+          value: 'en_US.UTF-8 UTF-8'
         - name: PUID
           value: "1001"
         - name: PGID
