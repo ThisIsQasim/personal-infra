@@ -36,6 +36,26 @@ spec:
           value: "Asia/Karachi"
         - name: SHM_SIZE
           value: '2G'
+        - name: USER_PASSWORD
+          value: 'password' #changeme
+        - name: MODE
+          value: 'primary'
+        - name: WEB_UI_MODE
+          value: 'none'
+        - name: ENABLE_VNC_AUDIO
+          value: 'false'
+        - name: PORT_NOVNC_WEB
+          value: '8083'
+        - name: NEKO_NAT1TO1
+          value: ''
+        - name: ENABLE_SUNSHINE
+          value: 'true'
+        - name: SUNSHINE_USER
+          value: 'sam'
+        - name: SUNSHINE_PASS
+          value: 'password'
+        - name: ENABLE_EVDEV_INPUTS
+          value: 'true'
         ports:
         - name: http
           containerPort: 47990
