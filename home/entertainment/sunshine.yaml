@@ -50,6 +50,8 @@ spec:
           value: 'true'
         - name: ENABLE_EVDEV_INPUTS
           value: 'false'
+        - name: STEAM_ARGS
+          value: '-silent -eula=yes'
         envFrom:
         - secretRef:
             name: sunshine
