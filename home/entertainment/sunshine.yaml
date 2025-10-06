@@ -100,10 +100,12 @@ spec:
         - mountPath: /mnt/games/
           name: external
           subPath: games 
+        - mountPath: /mnt/external/
+          name: external
         - mountPath: /home/default/
           name: home
-        - name: dshm
-          mountPath: /dev/shm
+        - mountPath: /dev/shm
+          name: dshm
       volumes:
       - name: home
         hostPath:
