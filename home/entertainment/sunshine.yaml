@@ -62,8 +62,8 @@ spec:
           value: 'true'
         - name: STEAM_ARGS
           value: '-silent -eula=yes'
-        - name: ALSA_CONFIG_PATH
-          value: '/usr/share/alsa/alsa.conf'
+        - name: FORCE_X11_DUMMY_CONFIG
+          value: 'true'
         envFrom:
         - secretRef:
             name: sunshine
