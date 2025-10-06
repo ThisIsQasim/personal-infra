@@ -1,3 +1,5 @@
+# yum install -y https://repo.radeon.com/amdgpu-install/6.4.4/rhel/9.6/amdgpu-install-6.4.60404-1.el9.noarch.rpm
+# amdgpu-install -y --accept-eula
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,9 +90,11 @@ spec:
           periodSeconds: 5
         resources:
           requests:
+            smarter-devices/kfd: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
+            smarter-devices/kfd: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
