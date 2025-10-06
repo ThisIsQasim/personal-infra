@@ -91,7 +91,7 @@ spec:
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
-        - mountPath: /mnt/games
+        - mountPath: /home/default/games/
           name: external
           subPath: games
         - mountPath: /home/default/
