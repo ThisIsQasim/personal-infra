@@ -1,15 +1,4 @@
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    app: sunshine
-  name: sunshine
-data:
-  ulimits.conf: |
-    [Manager]
-    DefaultLimitNOFILE=1048576
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -37,6 +26,12 @@ spec:
         name: sunshine
         securityContext:
           privileged: true
+        command:
+        - /bin/sh
+        - -c
+        - |
+          ulimit -n 1048576
+          exec /entrypoint.sh
         env:
         - name: USER_LOCALES
           value: 'en_US.UTF-8 UTF-8'
@@ -103,12 +98,6 @@ spec:
           name: home
         - name: dshm
           mountPath: /dev/shm
-        - name: config
-          mountPath: /etc/systemd/system.conf
-          subPath: ulimits.conf
-        - name: config
-          mountPath: /etc/systemd/user.conf
-          subPath: ulimits.conf
       volumes:
       - name: home
         hostPath:
@@ -122,9 +111,6 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 2Gi
-      - name: config
-        configMap:
-          name: sunshine
       nodeSelector:
         kubernetes.io/hostname: node3
 ---
