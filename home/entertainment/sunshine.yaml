@@ -19,6 +19,7 @@ spec:
       annotations:
         k8s.v1.cni.cncf.io/networks: '[{ "name" : "macvlan-conf", "namespace": "kube-system", "interface": "macvlan0", "ips": [ "y.y.y.y
     spec:
+      enableServiceLinks: false
       securityContext:
         fsGroup: 1001
       containers:
@@ -61,6 +62,8 @@ spec:
           value: 'true'
         - name: STEAM_ARGS
           value: '-silent -eula=yes'
+        # - name: ALSA_CONFIG_PATH
+        #   value: '/usr/share/alsa/alsa.conf'
         envFrom:
         - secretRef:
             name: sunshine
