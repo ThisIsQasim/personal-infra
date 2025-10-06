@@ -94,6 +94,9 @@ spec:
         - mountPath: /home/default/Games/
           name: external
           subPath: games
+        - mountPath: /mnt/games/
+          name: external
+          subPath: games 
         - mountPath: /home/default/
           name: home
         - name: dshm
