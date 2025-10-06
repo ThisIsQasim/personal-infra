@@ -11,6 +11,8 @@ data:
       nummaxdevices: 20
     - devicematch: ^dri.*$
       nummaxdevices: 10
+    - devicematch: ^kfd$
+      nummaxdevices: 10
     - devicematch: ^rtc0$
       nummaxdevices: 20
     - devicematch: ^apex_.*$
