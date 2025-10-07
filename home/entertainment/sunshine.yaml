@@ -80,7 +80,7 @@ spec:
         - name: STEAM_ARGS
           value: '-silent -eula=yes'
         - name: FORCE_X11_DUMMY_CONFIG
-          value: 'true'
+          value: 'false'
         - name: ENABLE_SID
           value: 'false'
         # - name: PROTON_DUMP_DEBUG_COMMANDS
