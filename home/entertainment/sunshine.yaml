@@ -49,9 +49,9 @@ spec:
         - -c
         - |
           ulimit -n 1048576
-          for file in /etc/cont-init.d/60-configure_gpu_driver.sh /etc/apt/sources.list.d/debian.sources; do
-            sed -i 's|http://deb.debian.org/debian|http://ftp.de.debian.org/debian|g' $file
-          done
+          # sed -i 's|http://deb.debian.org/debian|http://ftp.us.debian.org/debian|g' \
+          #         /etc/cont-init.d/60-configure_gpu_driver.sh \
+          #         /etc/apt/sources.list.d/debian.sources
           exec /entrypoint.sh
         env:
         - name: USER_LOCALES
