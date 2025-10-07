@@ -1,5 +1,5 @@
 # yum install -y https://repo.radeon.com/amdgpu-install/6.4.4/rhel/9.6/amdgpu-install-6.4.60404-1.el9.noarch.rpm
-# amdgpu-install -y --accept-eula --vulkan=pro
+# amdgpu-install -y --accept-eula --vulkan=radv
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -82,7 +82,7 @@ spec:
         - name: FORCE_X11_DUMMY_CONFIG
           value: 'false'
         - name: ENABLE_SID
-          value: 'false'
+          value: 'true'
         # - name: PROTON_DUMP_DEBUG_COMMANDS
         #   value: '1'
         # - name: DXVK_HUD
