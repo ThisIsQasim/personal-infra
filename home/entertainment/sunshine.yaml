@@ -49,9 +49,9 @@ spec:
         - -c
         - |
           ulimit -n 1048576
-          # sed -i 's|http://deb.debian.org/debian|http://ftp.us.debian.org/debian|g' \
-          #         /etc/cont-init.d/60-configure_gpu_driver.sh \
-          #         /etc/apt/sources.list.d/debian.sources
+          sed -i 's|http://deb.debian.org/debian|http://ftp.us.debian.org/debian|g' \
+                  /etc/cont-init.d/60-configure_gpu_driver.sh \
+                  /etc/apt/sources.list.d/debian.sources
           exec /entrypoint.sh
         env:
         - name: USER_LOCALES
@@ -96,8 +96,8 @@ spec:
           value: '/home/default/logs/proton.log'
         - name: PROTON_LOG_DIR
           value: '/home/default/logs'
-        - name: INSTALL_EXTRAS
-          value: '1' # installs additional dependencies, including VC++ Redist
+        # - name: INSTALL_EXTRAS
+        #   value: '1' # installs additional dependencies, including VC++ Redist
         envFrom:
         - secretRef:
             name: sunshine
