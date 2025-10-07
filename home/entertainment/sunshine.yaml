@@ -85,7 +85,7 @@ spec:
         - name: FORCE_X11_DUMMY_CONFIG
           value: 'false'
         - name: ENABLE_SID
-          value: 'true'
+          value: 'false'
         # - name: PROTON_DUMP_DEBUG_COMMANDS
         #   value: '1'
         # - name: DXVK_HUD
