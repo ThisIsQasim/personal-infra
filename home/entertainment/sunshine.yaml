@@ -66,6 +66,8 @@ spec:
           value: '-silent -eula=yes'
         - name: FORCE_X11_DUMMY_CONFIG
           value: 'true'
+        - name: ENABLE_SID
+          value: 'false'
         # - name: PROTON_DUMP_DEBUG_COMMANDS
         #   value: '1'
         # - name: DXVK_HUD
