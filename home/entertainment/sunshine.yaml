@@ -1,5 +1,20 @@
 # yum install -y https://repo.radeon.com/amdgpu-install/6.4.4/rhel/9.6/amdgpu-install-6.4.60404-1.el9.noarch.rpm
-# amdgpu-install -y --accept-eula
+# amdgpu-install -y --accept-eula --vulkan=pro
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sunshine
+  labels:
+    app: sunshine
+data:
+  dri.conf: |
+    Section "Device"
+        Identifier  "AMD GPU"
+        Driver      "amdgpu"
+        Option      "DRI" "3"
+        Option      "TearFree" "true"
+    EndSection 
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -122,6 +137,9 @@ spec:
           name: external
         - mountPath: /home/default/
           name: home
+        - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
+          name: config
+          subPath: dri.conf
         - mountPath: /dev/shm
           name: dshm
       volumes:
@@ -133,6 +151,9 @@ spec:
         hostPath:
           path: /mnt/external
           type: Directory
+      - name: config
+        configMap:
+          name: sunshine
       - name: dshm
         emptyDir:
           medium: Memory
