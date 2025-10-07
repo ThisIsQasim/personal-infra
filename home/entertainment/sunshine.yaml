@@ -66,6 +66,18 @@ spec:
           value: '-silent -eula=yes'
         - name: FORCE_X11_DUMMY_CONFIG
           value: 'true'
+        - name: PROTON_DUMP_DEBUG_COMMANDS
+          value: '1'
+        - name: DXVK_HUD
+          value: '1' # Add this for debugging
+        - name: DXVK_LOG_LEVEL
+          value: 'debug'
+        - name: PROTON_LOG
+          value: '/home/default/logs/proton.log'
+        - name: PROTON_LOG_DIR
+          value: '/home/default/logs'
+        - name: INSTALL_EXTRAS
+          value: '1' # installs additional dependencies, including VC++ Redist
         envFrom:
         - secretRef:
             name: sunshine
