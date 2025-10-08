@@ -1,4 +1,8 @@
-# yum install -y https://repo.radeon.com/amdgpu-install/6.4.4/rhel/9.6/amdgpu-install-6.4.60404-1.el9.noarch.rpm
+# yum install -y https://repo.radeon.com/amdgpu-install/7.0.1/el/9.6/amdgpu-install-7.0.1.70001-1.el9.noarch.rpm
+# yum clean all
+# yum install "kernel-headers" "kernel-devel" "kernel-devel-matched"
+# dnf install -y amdgpu-dkms
+# sed -i 's/$amdgpudistro/9.6/g' /etc/yum.repos.d/amdgpu.repo /etc/yum.repos.d/amdgpu-proprietary.repo /etc/yum.repos.d/rocm.repo
 # amdgpu-install -y --accept-eula --vulkan=radv
 ---
 apiVersion: v1
@@ -51,9 +55,6 @@ spec:
         - -c
         - |
           ulimit -n 1048576
-          sed -i 's|http://deb.debian.org/debian|http://ftp.de.debian.org/debian|g' \
-                  /etc/cont-init.d/60-configure_gpu_driver.sh \
-                  /etc/apt/sources.list.d/debian.sources
           sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           apt-get update && apt-get install -y --no-install-recommends mesa-va-drivers
           exec /entrypoint.sh
