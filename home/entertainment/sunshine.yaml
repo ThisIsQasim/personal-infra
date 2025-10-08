@@ -54,6 +54,7 @@ spec:
           sed -i 's|http://deb.debian.org/debian|http://ftp.de.debian.org/debian|g' \
                   /etc/cont-init.d/60-configure_gpu_driver.sh \
                   /etc/apt/sources.list.d/debian.sources
+          sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /etc/X11/xorg.conf
           apt-get update && apt-get install -y --no-install-recommends mesa-va-drivers
           exec /entrypoint.sh
         env:
