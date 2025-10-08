@@ -14,6 +14,8 @@ data:
         Driver      "amdgpu"
         Option      "DRI" "3"
         Option      "TearFree" "true"
+        Option      "VirtualHeads" "1"    # For virtual display
+        Option      "SWcursor" "true"     # For virtual mouse cursor
     EndSection 
 ---
 apiVersion: apps/v1
@@ -84,7 +86,7 @@ spec:
         - name: STEAM_ARGS
           value: '-silent -eula=yes'
         - name: FORCE_X11_DUMMY_CONFIG
-          value: 'false'
+          value: 'true'
         - name: ENABLE_SID
           value: 'false'
         # - name: PROTON_DUMP_DEBUG_COMMANDS
