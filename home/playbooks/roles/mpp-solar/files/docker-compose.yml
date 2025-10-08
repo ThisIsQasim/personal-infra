@@ -35,7 +35,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   stale-metrics-cleaner:
-    image: python:3.13-slim
+    image: python:3.14-slim
     command:
     - /bin/sh
     - /stale-metrics-cleaner.sh
