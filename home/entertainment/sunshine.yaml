@@ -52,6 +52,7 @@ spec:
           sed -i 's|http://deb.debian.org/debian|http://ftp.de.debian.org/debian|g' \
                   /etc/cont-init.d/60-configure_gpu_driver.sh \
                   /etc/apt/sources.list.d/debian.sources
+          apt-get update && apt-get install -y mesa-va-drivers
           exec /entrypoint.sh
         env:
         - name: USER_LOCALES
