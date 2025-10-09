@@ -147,8 +147,6 @@ spec:
         image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
         imagePullPolicy: IfNotPresent
         securityContext:
-          runAsUser: 1001
-          runAsGroup: 1001
           privileged: true
         ports:
         - name: http
