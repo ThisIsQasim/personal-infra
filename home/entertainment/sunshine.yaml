@@ -59,6 +59,8 @@ spec:
           apt-get update && apt-get install -y --no-install-recommends mesa-va-drivers
           exec /entrypoint.sh
         env:
+        - name: DISPLAY
+          value: :55
         - name: USER_LOCALES
           value: 'en_US.UTF-8 UTF-8'
         - name: PUID
@@ -82,7 +84,7 @@ spec:
         - name: NEKO_NAT1TO1
           value: ''
         - name: ENABLE_SUNSHINE
-          value: 'true'
+          value: 'false'
         - name: ENABLE_EVDEV_INPUTS
           value: 'true'
         - name: STEAM_ARGS
@@ -96,18 +98,20 @@ spec:
         envFrom:
         - secretRef:
             name: sunshine
-        ports:
-        - name: http
-          containerPort: 47990
-          protocol: TCP
         startupProbe:
-          tcpSocket:
-            port: http
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - file /tmp/.X11-unix/X55 | grep socket
           failureThreshold: 600
           periodSeconds: 5
         readinessProbe:
-          tcpSocket:
-            port: http
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - file /tmp/.X11-unix/X55 | grep socket
           initialDelaySeconds: 15
           periodSeconds: 5
         resources:
@@ -135,6 +139,57 @@ spec:
           subPath: dri.conf
         - mountPath: /dev/shm
           name: dshm
+        - mountPath: /tmp/.X11-unix/
+          name: x11-socket
+        - mountPath: /tmp/pulse/
+          name: pulse-socket
+      # - name: sunshine
+      #   image: "ghcr.io/games-on-whales/sunshine:edge"
+      #   imagePullPolicy: IfNotPresent
+      #   command: ["/bin/bash", "-c", "--"]
+      #   securityContext:
+      #     privileged: true
+        # ports:
+        # - name: http
+        #   containerPort: 47990
+        #   protocol: TCP
+        # startupProbe:
+        #   tcpSocket:
+        #     port: http
+        #   failureThreshold: 600
+        #   periodSeconds: 5
+        # readinessProbe:
+        #   tcpSocket:
+        #     port: http
+        #   initialDelaySeconds: 15
+        #   periodSeconds: 5
+      #   env:
+      #   - name: DISPLAY
+      #     value: :55
+      #   - name: PULSE_SERVER
+      #     value: /tmp/pulse/pulse-socket
+      #   - name: XDG_RUNTIME_DIR
+      #     value: /tmp/.X11-unix
+      #   envFrom:
+      #   - secretRef:
+      #       name: sunshine
+      #   volumeMounts:
+      #   - mountPath: /home/default/Games/
+      #     name: external
+      #     subPath: games
+      #   - mountPath: /mnt/games/
+      #     name: external
+      #     subPath: games 
+      #   - mountPath: /mnt/external/
+      #     name: external
+      #   - mountPath: /home/default/
+      #     name: home
+      #   - mountPath: /dev/shm
+      #     name: dshm
+      #   - mountPath: /tmp/.X11-unix/
+      #     name: x11-socket
+      #   - mountPath: /tmp/pulse/
+      #     name: pulse-socket
       volumes:
       - name: home
         hostPath:
@@ -151,6 +206,10 @@ spec:
         emptyDir:
           medium: Memory
           sizeLimit: 2Gi
+      - name: x11-socket
+        emptyDir: {}
+      - name: pulse-socket
+        emptyDir: {}
       nodeSelector:
         kubernetes.io/hostname: node3
 ---
