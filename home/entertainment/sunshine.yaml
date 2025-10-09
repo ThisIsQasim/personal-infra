@@ -67,7 +67,7 @@ spec:
             - /var/run/docker.sock
         restartPolicy: Always
       containers:
-      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:6f5c825ab3364557f52deda8c068f0f4cd166374d04a2c2a591aa77b36abea27
+      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:3984e4f957fa4b556fe7443291132e7c2e56c2339d39e951397272c04ebb0d81
         name: server
         securityContext:
           privileged: true
@@ -130,17 +130,17 @@ spec:
         startupProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - file /tmp/.X11-unix/X55 | grep socket
+            - /usr/sbin/test
+            - -S
+            - /tmp/.X11-unix/X55
           failureThreshold: 600
           periodSeconds: 5
         readinessProbe:
           exec:
             command:
-            - /bin/sh
-            - -c
-            - file /tmp/.X11-unix/X55 | grep socket
+            - /usr/sbin/test
+            - -S
+            - /tmp/.X11-unix/X55
           initialDelaySeconds: 15
           periodSeconds: 5
         resources:
