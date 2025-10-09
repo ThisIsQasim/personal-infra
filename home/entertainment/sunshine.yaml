@@ -57,6 +57,9 @@ spec:
           ulimit -n 1048576
           sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           apt-get update && apt-get install -y --no-install-recommends mesa-va-drivers
+          curl -LO https://github.com/LizardByte/Sunshine/releases/latest/download/sunshine-debian-trixie-amd64.deb
+          dpkg -i sunshine-debian-trixie-amd64.deb
+          rm -f sunshine-debian-trixie-amd64.deb
           exec /entrypoint.sh
         env:
         - name: USER_LOCALES
