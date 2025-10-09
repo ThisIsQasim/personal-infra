@@ -45,6 +45,33 @@ spec:
       enableServiceLinks: false
       securityContext:
         fsGroup: 1001
+      initContainers:
+      - image: docker:28.4.0-dind
+        name: docker
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: docker
+          mountPath: /var/run/
+        resources:
+          requests:
+            cpu: 50m
+            memory: 1G
+          limits:
+            memory: 8G
+        startupProbe:
+          exec:
+            command:
+            - /usr/bin/test
+            - -S
+            - /var/run/docker.sock
+        livenessProbe:
+          exec:
+            command:
+            - /usr/bin/test
+            - -S
+            - /var/run/docker.sock
+        restartPolicy: Always
       containers:
       - image: ghcr.io/steam-headless/steam-headless:debian@sha256:453e03d7a7e948db9f9c78569f3936561472797159dcf415a8ba89a20b68ca72
         name: server
@@ -144,6 +171,9 @@ spec:
           name: x11-socket
         - mountPath: /tmp/pulse/
           name: pulse-socket
+        - name: docker
+          mountPath: /var/run/docker.sock
+          subPath: docker.sock
       - name: sunshine
         image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
         imagePullPolicy: IfNotPresent
@@ -215,6 +245,8 @@ spec:
       - name: x11-socket
         emptyDir: {}
       - name: pulse-socket
+        emptyDir: {}
+      - name: docker
         emptyDir: {}
       nodeSelector:
         kubernetes.io/hostname: node3
