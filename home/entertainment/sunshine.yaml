@@ -29,7 +29,7 @@ metadata:
     app: sunshine
   name: sunshine
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: sunshine
