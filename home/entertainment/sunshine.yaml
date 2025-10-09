@@ -29,7 +29,7 @@ metadata:
     app: sunshine
   name: sunshine
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: sunshine
@@ -134,6 +134,7 @@ spec:
           name: external
         - mountPath: /home/default/
           name: home
+          subPath: home
         - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
           name: config
           subPath: dri.conf
@@ -186,16 +187,9 @@ spec:
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
-        - mountPath: /home/default/Games/
-          name: external
-          subPath: games
-        - mountPath: /mnt/games/
-          name: external
-          subPath: games
-        - mountPath: /mnt/external/
-          name: external
-        - mountPath: /home/default/
+        - mountPath: /config
           name: home
+          subPath: config
         - mountPath: /dev/shm
           name: dshm
         - mountPath: /tmp/.X11-unix/
@@ -205,7 +199,7 @@ spec:
       volumes:
       - name: home
         hostPath:
-          path: /home/entertainment/sunshine/config
+          path: /home/entertainment/sunshine/
           type: Directory
       - name: external
         hostPath:
