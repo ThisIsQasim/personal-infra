@@ -144,7 +144,7 @@ spec:
         - mountPath: /tmp/pulse/
           name: pulse-socket
       - name: sunshine
-        image: "ghcr.io/lizardbyte/sunshine:v2025.1007.152916-debian-trixie"
+        image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 1001
