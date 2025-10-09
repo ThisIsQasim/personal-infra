@@ -4,6 +4,7 @@
 # dnf install -y amdgpu-dkms
 # sed -i 's/$amdgpudistro/9.6/g' /etc/yum.repos.d/amdgpu.repo /etc/yum.repos.d/amdgpu-proprietary.repo /etc/yum.repos.d/rocm.repo
 # amdgpu-install -y --accept-eula --vulkan=radv
+# yum install -y mesa-amdgpu-va-drivers
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -78,8 +79,7 @@ spec:
           curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-28.5.1.tgz
           tar xzvf docker-28.5.1.tgz
           sudo cp docker/* /usr/bin/
-          echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen \
-          && locale-gen
+          yum install -y libavcodec-freeworld
           sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           ulimit -n 1048576
           exec /entrypoint.sh
