@@ -78,6 +78,7 @@ spec:
           curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-28.5.1.tgz
           tar xzvf docker-28.5.1.tgz
           sudo cp docker/* /usr/bin/
+          sed -i 's|^autostart.*=.*$|autostart=false|' /etc/supervisor.d/udev.ini
           sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           apt-get update && apt-get install -y --no-install-recommends mesa-va-drivers
           ulimit -n 1048576
