@@ -47,7 +47,7 @@ spec:
         fsGroup: 1001
       containers:
       - image: ghcr.io/steam-headless/steam-headless:debian@sha256:453e03d7a7e948db9f9c78569f3936561472797159dcf415a8ba89a20b68ca72
-        name: sunshine
+        name: server
         securityContext:
           privileged: true
         command:
