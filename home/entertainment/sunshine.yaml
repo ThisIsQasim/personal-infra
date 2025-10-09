@@ -105,7 +105,7 @@ spec:
         - name: NEKO_NAT1TO1
           value: ''
         - name: ENABLE_SUNSHINE
-          value: 'false'
+          value: 'true'
         - name: ENABLE_EVDEV_INPUTS
           value: 'true'
         - name: STEAM_ARGS
@@ -168,58 +168,6 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-      - name: sunshine
-        image: lizardbyte/sunshine:v2025.930.130407-ubuntu-24.04
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
-        ports:
-        - name: http
-          containerPort: 47990
-          protocol: TCP
-        startupProbe:
-          tcpSocket:
-            port: http
-          failureThreshold: 600
-          periodSeconds: 5
-        readinessProbe:
-          tcpSocket:
-            port: http
-          initialDelaySeconds: 15
-          periodSeconds: 5
-        env:
-        - name: DISPLAY
-          value: :55
-        - name: PUID
-          value: "1001"
-        - name: PGID
-          value: "1001"
-        - name: TZ
-          value: "Asia/Karachi"
-        - name: PULSE_SERVER
-          value: /tmp/pulse/pulse-socket
-        - name: XDG_RUNTIME_DIR
-          value: /tmp/.X11-unix
-        envFrom:
-        - secretRef:
-            name: sunshine
-        resources:
-          requests:
-            smarter-devices/dri_card0: 1
-            smarter-devices/dri_renderD128: 1
-          limits:
-            smarter-devices/dri_card0: 1
-            smarter-devices/dri_renderD128: 1
-        volumeMounts:
-        - mountPath: /config
-          name: home
-          subPath: config
-        - mountPath: /dev/shm
-          name: dshm
-        - mountPath: /tmp/.X11-unix/
-          name: x11-socket
-        - mountPath: /tmp/pulse/
-          name: pulse-socket
       volumes:
       - name: home
         hostPath:
