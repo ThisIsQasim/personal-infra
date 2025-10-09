@@ -162,6 +162,8 @@ spec:
         - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
           name: config
           subPath: dri.conf
+        - name: input-devices
+          mountPath: /dev/input/
         - mountPath: /dev/shm
           name: dshm
         - mountPath: /tmp/.X11-unix/
@@ -183,6 +185,9 @@ spec:
       - name: config
         configMap:
           name: sunshine
+      - name: input-devices
+        hostPath:
+          path: /dev/input/
       - name: dshm
         emptyDir:
           medium: Memory
