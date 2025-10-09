@@ -53,12 +53,6 @@ spec:
         volumeMounts:
         - name: docker
           mountPath: /var/run/
-        resources:
-          requests:
-            cpu: 50m
-            memory: 1G
-          limits:
-            memory: 8G
         startupProbe:
           exec:
             command:
