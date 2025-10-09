@@ -122,6 +122,10 @@ spec:
         envFrom:
         - secretRef:
             name: sunshine
+        ports:
+        - name: http
+          containerPort: 47990
+          protocol: TCP
         startupProbe:
           exec:
             command:
