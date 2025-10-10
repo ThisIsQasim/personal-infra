@@ -1,7 +1,7 @@
-# yum install -y https://repo.radeon.com/amdgpu-install/7.0.1/el/9.6/amdgpu-install-7.0.1.70001-1.el9.noarch.rpm
+# yum install -y https://repo.radeon.com/amdgpu-install/latest/el/10/amdgpu-install-7.0.2.70002-1.el10.noarch.rpm
 # yum clean all
-# yum install "kernel-headers" "kernel-devel" "kernel-devel-matched"
-# dnf install -y amdgpu-dkms
+# yum install -y "kernel-headers" "kernel-devel" "kernel-devel-matched"
+# yum install -y amdgpu-dkms
 # sed -i 's/$amdgpudistro/9.6/g' /etc/yum.repos.d/amdgpu.repo /etc/yum.repos.d/amdgpu-proprietary.repo /etc/yum.repos.d/rocm.repo
 # amdgpu-install -y --accept-eula --vulkan=radv
 # yum install -y mesa-amdgpu-va-drivers
@@ -13,7 +13,23 @@ metadata:
   labels:
     app: sunshine
 data:
+  edid.txt: |-
+    00 ff ff ff ff ff ff 00 1e 6d f5 56 71 ca 04 00 05 14 01 03 80 35 1e 78 0a ae c5 a2 57 4a 9c 25 12 50 54 21 08 00 b3 00 81 80 81 40 01 01 01 01 01 01 01 01 01 01 1a 36 80 a0 70 38 1f 40 30 20 35 00 13 2b 21 00 00 1a 02 3a 80 18 71 38 2d 40 58 2c 45 00 13 2b 21 00 00 1e 00 00 00 fd 00 38 3d 1e 53 0f 00 0a 20 20 20 20 20 20 00 00 00 fc 00 57 32 34 35 33 0a 20 20 20 20 20 20 20 01 3d 02 03 21 f1 4e 90 04 03 01 14 12 05 1f 10 13 00 00 00 00 23 09 07 07 83 01 00 00 65 03 0c 00 10 00 02 3a 80 18 71 38 2d 40 58 2c 45 00 13 2b 21 00 00 1e 01 1d 80 18 71 1c 16 20 58 2c 25 00 13 2b 21 00 00 9e 01 1d 00 72 51 d0 1e 20 6e 28 55 00 13 2b 21 00 00 1e 8c 0a d0 8a 20 e0 2d 10 10 3e 96 00 13 2b 21 00 00 18 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 26
   dri.conf: |
+    Section "Screen"
+      Identifier     "Screen0"
+      Device         "AMD GPU"
+      Monitor        "Monitor0"
+      DefaultDepth    24
+      Option         "AllowEmptyInitialConfiguration" "True"
+      Option         "UseDisplayDevice" "DP-0"
+      Option         "CustomEDID" "DP-0:/opt/config/edid.txt"
+      Option         "ConnectedMonitor" "DP-0"
+      SubSection     "Display"
+          Depth       24
+      EndSubSection
+    EndSection
+
     Section "Device"
         Identifier  "AMD GPU"
         Driver      "amdgpu"
@@ -81,7 +97,6 @@ spec:
           sudo cp docker/* /usr/bin/
           dnf install -y xfce4-notifyd xfce4-pulseaudio-plugin xfce4-statusnotifier-plugin
           rm -f /etc/xdg/autostart/xfce-polkit.desktop 
-          sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           ulimit -n 1048576
           exec /entrypoint.sh
         env:
@@ -174,6 +189,9 @@ spec:
         - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
           name: config
           subPath: dri.conf
+        - mountPath: /opt/config/edid.txt
+          name: config
+          subPath: edit.txt
         - mountPath: /dev/shm
           name: dshm
         - mountPath: /tmp/.X11-unix/
