@@ -80,7 +80,7 @@ spec:
           tar xzvf docker-28.5.1.tgz
           sudo cp docker/* /usr/bin/
           dnf install -y xfce4-notifyd xfce4-pulseaudio-plugin xfce4-statusnotifier-plugin
-          /usr/lib/polkit-1/polkitd --no-debug &
+          rm -f /etc/xdg/autostart/xfce-polkit.desktop 
           sed -i 's/Device          "Configured Video Device"/Device          "AMD GPU"/g' /templates/xorg/xorg.dummy.conf
           ulimit -n 1048576
           exec /entrypoint.sh
