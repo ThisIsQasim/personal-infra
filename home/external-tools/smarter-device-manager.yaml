@@ -13,6 +13,10 @@ data:
       nummaxdevices: 10
     - devicematch: ^kfd$
       nummaxdevices: 10
+    - devicematch: ^uinput$
+      nummaxdevices: 10
+    - devicematch: ^fuse$
+      nummaxdevices: 10
     - devicematch: ^rtc0$
       nummaxdevices: 20
     - devicematch: ^apex_.*$
