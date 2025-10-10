@@ -25,8 +25,6 @@ data:
       nummaxdevices: 2
     - devicematch: ^ttyACM[0-9]*$
       nummaxdevices: 2
-    - devicematch: ^serial.*by-path.*$
-      nummaxdevices: 2
 ---
 apiVersion: apps/v1
 kind: DaemonSet

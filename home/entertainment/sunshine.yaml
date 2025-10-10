@@ -146,10 +146,14 @@ spec:
           periodSeconds: 5
         resources:
           requests:
+            smarter-devices/uinput: 1
+            smarter-devices/fuse: 1
             smarter-devices/kfd: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
+            smarter-devices/uinput: 1
+            smarter-devices/fuse: 1
             smarter-devices/kfd: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
