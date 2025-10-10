@@ -9,7 +9,7 @@ data:
       nummaxdevices: 20
     - devicematch: ^net/tun$
       nummaxdevices: 20
-    - devicematch: ^dri.*$
+    - devicematch: ^dri/(card|render).*$
       nummaxdevices: 10
     - devicematch: ^kfd$
       nummaxdevices: 10
