@@ -15,11 +15,18 @@ metadata:
 data:
   edid.txt: |-
     00 ff ff ff ff ff ff 00 1e 6d f5 56 71 ca 04 00 05 14 01 03 80 35 1e 78 0a ae c5 a2 57 4a 9c 25 12 50 54 21 08 00 b3 00 81 80 81 40 01 01 01 01 01 01 01 01 01 01 1a 36 80 a0 70 38 1f 40 30 20 35 00 13 2b 21 00 00 1a 02 3a 80 18 71 38 2d 40 58 2c 45 00 13 2b 21 00 00 1e 00 00 00 fd 00 38 3d 1e 53 0f 00 0a 20 20 20 20 20 20 00 00 00 fc 00 57 32 34 35 33 0a 20 20 20 20 20 20 20 01 3d 02 03 21 f1 4e 90 04 03 01 14 12 05 1f 10 13 00 00 00 00 23 09 07 07 83 01 00 00 65 03 0c 00 10 00 02 3a 80 18 71 38 2d 40 58 2c 45 00 13 2b 21 00 00 1e 01 1d 80 18 71 1c 16 20 58 2c 25 00 13 2b 21 00 00 9e 01 1d 00 72 51 d0 1e 20 6e 28 55 00 13 2b 21 00 00 1e 8c 0a d0 8a 20 e0 2d 10 10 3e 96 00 13 2b 21 00 00 18 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 26
-  dri.conf: |
+  xorg.dummy.conf: |
+    Section "Monitor"
+        Identifier      "Configured Monitor"
+        HorizSync       5.0 - 1000.0
+        VertRefresh     5.0 - 200.0
+        ModeLine        "1920x1080" 148.50 1920 2448 2492 2640 1080 1084 1089 1125 +Hsync +Vsync
+    EndSection
+
     Section "Screen"
-      Identifier     "Screen0"
+      Identifier     "Configured Screen"
       Device         "AMD GPU"
-      Monitor        "Monitor0"
+      Monitor        "Configured Monitor"
       DefaultDepth    24
       Option         "AllowEmptyInitialConfiguration" "True"
       Option         "UseDisplayDevice" "DP-0"
@@ -186,9 +193,9 @@ spec:
           subPath: home
         - mountPath: /run/udev/
           name: udev
-        - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
+        - mountPath: /etc/X11/xorg.conf
           name: config
-          subPath: dri.conf
+          subPath: xorg.dummy.conf
         - mountPath: /opt/config/edid.txt
           name: config
           subPath: edit.txt
