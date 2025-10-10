@@ -165,6 +165,8 @@ spec:
         - mountPath: /home/default/
           name: home
           subPath: home
+        - mountPath: /run/udev/
+          name: udev
         - mountPath: /etc/X11/xorg.conf.d/09-dri.conf
           name: config
           subPath: dri.conf
@@ -185,6 +187,10 @@ spec:
       - name: external
         hostPath:
           path: /mnt/external
+          type: Directory
+      - name: udev
+        hostPath:
+          path: /run/udev/
           type: Directory
       - name: config
         configMap:
