@@ -189,13 +189,9 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            smarter-devices/uhid: 1
-            smarter-devices/uinput: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
-            smarter-devices/uhid: 1
-            smarter-devices/uinput: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
@@ -225,8 +221,18 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-        - mountPath: /dev
+        - mountPath: /dev/uhid
           name: dev
+          subPath: uhid
+        - mountPath: /dev/uinput
+          name: dev
+          subPath: uinput
+        - mountPath: /dev/tty
+          name: dev
+          subPath: tty
+        - mountPath: /dev/fd
+          name: dev
+          subPath: fd
         - mountPath: /run/udev
           name: udev
       volumes:
