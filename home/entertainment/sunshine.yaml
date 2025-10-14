@@ -116,6 +116,7 @@ spec:
             - NET_RAW
             - MKNOD
             - SETUID
+            - CAP_SYS_TTY_CONFIG
         command:
         - /bin/bash
         - -c
