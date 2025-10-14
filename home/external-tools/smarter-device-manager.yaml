@@ -11,7 +11,7 @@ data:
       nummaxdevices: 20
     - devicematch: ^dri/(card|render).*$
       nummaxdevices: 10
-    - devicematch: ^kfd$
+    - devicematch: ^uhid$
       nummaxdevices: 10
     - devicematch: ^uinput$
       nummaxdevices: 10
