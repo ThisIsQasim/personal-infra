@@ -104,6 +104,19 @@ spec:
         name: server
         securityContext:
           privileged: true
+          seccompProfile:
+            type: Unconfined
+          appArmorProfile:
+            type: Unconfined
+          capabilities:
+            add:
+            - SYS_ADMIN
+            - SYS_NICE
+            - SYS_PTRACE
+            - NET_ADMIN
+            - NET_RAW
+            - MKNOD
+            - SETUID
         command:
         - /bin/bash
         - -c
