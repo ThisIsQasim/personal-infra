@@ -225,8 +225,8 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-        # - mountPath: /dev/input
-        #   name: dev
+        - mountPath: /dev/input
+          name: dev
         - mountPath: /run/udev
           name: udev
       volumes:
