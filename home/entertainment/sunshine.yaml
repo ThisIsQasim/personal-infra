@@ -103,21 +103,7 @@ spec:
       - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:ee967ca4fcc42d58a5d3358e2611809a2c36f85bc6300fe7496c929ffa946e25
         name: server
         securityContext:
-          # privileged: true
-          seccompProfile:
-            type: Unconfined
-          appArmorProfile:
-            type: Unconfined
-          capabilities:
-            add:
-            - SYS_ADMIN
-            - SYS_NICE
-            - SYS_PTRACE
-            - NET_ADMIN
-            - NET_RAW
-            - MKNOD
-            - SETUID
-            - CAP_SYS_TTY_CONFIG
+          privileged: true
         command:
         - /bin/bash
         - -c
