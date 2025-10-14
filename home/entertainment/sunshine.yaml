@@ -161,8 +161,6 @@ spec:
           value: 'true'
         - name: ENABLE_SID
           value: 'false'
-        - name: USE_FAKE_UDEV
-          value: 'true'
         # - name: INSTALL_EXTRAS
         #   value: '1' # installs additional dependencies, including VC++ Redist
         envFrom:
