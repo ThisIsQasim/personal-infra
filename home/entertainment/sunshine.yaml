@@ -103,7 +103,6 @@ spec:
       - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:9eebb7b0ef8c91ca262375030e1d858b7f894436b515aadee1797a2fe503710d
         name: server
         securityContext:
-          privileged: true
           seccompProfile:
             type: Unconfined
           appArmorProfile:
