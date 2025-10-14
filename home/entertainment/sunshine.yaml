@@ -79,11 +79,6 @@ spec:
       securityContext:
         fsGroup: 1001
       initContainers:
-      - name: max-map-count-setter
-        image: busybox:1.28
-        command: ['sysctl', '-w', 'vm.max_map_count=524288']
-        securityContext:
-          privileged: true
       - image: docker:28.5.1-dind
         name: docker
         securityContext:
@@ -230,8 +225,8 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-        - mountPath: /dev
-          name: dev
+        # - mountPath: /dev/input
+        #   name: dev
         - mountPath: /run/udev
           name: udev
       volumes:
