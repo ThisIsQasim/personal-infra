@@ -230,7 +230,7 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-        - mountPath: /dev/input
+        - mountPath: /dev
           name: dev
         - mountPath: /run/udev
           name: udev
@@ -258,7 +258,7 @@ spec:
         emptyDir: {}
       - name: dev
         hostPath:
-          path: /dev/input
+          path: /dev
       - name: udev
         hostPath:
           path: /run/udev
