@@ -175,11 +175,11 @@ spec:
           periodSeconds: 5
         resources:
           requests:
-            smarter-devices/kfd: 1
+            smarter-devices/uinput: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
           limits:
-            smarter-devices/kfd: 1
+            smarter-devices/uinput: 1
             smarter-devices/dri_card0: 1
             smarter-devices/dri_renderD128: 1
         volumeMounts:
@@ -199,7 +199,7 @@ spec:
           subPath: xorg.dummy.conf
         - mountPath: /etc/X11/edid/edid.bin
           name: config
-          subPath: edit.txt
+          subPath: edid.txt
         - mountPath: /dev/shm
           name: dshm
         - mountPath: /tmp/.X11-unix/
@@ -209,6 +209,10 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
+        - mountPath: /dev
+          name: dev
+        - mountPath: /run/udev
+          name: udev
       volumes:
       - name: home
         hostPath:
@@ -231,6 +235,12 @@ spec:
         emptyDir: {}
       - name: docker
         emptyDir: {}
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: udev
+        hostPath:
+          path: /run/udev
       nodeSelector:
         kubernetes.io/hostname: node3
 ---
