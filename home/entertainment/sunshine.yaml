@@ -224,15 +224,15 @@ spec:
         - mountPath: /dev/uhid
           name: dev
           subPath: uhid
-        - mountPath: /dev/uinput
-          name: dev
-          subPath: uinput
-        - mountPath: /dev/tty
-          name: dev
-          subPath: tty
-        - mountPath: /dev/fd
-          name: dev
-          subPath: fd
+        # - mountPath: /dev/uinput
+        #   name: dev
+        #   subPath: uinput
+        # # - mountPath: /dev/tty
+        # #   name: dev
+        # #   subPath: tty
+        # # - mountPath: /dev/fd
+        # #   name: dev
+        # #   subPath: fd
         - mountPath: /run/udev
           name: udev
       volumes:
