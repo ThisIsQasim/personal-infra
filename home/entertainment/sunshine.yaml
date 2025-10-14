@@ -227,9 +227,9 @@ spec:
         - mountPath: /dev/uinput
           name: dev
           subPath: uinput
-        # # - mountPath: /dev/tty
-        # #   name: dev
-        # #   subPath: tty
+        - mountPath: /dev/tty
+          name: dev
+          subPath: tty
         # # - mountPath: /dev/fd
         # #   name: dev
         # #   subPath: fd
