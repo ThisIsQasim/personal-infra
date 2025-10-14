@@ -104,20 +104,6 @@ spec:
         name: server
         securityContext:
           privileged: true
-          seccompProfile:
-            type: Unconfined
-          appArmorProfile:
-            type: Unconfined
-          capabilities:
-            add:
-            - SYS_ADMIN
-            - SYS_NICE
-            - SYS_PTRACE
-            - NET_ADMIN
-            - NET_RAW
-            - MKNOD
-            - SETUID
-            - CAP_SYS_TTY_CONFIG
         command:
         - /bin/bash
         - -c
@@ -162,8 +148,6 @@ spec:
           value: 'true'
         - name: ENABLE_SID
           value: 'false'
-        # - name: INSTALL_EXTRAS
-        #   value: '1' # installs additional dependencies, including VC++ Redist
         envFrom:
         - secretRef:
             name: sunshine
@@ -221,18 +205,8 @@ spec:
         - name: docker
           mountPath: /var/run/docker.sock
           subPath: docker.sock
-        - mountPath: /dev/uhid
+        - mountPath: /dev
           name: dev
-          subPath: uhid
-        - mountPath: /dev/input
-          name: dev
-          subPath: input
-        - mountPath: /dev/uinput
-          name: dev
-          subPath: uinput
-        - mountPath: /dev/tty
-          name: dev
-          subPath: tty
         - mountPath: /run/udev
           name: udev
       volumes:
