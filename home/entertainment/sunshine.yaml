@@ -104,19 +104,19 @@ spec:
         name: server
         securityContext:
           privileged: true
-          seccompProfile:
-            type: Unconfined
-          appArmorProfile:
-            type: Unconfined
-          capabilities:
-            add:
-            - SYS_ADMIN
-            - SYS_NICE
-            - SYS_PTRACE
-            - NET_ADMIN
-            - NET_RAW
-            - MKNOD
-            - SETUID
+          # seccompProfile:
+          #   type: Unconfined
+          # appArmorProfile:
+          #   type: Unconfined
+          # capabilities:
+          #   add:
+          #   - SYS_ADMIN
+          #   - SYS_NICE
+          #   - SYS_PTRACE
+          #   - NET_ADMIN
+          #   - NET_RAW
+          #   - MKNOD
+          #   - SETUID
         command:
         - /bin/bash
         - -c
@@ -161,6 +161,8 @@ spec:
           value: 'true'
         - name: ENABLE_SID
           value: 'false'
+        - name: USE_FAKE_UDEV
+          value: 'true'
         # - name: INSTALL_EXTRAS
         #   value: '1' # installs additional dependencies, including VC++ Redist
         envFrom:
