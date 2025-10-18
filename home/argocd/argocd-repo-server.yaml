@@ -21,7 +21,7 @@ spec:
       # 2. Use an init container to download/copy custom binaries into the emptyDir since kubernetes 1.32 doesn't support subpaths
       initContainers:
         - name: install-ksops
-          image: quay.io/argoproj/argocd:v3.1.8
+          image: quay.io/argoproj/argocd:v3.1.9
           command:
             - /bin/bash
             - -c
