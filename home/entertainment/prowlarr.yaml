@@ -18,7 +18,7 @@ spec:
         app: prowlarr
     spec:
       containers:
-      - image: lscr.io/linuxserver/prowlarr:2.0.5
+      - image: lscr.io/linuxserver/prowlarr:2.1.5
         imagePullPolicy: IfNotPresent
         name: prowlarr
         env:
