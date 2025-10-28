@@ -9,7 +9,7 @@ global:
 authentik:
   postgresql:
     host: file:///postgres-creds/host
-    port: file:///postgres-creds/port
+    port: 5432
     name: file:///postgres-creds/dbname
     user: file:///postgres-creds/username
     password: file:///postgres-creds/password
