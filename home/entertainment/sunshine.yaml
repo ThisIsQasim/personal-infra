@@ -100,7 +100,7 @@ spec:
             - /var/run/docker.sock
         restartPolicy: Always
       containers:
-      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:0b33e2dadbfa988f9e9d3114a0908a25f3d77ea9b26afe412b2ab986c72a8b72
+      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:d8637cd7d265008325609cce817cc437d92e7d86d270bfb27f493e30a4445f9b
         name: server
         securityContext:
           privileged: true
