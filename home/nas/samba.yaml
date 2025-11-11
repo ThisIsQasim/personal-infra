@@ -17,7 +17,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: ghcr.io/servercontainers/samba:smbd-only-a3.22.0-s4.21.4-r4
+      - image: ghcr.io/servercontainers/samba:smbd-only-a3.22.2-s4.21.9-r1
         imagePullPolicy: IfNotPresent
         name: samba
         env:
