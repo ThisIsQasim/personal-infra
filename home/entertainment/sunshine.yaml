@@ -79,7 +79,7 @@ spec:
       securityContext:
         fsGroup: 1001
       initContainers:
-      - image: docker:29.0.2-dind
+      - image: docker:29.0.1-dind
         name: docker
         securityContext:
           privileged: true
