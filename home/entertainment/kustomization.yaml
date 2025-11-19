@@ -12,6 +12,7 @@ resources:
 - metube.yaml
 - flare-bypasser.yaml
 - sunshine.yaml
+- isponsorblocktv.yaml
 
 generators:
 - |

@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: isponsorblocktv
+  name: isponsorblocktv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: isponsorblocktv
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: isponsorblocktv
+    spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+      containers:
+      - image: ghcr.io/dmunozv04/isponsorblocktv:v2.6.1
+        name: isponsorblocktv
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: 200Mi  
+        volumeMounts:
+        - mountPath: /app/data
+          name: data
+      volumes:
+        - name: data
+          hostPath:
+            path: /home/entertainment/isponsorblocktv/data
+            type: Directory
+      nodeSelector:
+        kubernetes.io/hostname: node1
