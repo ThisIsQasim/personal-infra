@@ -79,7 +79,7 @@ spec:
       securityContext:
         fsGroup: 1001
       initContainers:
-      - image: public.ecr.aws/docker/library/docker:29.0.2-dind
+      - image: public.ecr.aws/docker/library/docker:29.0.4-dind
         name: docker
         securityContext:
           privileged: true
