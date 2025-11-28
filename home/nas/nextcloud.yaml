@@ -49,13 +49,13 @@ spec:
         imagePullPolicy: IfNotPresent
         env:
         - name: PHP_MEMORY_LIMIT
-          value: 1G
+          value: 10G
         resources:
           requests:
             cpu: 200m
             memory: "2Gi"
           limits:
-            memory: "4Gi"
+            memory: "12Gi"
         ports:
         - containerPort: 8080
           name: http
