@@ -42,3 +42,9 @@ prometheus-node-exporter:
 grafana:
   imageRenderer:
     enabled: true
+  grafana.ini:
+    log:
+      level: debug
+    unified_alerting.screenshots:
+      capture: true
+      upload_external_image_storage: false
