@@ -13,11 +13,11 @@ spec:
     metadata:
       labels:
         app: samba
+      annotations:
+        k8s.v1.cni.cncf.io/networks: 'kube-system/macvlan-conf@macvlan0'
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       containers:
-      - image: ghcr.io/servercontainers/samba:smbd-only-a3.22.2-s4.21.9-r1
+      - image: ghcr.io/servercontainers/samba:smbd-avahi-a3.22.2-s4.21.9-r1
         imagePullPolicy: IfNotPresent
         name: samba
         env:
@@ -55,8 +55,14 @@ spec:
           value: "[Qasim's Files]; path=/shares/external; valid users = qasim; guest ok = no; read only = no; browseable = yes; writable = yes"
         - name: SAMBA_VOLUME_CONFIG_timemachine
           value: "[TimeCapsule]; path=/shares/external/timemachine; valid users = timemachine qasim; guest ok = no; read only = no; browseable = no; writable = yes; fruit:aapl = yes; fruit:time machine = yes; fruit:time machine max size = 500G;"
-        - name: AVAHI_DISABLE
-          value: "true"
+        - name: AVAHI_INTERFACES
+          value: "macvlan0"
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: AVAHI_NAME
+          value: "smb-$(NODE_NAME)"
         - name: WSDD2_DISABLE
           value: "true"
         volumeMounts:
