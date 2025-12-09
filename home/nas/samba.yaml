@@ -14,7 +14,7 @@ spec:
       labels:
         app: samba
       annotations:
-        k8s.v1.cni.cncf.io/networks: 'kube-system/macvlan-conf@macvlan0'
+        k8s.v1.cni.cncf.io/networks: 'kube-system/macvlan-dhcp@macvlan0'
     spec:
       containers:
       - image: ghcr.io/servercontainers/samba:smbd-avahi-a3.22.2-s4.21.9-r1
