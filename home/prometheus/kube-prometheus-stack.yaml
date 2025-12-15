@@ -49,7 +49,6 @@ grafana:
       capture: true
       upload_external_image_storage: false
 alertmanager:
-  enabled: true
   podDisruptionBudget:
     enabled: false
   alertManagerSpec:
@@ -70,7 +69,7 @@ alertmanager:
     receivers:
     - name: 'null'
     - name: 'alertshub'
-      webhook_config:
+      webhook_configs:
         url: https://8000.code.work.com/webhook/prometheus
         send_resolved: True
   ingress:
