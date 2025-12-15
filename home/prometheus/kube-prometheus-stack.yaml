@@ -70,7 +70,7 @@ alertmanager:
     - name: 'null'
     - name: 'alertshub'
       webhook_configs:
-        url: https://8000.code.work.com/webhook/prometheus
+      - url: https://8000.code.work.com/webhook/prometheus
         send_resolved: True
   ingress:
     enabled: true
