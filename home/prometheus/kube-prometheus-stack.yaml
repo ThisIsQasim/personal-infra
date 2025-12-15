@@ -49,12 +49,12 @@ grafana:
       capture: true
       upload_external_image_storage: false
 alertmanager:
+  enabled: true
   podDisruptionBudget:
     enabled: false
   alertManagerSpec:
     externalUrl: "https://alertmanager.home.com"
   config:
-    enabled: true
     global:
       resolve_timeout: 5m
     route:
