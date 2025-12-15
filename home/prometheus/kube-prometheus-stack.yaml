@@ -61,17 +61,13 @@ alertmanager:
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
-      receiver: 'alertshub'
+      receiver: 'null'
       routes:
       - receiver: 'null'
         matchers:
           - alertname = "Watchdog"
     receivers:
     - name: 'null'
-    - name: 'alertshub'
-      webhook_configs:
-      - url: https://8000.code.work.com/webhook/prometheus
-        send_resolved: True
   ingress:
     enabled: true
     annotations:
