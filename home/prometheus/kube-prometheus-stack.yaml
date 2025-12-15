@@ -54,6 +54,7 @@ alertmanager:
   alertManagerSpec:
     externalUrl: "https://alertmanager.home.com"
   config:
+    enabled: true
     global:
       resolve_timeout: 5m
     route:
