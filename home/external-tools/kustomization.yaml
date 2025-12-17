@@ -20,7 +20,7 @@ helmCharts:
   namespace: spegel
   releaseName: spegel
   repo: oci://ghcr.io/spegel-org/helm-charts
-  version: 0.5.1
+  version: 0.6.0
   valuesInline:
     spegel:
       resolveLatestTag: false
