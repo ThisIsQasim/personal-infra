@@ -100,6 +100,10 @@ spec:
           value: "tailscale"
         - name: TS_USERSPACE
           value: "false"
+        - name: TS_SOCKS5_SERVER
+          value: ":1055"
+        - name: TS_OUTBOUND_HTTP_PROXY_LISTEN
+          value: ":1080"
         - name: TS_AUTHKEY
           valueFrom:
             secretKeyRef:
