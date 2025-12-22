@@ -21,14 +21,24 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: ghcr.io/thisisqasim/transmission:0.0.6
+      - image: ghcr.io/thisisqasim/transmission:0.0.9
         imagePullPolicy: IfNotPresent
         name: transmission
         env:
-        - name: TRANSMISSION_DOWNLOAD_LIMIT
-          value: "1024"
         - name: TRANSMISSION_DOWNLOAD_QUEUE
           value: "20"
+        - name: TRANSMISSION_DOWNLOAD_LIMIT
+          value: "51200"
+        - name: TRANSMISSION_UPLOAD_LIMIT
+          value: "51200"
+        - name: TRANSMISSION_ALT_DOWNLOAD_LIMIT
+          value: "10240"
+        - name: TRANSMISSION_ALT_UPLOAD_LIMIT
+          value: "10240"
+        - name: TRANSMISSION_DHT_ENABLED
+          value: "false"
+        - name: TRANSMISSION_PEX_ENABLED
+          value: "false"
         - name: TRANSMISSION_AUTH
           value: "false"
         volumeMounts:
