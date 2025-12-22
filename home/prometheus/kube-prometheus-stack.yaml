@@ -1,6 +1,7 @@
 ---
 prometheus:
   prometheusSpec:
+    externalUrl: "https://prometheus.home.com"
     externalLabels:
       cluster: home
     remoteWrite:
