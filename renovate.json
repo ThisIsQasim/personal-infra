@@ -18,7 +18,8 @@
         "docker"
       ],
       "matchPackageNames": [
-        "ghcr.io/renovatebot/renovate"
+        "ghcr.io/renovatebot/renovate",
+        "ghcr.io/alexta69/metube"
       ],
       "matchUpdateTypes": [
         "minor",
