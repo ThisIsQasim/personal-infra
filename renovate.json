@@ -63,8 +63,7 @@
   ],
   "kubernetes": {
     "managerFilePatterns": [
-      "/home/.+\\.yaml$/",
-      "/prod1-eu1/.+\\.yaml$/"
+      "/home/.+\\.yaml$/"
     ]
   }
 }
