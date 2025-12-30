@@ -57,7 +57,13 @@ spec:
       labels:
         app: tailscale
       annotations:
-        k8s.v1.cni.cncf.io/networks: '[{ "name" : "macvlan-conf", "namespace": "kube-system", "interface": "macvlan0", "ips": [ "y.y.y.y
+        k8s.v1.cni.cncf.io/networks: '[{ 
+          "name" : "macvlan-conf",
+          "namespace": "kube-system",
+          "interface": "macvlan0",
+          "ips": [ "y.y.y.y
+          "default-route": ["y.y.y.y
+        }]'
     spec:
       serviceAccount: tailscale
       dnsPolicy: ClusterFirstWithHostNet
