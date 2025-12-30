@@ -56,9 +56,10 @@ spec:
     metadata:
       labels:
         app: tailscale
+      annotations:
+        k8s.v1.cni.cncf.io/networks: '[{ "name" : "macvlan-conf", "namespace": "kube-system", "interface": "macvlan0", "ips": [ "y.y.y.y
     spec:
       serviceAccount: tailscale
-      hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       initContainers:
       - image: ghcr.io/tailscale/tailscale:v1.92.4
@@ -91,7 +92,7 @@ spec:
         - name: TS_HOSTNAME
           value: f8k
         - name: TS_EXTRA_ARGS
-          value: "--login-server https://headscale.home.com:443 --advertise-exit-node --accept-routes --stateful-filtering=false"
+          value: "--login-server https://headscale.home.com:443 --advertise-exit-node --accept-routes"
         - name: TS_TAILSCALED_EXTRA_ARGS
           value: "--port=31643"
         - name: TS_KUBE_SECRET
@@ -149,22 +150,3 @@ spec:
                 operator: In
                 values:
                 - node3
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: tailscale
-  name: tailscale
-  namespace: tailscale
-spec:
-  ports:
-  - name: "tailscale"
-    port: 31643
-    protocol: UDP
-    targetPort: 31643
-  selector:
-    app: tailscale
-  type: LoadBalancer
-  externalTrafficPolicy: Local
-  loadBalancerIP: y.y.y.y
