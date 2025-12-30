@@ -15,11 +15,13 @@
     },
     {
       "matchDatasources": [
-        "docker"
+        "docker",
+        "helm"
       ],
       "matchPackageNames": [
         "ghcr.io/renovatebot/renovate",
-        "ghcr.io/alexta69/metube"
+        "ghcr.io/alexta69/metube",
+        "kube-prometheus-stack"
       ],
       "matchUpdateTypes": [
         "minor",
