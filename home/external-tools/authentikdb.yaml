@@ -60,6 +60,9 @@ spec:
       secretAccessKey:
         name: authentik-pgsql-s3
         key: ACCESS_SECRET_KEY
+      region:
+        name: authentik-pgsql-s3
+        key: REGION
     wal:
       compression: gzip
 ---
