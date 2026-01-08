@@ -63,8 +63,6 @@ spec:
           value: "--login-server https://headscale.home.com:443"
         - name: TS_KUBE_SECRET
           value: "metube-tailscale-state"
-        - name: TS_DEBUG_FIREWALL_MODE
-          value: "nftables"
         - name: TS_USERSPACE
           value: "true"
         - name: TS_AUTHKEY
@@ -81,6 +79,9 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.uid
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         resources:
           requests:
             cpu: "50m"
