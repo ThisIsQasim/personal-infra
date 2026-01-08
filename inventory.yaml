@@ -67,9 +67,9 @@ k8s_cluster:
       use-gzip: "true"
       enable-brotli: "true"
     kube_vip_enabled: true
-    kube_vip_image_tag: v0.8.2
     kube_vip_controlplane_enabled: true
     kube_vip_address: y.y.y.y
+    kube_vip_cidr: 24
     loadbalancer_apiserver:
       address: "{{ kube_vip_address }}"
       port: 6443
