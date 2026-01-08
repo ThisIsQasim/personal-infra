@@ -64,7 +64,7 @@ spec:
         - name: TS_KUBE_SECRET
           value: "metube-tailscale-state"
         - name: TS_DEBUG_FIREWALL_MODE
-          value: "auto"
+          value: "nftables"
         - name: TS_USERSPACE
           value: "true"
         - name: TS_AUTHKEY

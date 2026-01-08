@@ -103,8 +103,6 @@ spec:
           value: "--port=31643"
         - name: TS_KUBE_SECRET
           value: "tailscale"
-        - name: TS_NAMESPACE
-          value: "tailscale"
         - name: TS_USERSPACE
           value: "false"
         - name: TS_SOCKS5_SERVER
