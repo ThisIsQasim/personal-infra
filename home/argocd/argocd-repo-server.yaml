@@ -6,49 +6,29 @@ metadata:
 spec:
   template:
     spec:
-      # 1. Define an emptyDir volume which will hold the custom binaries
+      # 1. Define a volume from the ksops container image
       volumes:
         - name: ksops
           image:
             reference: viaductoss/ksops:v4.4.0
             pullPolicy: IfNotPresent
-        - name: custom-tools
-          emptyDir: {}
         - name: age-private-key
           secret:
             secretName: age-private-key
             optional: false
-      # 2. Use an init container to download/copy custom binaries into the emptyDir since kubernetes 1.32 doesn't support subpaths
-      initContainers:
-        - name: install-ksops
-          image: quay.io/argoproj/argocd:v3.2.6
-          command:
-            - /bin/bash
-            - -c
-            - |
-              echo "Installing KSOPS..."
-              cd /ksops/usr/local/bin/
-              cp ksops kustomize /custom-tools/
-              echo "Done."
-          volumeMounts:
-            - mountPath: /ksops
-              name: ksops
-            - mountPath: /custom-tools
-              name: custom-tools
-      # 3. Volume mount the custom binary to the bin directory (overriding the existing version)
+      # 2. Volume mount the custom binary to the bin directory (overriding the existing version)
       containers:
         - name: argocd-repo-server
           volumeMounts:
-            - mountPath: /usr/local/bin/kustomize
-              name: custom-tools
-              subPath: kustomize
-            - mountPath: /usr/local/bin/ksops
-              name: custom-tools
-              subPath: ksops
+            - mountPath: /ksops/bin
+              name: ksops
+              subPath: usr/local/bin
             - mountPath: /.config/sops/age/keys.txt
               name: age-private-key
               subPath: keys.txt
-          # 4. Set the XDG_CONFIG_HOME env variable to allow kustomize to detect the plugin
+          # 3. Set the SOPS_AGE_KEY_FILE env variable to allow sops to detect the age key
           env:
             - name: SOPS_AGE_KEY_FILE
               value: /.config/sops/age/keys.txt
+            - name: PATH
+              value: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/ksops/bin'
