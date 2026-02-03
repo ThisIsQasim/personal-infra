@@ -18,7 +18,7 @@ spec:
         app: actualbudget
     spec:
       containers:
-      - image: ghcr.io/actualbudget/actual-server:26.1.0
+      - image: ghcr.io/actualbudget/actual-server:26.2.0
         imagePullPolicy: IfNotPresent
         name: actualbudget
         env:
