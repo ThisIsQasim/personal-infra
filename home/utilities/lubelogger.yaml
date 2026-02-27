@@ -18,7 +18,7 @@ spec:
         app: lubelogger
     spec:
       containers:
-      - image: ghcr.io/hargata/lubelogger:v1.6.0
+      - image: ghcr.io/hargata/lubelogger:v1.6.1
         imagePullPolicy: IfNotPresent
         name: lubelogger
         env:
