@@ -269,18 +269,18 @@ data:
             - 0.199,0,0.27,0,0.267,0.089,0.2,0.088
     classification:
       custom:
-        Door:
+        Gate:
           enabled: true
-          name: Door
+          name: Gate
           threshold: 0.8
           state_config:
             cameras:
               hikvision-5:
                 crop:
-                  - 0.6057734446525687
-                  - 0.08090407651431845
-                  - 0.8263157203294123
-                  - 0.4729792332731516
+                  - 0.5586847680309462
+                  - 0.050428489149967795
+                  - 0.8550108439948586
+                  - 0.577230401974701
             motion: true
 ---
 apiVersion: v1
