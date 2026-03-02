@@ -32,7 +32,7 @@ data:
       #   watchdog.hikvision-1: debug
       #   ffmpeg.hikvision-1.detect: debug
     detectors:
-      coral1:
+      coral:
         type: edgetpu
         device: pci
     model:
