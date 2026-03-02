@@ -229,7 +229,8 @@ data:
               - motorcycle
               - bicycle
           outer_garage:
-            coordinates: 0,0.372,0,0,1,0,1,1,0.766,1,0.776,0.599,0.675,0.498,0.503,0.42,0.285,0.346
+            coordinates: 
+              0,0.372,0,0,1,0,1,1,0.766,1,0.776,0.599,0.675,0.498,0.503,0.42,0.285,0.346
             objects:
               - car
       hikvision-8:
@@ -267,7 +268,20 @@ data:
             - 0.761,0,0.747,0.175,0.631,0.114,0.436,0.153,0.441,0
             - 0.199,0,0.27,0,0.267,0.089,0.2,0.088
     classification:
-      custom: {}
+      custom:
+        Door:
+          enabled: true
+          name: Door
+          threshold: 0.8
+          state_config:
+            cameras:
+              hikvision-5:
+                crop:
+                  - 0.6057734446525687
+                  - 0.08090407651431845
+                  - 0.8263157203294123
+                  - 0.4729792332731516
+            motion: true
 ---
 apiVersion: v1
 kind: Service
