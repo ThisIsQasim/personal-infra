@@ -18,7 +18,7 @@ data:
       enabled: false
     proxy:
       default_role: viewer
-      separator: "|" # This value defaults to a comma, but Authentik uses a pipe, for example.
+      separator: '|' # This value defaults to a comma, but Authentik uses a pipe, for example.
       header_map:
         user: X-authentik-username
         role: x-authentik-groups
@@ -35,6 +35,12 @@ data:
       coral1:
         type: edgetpu
         device: pci
+    model:
+      model_type: yolo-generic
+      width: 320
+      height: 320
+      path: /config/model_cache/yolov9-s-relu6-best_320_int8_edgetpu.tflite
+      labelmap_path: /config/labels-coco17.txt
     detect:
       enabled: true
       width: 1280
@@ -48,15 +54,16 @@ data:
         - bicycle
     record:
       enabled: true
-      retain:
-        days: 7
-        mode: motion
       alerts:
         retain:
           days: 7
       detections:
         retain:
           days: 7
+      continuous:
+        days: 0
+      motion:
+        days: 7
     ffmpeg:
       hwaccel_args: preset-vaapi
       output_args:
@@ -259,6 +266,8 @@ data:
           mask:
             - 0.761,0,0.747,0.175,0.631,0.114,0.436,0.153,0.441,0
             - 0.199,0,0.27,0,0.267,0.089,0.2,0.088
+    classification:
+      custom: {}
 ---
 apiVersion: v1
 kind: Service
@@ -326,9 +335,12 @@ spec:
         image: "ghcr.io/blakeblackshear/frigate:0.17.0"
         imagePullPolicy: IfNotPresent
         command:
-          - cp
-          - /tmp/config.yml
-          - /config/config.yml
+          - /bin/bash
+          - -c
+          - |
+            cp /tmp/config.yml /config/config.yml
+            curl -o /config/yolov9-s-relu6-best_320_int8_edgetpu.tflite -L https://github.com/dbro/frigate-detector-edgetpu-yolo9/releases/download/v1.0/yolov9-s-relu6-best_320_int8_edgetpu.tflite
+            curl -o /config/labels-coco17.txt -L https://raw.githubusercontent.com/dbro/frigate-detector-edgetpu-yolo9/refs/heads/main/labels-coco17.txt
         volumeMounts:
           - name: config
             mountPath: /tmp/config.yml
