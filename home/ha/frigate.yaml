@@ -39,7 +39,7 @@ data:
       model_type: yolo-generic
       width: 320
       height: 320
-      path: /config/model_cache/yolov9-s-relu6-best_320_int8_edgetpu.tflite
+      path: /config/yolov9-s-relu6-best_320_int8_edgetpu.tflite
       labelmap_path: /config/labels-coco17.txt
     detect:
       enabled: true
