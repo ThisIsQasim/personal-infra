@@ -30,6 +30,8 @@ spec:
             aio read size = 16384;
             aio write size = 16384;
             server multi channel support = yes
+        - name: SAMBA_CONF_LOG_LEVEL
+          value: "5"
         - name: SAMBA_CONF_ENABLE_NTLM_AUTH
           value: "y"
         - name: ACCOUNT_qasim
