@@ -26,7 +26,6 @@ spec:
         - name: SAMBA_GLOBAL_STANZA
           value: >-
             socket options = TCP_NODELAY IPTOS_LOWDELAY SO_SNDBUF=8192 SO_RCVBUF=8192;
-            min receivefile size = 16384;
             use sendfile = true;
             aio read size = 16384;
             aio write size = 16384;
