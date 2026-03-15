@@ -87,7 +87,7 @@ spec:
             cpu: "50m"
           limits:
             memory: "128Mi"
-      - image: ghcr.io/alexta69/metube:2026.02.27
+      - image: ghcr.io/alexta69/metube:2026.03.14
         imagePullPolicy: IfNotPresent
         name: metube
         env:
