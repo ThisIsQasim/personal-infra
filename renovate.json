@@ -60,7 +60,7 @@
       "matchPackageNames": [
         "ghcr.io/servercontainers/samba"
       ],
-      "versioning": "regex:^smbd-only-.*-s(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-r(?<revision>\\d+)?$"
+      "versioning": "regex:^smbd-avahi-.*-s(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-r(?<revision>\\d+)?$"
     }
   ],
   "kubernetes": {
