@@ -9,6 +9,11 @@ resources:
 - scrypted.yaml
 - zigbee2mqtt.yaml
 
+configMapGenerator:
+- name: frigate
+  files:
+    - config.yml=frigate-config.yaml
+
 generators:
 - |
   apiVersion: viaduct.ai/v1
