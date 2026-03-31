@@ -12,7 +12,7 @@ resources:
 configMapGenerator:
 - name: frigate
   files:
-    - config.yml=frigate-config.yaml
+  - config.yml=frigate-config.yaml
 
 generators:
 - |

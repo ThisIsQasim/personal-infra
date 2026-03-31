@@ -8,14 +8,14 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: http
-      port: 5000
-      protocol: TCP
-      targetPort: http
-    - name: auth
-      port: 8971
-      protocol: TCP
-      targetPort: auth
+  - name: http
+    port: 5000
+    protocol: TCP
+    targetPort: http
+  - name: auth
+    port: 8971
+    protocol: TCP
+    targetPort: auth
   selector:
     app: frigate
 ---
@@ -31,14 +31,14 @@ spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
   ports:
-    - name: webrtc-tcp
-      port: 8555
-      protocol: TCP
-      targetPort: webrtc-tcp
-    - name: webrtc-udp
-      port: 8555
-      protocol: UDP
-      targetPort: webrtc-udp
+  - name: webrtc-tcp
+    port: 8555
+    protocol: TCP
+    targetPort: webrtc-tcp
+  - name: webrtc-udp
+    port: 8555
+    protocol: UDP
+    targetPort: webrtc-udp
   selector:
     app: frigate
 ---
@@ -65,19 +65,19 @@ spec:
         image: "ghcr.io/blakeblackshear/frigate:0.17.1"
         imagePullPolicy: IfNotPresent
         command:
-          - /bin/bash
-          - -c
-          - |
-            cp /tmp/config.yml /config/config.yml
-            curl -o /config/yolov9-s-relu6-best_320_int8_edgetpu.tflite -L https://github.com/dbro/frigate-detector-edgetpu-yolo9/releases/download/v1.0/yolov9-s-relu6-best_320_int8_edgetpu.tflite
-            curl -o /config/labels-coco17.txt -L https://raw.githubusercontent.com/dbro/frigate-detector-edgetpu-yolo9/refs/heads/main/labels-coco17.txt
+        - /bin/bash
+        - -c
+        - |
+          cp /tmp/config.yml /config/config.yml
+          curl -o /config/yolov9-s-relu6-best_320_int8_edgetpu.tflite -L https://github.com/dbro/frigate-detector-edgetpu-yolo9/releases/download/v1.0/yolov9-s-relu6-best_320_int8_edgetpu.tflite
+          curl -o /config/labels-coco17.txt -L https://raw.githubusercontent.com/dbro/frigate-detector-edgetpu-yolo9/refs/heads/main/labels-coco17.txt
         volumeMounts:
-          - name: config
-            mountPath: /tmp/config.yml
-            subPath: config.yml
-          - name: media
-            mountPath: /config
-            subPath: config
+        - name: config
+          mountPath: /tmp/config.yml
+          subPath: config.yml
+        - name: media
+          mountPath: /config
+          subPath: config
       containers:
       - name: frigate
         image: "ghcr.io/blakeblackshear/frigate:0.17.1"
@@ -118,22 +118,22 @@ spec:
         - secretRef:
             name: frigate
         volumeMounts:
-          - name: media
-            mountPath: /config
-            subPath: config
-          - name: media
-            mountPath: /media/frigate
-          - name: recordings
-            mountPath: /media/frigate/recordings
-          - name: clips
-            mountPath: /media/frigate/clips
-          - name: exports
-            mountPath: /media/frigate/exports
-          - name: dshm
-            mountPath: /dev/shm
-          - name: dshm
-            mountPath: /tmp/cache
-            subPath: tmp
+        - name: media
+          mountPath: /config
+          subPath: config
+        - name: media
+          mountPath: /media/frigate
+        - name: recordings
+          mountPath: /media/frigate/recordings
+        - name: clips
+          mountPath: /media/frigate/clips
+        - name: exports
+          mountPath: /media/frigate/exports
+        - name: dshm
+          mountPath: /dev/shm
+        - name: dshm
+          mountPath: /tmp/cache
+          subPath: tmp
         resources:
           requests:
             cpu: "1.5"
@@ -209,10 +209,10 @@ spec:
   - host: frigate.home.com
     http:
       paths:
-        - path: /
-          pathType: "ImplementationSpecific"
-          backend:
-            service:
-              name: frigate
-              port:
-                name: auth
+      - path: /
+        pathType: "ImplementationSpecific"
+        backend:
+          service:
+            name: frigate
+            port:
+              name: auth
