@@ -282,3 +282,16 @@ classification:
               - 0.8550108439948586
               - 0.577230401974701
         motion: true
+    BMW:
+      enabled: true
+      name: BMW
+      threshold: 0.8
+      state_config:
+        cameras:
+          hikvision-7:
+            crop:
+              - 0.0007184964676967097
+              - 0.25686220257622416
+              - 0.29731534528777903
+              - 0.7841454893674816
+        motion: true
