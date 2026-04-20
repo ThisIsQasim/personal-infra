@@ -10,7 +10,7 @@ spec:
       volumes:
         - name: ksops
           image:
-            reference: viaductoss/ksops:v4.4.0
+            reference: viaductoss/ksops:v4.5.1
             pullPolicy: IfNotPresent
         - name: age-private-key
           secret:
