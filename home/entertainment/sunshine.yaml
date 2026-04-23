@@ -184,12 +184,12 @@ spec:
           subPath: games
         - mountPath: /mnt/games/
           name: external
-          subPath: games 
+          subPath: games
         - mountPath: /mnt/external/
           name: external
         - mountPath: /home/default/
-          name: home
-          subPath: home
+          name: external
+          subPath: sunshine
         - mountPath: /templates/xorg/xorg.dummy.conf
           name: config
           subPath: xorg.dummy.conf
@@ -210,10 +210,6 @@ spec:
         - mountPath: /run/udev
           name: udev
       volumes:
-      - name: home
-        hostPath:
-          path: /home/entertainment/sunshine/
-          type: Directory
       - name: external
         hostPath:
           path: /mnt/external
