@@ -21,7 +21,7 @@ spec:
         runAsUser: 1001
         runAsGroup: 1001
       containers:
-      - image: ghcr.io/dmunozv04/isponsorblocktv:v2.8.1
+      - image: ghcr.io/dmunozv04/isponsorblocktv:v2.9.0
         name: isponsorblocktv
         resources:
           requests:
