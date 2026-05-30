@@ -36,7 +36,7 @@ metadata:
         proxy_set_header X-Forwarded-Host $http_host;
     nginx.ingress.kubernetes.io/auth-cache-key: $cookie_authentik_proxy_EhWySFtO
     nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 5s
-    gethomepage.dev/description: APC Smart-UPS 1500 XL
+    gethomepage.dev/description: APC Smart-UPS 1500
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Utilities
     gethomepage.dev/icon: ups.png
