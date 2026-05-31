@@ -50,6 +50,7 @@ k8s_cluster:
     ansible_become: true
     loadbalancer_apiserver_localhost: false
     use_localhost_as_kubeapi_loadbalancer: false
+    gateway_api_enabled: true
     ingress_nginx_service_type: LoadBalancer
     ingress_nginx_service_annotations:
       kube-vip.io/loadbalancerIPs: y.y.y.y
