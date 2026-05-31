@@ -14,6 +14,7 @@ rules:
   resources:
   - services
   - pods
+  - namespaces
   verbs:
   - get
   - watch
@@ -38,8 +39,10 @@ rules:
 - apiGroups:
   - gateway.networking.k8s.io
   resources:
-  - httproutes
   - gateways
+  - httproutes
+  - grpcroutes
+  - listenersets
   verbs:
   - get
   - watch
@@ -377,7 +380,9 @@ spec:
         args:
         - --source=service
         - --source=ingress
-        - --source=httproute
+        - --source=gateway-httproute
+        - --source=gateway-grpcroute
+        - --gateway-listener-sets
         - --domain-filter=home.com
         - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
         # Pihole only supports A/CNAME records so there is no mechanism to track ownership.
