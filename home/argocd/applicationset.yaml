@@ -8,6 +8,7 @@ spec:
       elements:
       - app: entertainment
       - app: external-tools
+      - app: gateway
       - app: ha
       - app: nas
       - app: prometheus

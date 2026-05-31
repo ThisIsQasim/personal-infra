@@ -93,15 +93,13 @@ spec:
     app: mealie
   type: ClusterIP
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: mealie
   labels:
     app: mealie
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/proxy-body-size: 50m
     gethomepage.dev/description: Recipes
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Utilities
@@ -110,17 +108,19 @@ metadata:
     gethomepage.dev/pod-selector: app=mealie
     gethomepage.dev/weight: "30"
 spec:
-  tls:
-  - hosts:
-    - mealie.home.com
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - mealie.home.com
   rules:
-  - host: mealie.home.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: mealie
-            port:
-              number: 80
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: mealie
+      port: 80

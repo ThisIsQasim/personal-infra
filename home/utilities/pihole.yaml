@@ -36,6 +36,15 @@ rules:
   - watch
   - list
 - apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - httproutes
+  - gateways
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
   - ""
   resources:
   - nodes
@@ -368,6 +377,7 @@ spec:
         args:
         - --source=service
         - --source=ingress
+        - --source=httproute
         - --domain-filter=home.com
         - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
         # Pihole only supports A/CNAME records so there is no mechanism to track ownership.
@@ -429,18 +439,14 @@ spec:
           secretName: pihole-cert
         name: tls-cert
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: pihole
   labels:
     app: pihole
   annotations:
     external-dns.alpha.kubernetes.io/exclude: "true"
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-name: "PHPSESSID"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "7200"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "7200"
     gethomepage.dev/description: DNS & Ad Blocker
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Networking
@@ -454,17 +460,22 @@ metadata:
     gethomepage.dev/widget.url: http://pihole.utilities.svc:80
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - pihole.home.com
   rules:
-  - host: pihole.home.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: pihole
-            port:
-              name: http
-        path: /
-        pathType: ImplementationSpecific
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: pihole
+      port: 80
 ---
 apiVersion: apps/v1
 kind: DaemonSet

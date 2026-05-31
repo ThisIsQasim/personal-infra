@@ -251,15 +251,13 @@ spec:
     app: sunshine
   type: ClusterIP
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: sunshine
   labels:
     app: sunshine
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     gethomepage.dev/description: Game Streaming
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Entertainment
@@ -267,17 +265,30 @@ metadata:
     gethomepage.dev/name: sunshine
     gethomepage.dev/pod-selector: app=sunshine
 spec:
-  tls:
-  - hosts:
-    - sunshine.home.com
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - sunshine.home.com
   rules:
-  - host: sunshine.home.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: sunshine
-            port:
-              number: 47990
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: sunshine
+      port: 47990
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: sunshine
+spec:
+  host: sunshine.entertainment.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+      insecureSkipVerify: true

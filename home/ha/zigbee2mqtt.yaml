@@ -69,20 +69,13 @@ spec:
   selector:
     app: zigbee2mqtt
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: zigbee2mqtt
   labels:
     app: zigbee2mqtt
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/auth-url: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/nginx
-    nginx.ingress.kubernetes.io/auth-signin: https://authentik.home.com/outpost.goauthentik.io/start?rd=https://$host$escaped_request_uri
-    nginx.ingress.kubernetes.io/auth-snippet: |
-        proxy_set_header X-Forwarded-Host $http_host;
-    nginx.ingress.kubernetes.io/auth-cache-key: $cookie_authentik_proxy_EhWySFtO
-    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 5s
     gethomepage.dev/description: Zigbee to MQTT
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
@@ -91,17 +84,25 @@ metadata:
     gethomepage.dev/pod-selector: app=zigbee2mqtt
     gethomepage.dev/weight: "40"
 spec:
-  tls:
-  - hosts:
-    - zigbee2mqtt.home.com
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - zigbee2mqtt.home.com
   rules:
-  - host: zigbee2mqtt.home.com
-    http:
-      paths:
-        - path: /
-          pathType: "ImplementationSpecific"
-          backend:
-            service:
-              name: zigbee2mqtt
-              port:
-                name: http
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: RequestHeaderModifier
+      requestHeaderModifier:
+        set:
+        - name: X-Forwarded-Host
+          value: zigbee2mqtt.home.com
+    backendRefs:
+    - name: zigbee2mqtt
+      port: 8080

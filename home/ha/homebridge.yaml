@@ -87,20 +87,13 @@ spec:
   selector:
     app: homebridge
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: homebridge
   labels:
     app: homebridge
   annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/auth-url: http://authentik-server.authentik.svc.cluster.local/outpost.goauthentik.io/auth/nginx
-    nginx.ingress.kubernetes.io/auth-signin: https://authentik.home.com/outpost.goauthentik.io/start?rd=https://$host$escaped_request_uri
-    nginx.ingress.kubernetes.io/auth-snippet: |
-        proxy_set_header X-Forwarded-Host $http_host;
-    nginx.ingress.kubernetes.io/auth-cache-key: $cookie_authentik_proxy_EhWySFtO
-    nginx.ingress.kubernetes.io/auth-cache-duration: 200 202 10m, 401 5s
     gethomepage.dev/description: HomeKit bridge
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
@@ -113,20 +106,28 @@ metadata:
     gethomepage.dev/widget.username: "{{HOMEPAGE_VAR_HOMEBRIDGE_USERNAME}}"
     gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_HOMEBRIDGE_PASSWORD}}"
 spec:
-  tls:
-  - hosts:
-    - homebridge.home.com
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - homebridge.home.com
   rules:
-  - host: homebridge.home.com
-    http:
-      paths:
-        - path: /
-          pathType: "ImplementationSpecific"
-          backend:
-            service:
-              name: homebridge
-              port:
-                name: http
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    filters:
+    - type: RequestHeaderModifier
+      requestHeaderModifier:
+        set:
+        - name: X-Forwarded-Host
+          value: homebridge.home.com
+    backendRefs:
+    - name: homebridge
+      port: 8581
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

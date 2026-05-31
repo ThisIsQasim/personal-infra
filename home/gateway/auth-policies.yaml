@@ -1,0 +1,37 @@
+# TODO: Split into per-route policies once GEP-1494 (HTTPRoute-level AuthorizationPolicy targetRefs) is implemented in Istio
+# https://gateway-api.sigs.k8s.io/geps/gep-1494/
+# https://github.com/istio/istio/issues/58067
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: authentik
+  namespace: istio-ingress
+spec:
+  targetRefs:
+  - kind: Gateway
+    group: gateway.networking.k8s.io
+    name: gateway
+  action: CUSTOM
+  provider:
+    name: authentik
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - sonarr.home.com
+        - radarr.home.com
+        - prowlarr.home.com
+        - ytdl.home.com
+        - torrent.home.com
+        - zigbee2mqtt.home.com
+        - homebridge.home.com
+        - scrypted.home.com
+        - frigate.home.com
+        - ups.home.com
+        - httpbin.home.com
+        - home.com
+        - lubelogger.home.com
+        - speedtest.home.com
+        notPaths:
+        - /apple-touch-icon.png
