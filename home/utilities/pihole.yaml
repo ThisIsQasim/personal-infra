@@ -529,6 +529,19 @@ spec:
             add:
             - NET_ADMIN
 ---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: pihole
+spec:
+  host: pihole.utilities.svc.cluster.local
+  trafficPolicy:
+    loadBalancer:
+      consistentHash:
+        httpCookie:
+          name: PHPSESSID
+          ttl: 7200s
+---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
