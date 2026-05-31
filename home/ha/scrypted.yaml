@@ -107,12 +107,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: scrypted.home.com
     backendRefs:
     - name: scrypted
       port: 11080

@@ -142,12 +142,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: lubelogger.home.com
     backendRefs:
     - name: lubelogger
       port: 80

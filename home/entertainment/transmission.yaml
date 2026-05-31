@@ -126,12 +126,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: torrent.home.com
     backendRefs:
     - name: transmission
       port: 9091

@@ -207,12 +207,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: frigate.home.com
     backendRefs:
     - name: frigate
       port: 8971

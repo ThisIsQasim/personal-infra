@@ -119,12 +119,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: homebridge.home.com
     backendRefs:
     - name: homebridge
       port: 8581

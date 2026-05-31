@@ -102,12 +102,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: prowlarr.home.com
     backendRefs:
     - name: prowlarr
       port: 9696

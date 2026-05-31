@@ -108,12 +108,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: sonarr.home.com
     backendRefs:
     - name: sonarr
       port: 8989

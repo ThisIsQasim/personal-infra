@@ -97,12 +97,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: zigbee2mqtt.home.com
     backendRefs:
     - name: zigbee2mqtt
       port: 8080

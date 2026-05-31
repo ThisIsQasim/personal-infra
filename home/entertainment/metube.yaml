@@ -174,12 +174,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: ytdl.home.com
     backendRefs:
     - name: metube
       port: 8081

@@ -85,12 +85,6 @@ spec:
     - path:
         type: PathPrefix
         value: /
-    filters:
-    - type: RequestHeaderModifier
-      requestHeaderModifier:
-        set:
-        - name: X-Forwarded-Host
-          value: speedtest.home.com
     backendRefs:
     - name: speedtest
       port: 80
