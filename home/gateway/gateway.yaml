@@ -14,6 +14,29 @@ spec:
     kind: Secret
     name: cluster-wildcard-cert
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-params
+  namespace: istio-ingress
+data:
+  service: |
+    metadata:
+      annotations:
+        kube-vip.io/loadbalancerIPs: y.y.y.y
+  deployment: |
+    spec:
+      replicas: 3
+      template:
+        spec:
+          topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
+            labelSelector:
+              matchLabels:
+                gateway.networking.k8s.io/gateway-name: gateway
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -22,8 +45,10 @@ metadata:
 spec:
   gatewayClassName: istio
   infrastructure:
-    annotations:
-      kube-vip.io/loadbalancerIPs: y.y.y.y
+    parametersRef:
+      group: ""
+      kind: ConfigMap
+      name: gateway-params
   listeners:
   - name: http
     protocol: HTTP
