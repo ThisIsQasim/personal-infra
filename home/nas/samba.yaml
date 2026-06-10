@@ -17,7 +17,7 @@ spec:
         k8s.v1.cni.cncf.io/networks: 'kube-system/macvlan-dhcp@macvlan0'
     spec:
       containers:
-      - image: ghcr.io/servercontainers/samba:smbd-avahi-a3.23.4-s4.22.10-r0
+      - image: ghcr.io/servercontainers/samba:smbd-avahi-a3.24.0-s4.23.8-r0
         imagePullPolicy: IfNotPresent
         name: samba
         env:
