@@ -233,7 +233,7 @@ spec:
         - -c
         - cp /etc/pihole-lists/* /etc/pihole/
       - name: dnsproxy
-        image: adguard/dnsproxy:v0.81.3
+        image: adguard/dnsproxy:v0.82.1
         imagePullPolicy: IfNotPresent
         restartPolicy: Always
         args:
