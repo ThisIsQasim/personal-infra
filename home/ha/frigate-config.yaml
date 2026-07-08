@@ -91,6 +91,9 @@ go2rtc:
 cameras:
   # Define at least one camera
   hikvision-1:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-1
@@ -104,6 +107,9 @@ cameras:
       mask:
         - 0.183,0,0.291,0,0.291,0.049,0.185,0.044
   hikvision-2:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-2
@@ -125,6 +131,9 @@ cameras:
             - 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
             - 0.7,0.815,0.692,0.904,0.716,0.908,0.723,0.823
   hikvision-3:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-3
@@ -186,6 +195,9 @@ cameras:
       inner_yard:
         coordinates: 0,0.25,0,1,1,1,0.998,0.087,0.878,0.098,0.483,0.125
   hikvision-6:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-6
