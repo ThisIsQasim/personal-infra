@@ -47,14 +47,14 @@ record:
   enabled: true
   alerts:
     retain:
-      days: 7
+      days: 10
   detections:
     retain:
       days: 7
   continuous:
-    days: 0
+    days: 1
   motion:
-    days: 7
+    days: 4
 ffmpeg:
   hwaccel_args: preset-vaapi
   output_args:
