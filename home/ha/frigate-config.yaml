@@ -77,6 +77,10 @@ go2rtc:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-8:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-9:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-11:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     pollo-1:
       - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
       - ffmpeg:pollo-1#audio=aac
@@ -247,6 +251,20 @@ cameras:
     motion:
       mask:
         - 0.291,0.072,0.288,0,0.22,0,0.217,0.073
+  hikvision-9:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hikvision-9
+          roles: []
+    objects:
+      track: []
+  hikvision-11:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hikvision-11
+          roles: []
+    objects:
+      track: []
   pollo-1:
     ffmpeg:
       inputs:
