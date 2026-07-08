@@ -255,16 +255,28 @@ cameras:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-9
-          roles: []
+          roles:
+            - record
+        - path:
+            rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+          roles:
+            - detect
     objects:
-      track: []
+      track:
+        - person
   hikvision-11:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-11
-          roles: []
+          roles:
+            - record
+        - path:
+            rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+          roles:
+            - detect
     objects:
-      track: []
+      track:
+        - person
   pollo-1:
     ffmpeg:
       inputs:
