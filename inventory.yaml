@@ -100,7 +100,7 @@ k8s_cluster:
     - 39034
     coredns_rewrite_block: |
       rewrite stop name exact headscale.home.com headscale.home.com
-      rewrite stop name regex home\.com\.$ ingress-nginx.ingress-nginx.svc.cluster.local answer auto
+      rewrite stop name regex home\.com\.$ gateway-istio.istio-ingress.svc.cluster.local answer auto
     nodelocaldns_external_zones:
     - zones:
       - home.com
