@@ -77,6 +77,10 @@ go2rtc:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-8:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-9:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-11:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     pollo-1:
       - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
       - ffmpeg:pollo-1#audio=aac
@@ -87,6 +91,9 @@ go2rtc:
 cameras:
   # Define at least one camera
   hikvision-1:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-1
@@ -100,6 +107,9 @@ cameras:
       mask:
         - 0.183,0,0.291,0,0.291,0.049,0.185,0.044
   hikvision-2:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-2
@@ -121,6 +131,9 @@ cameras:
             - 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
             - 0.7,0.815,0.692,0.904,0.716,0.908,0.723,0.823
   hikvision-3:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-3
@@ -182,6 +195,9 @@ cameras:
       inner_yard:
         coordinates: 0,0.25,0,1,1,1,0.998,0.087,0.878,0.098,0.483,0.125
   hikvision-6:
+    record:
+      motion:
+        days: 2
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-6
@@ -247,6 +263,32 @@ cameras:
     motion:
       mask:
         - 0.291,0.072,0.288,0,0.22,0,0.217,0.073
+  hikvision-9:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hikvision-9
+          roles:
+            - record
+        - path:
+            rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+          roles:
+            - detect
+    objects:
+      track:
+        - person
+  hikvision-11:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hikvision-11
+          roles:
+            - record
+        - path:
+            rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+          roles:
+            - detect
+    objects:
+      track:
+        - person
   pollo-1:
     ffmpeg:
       inputs:
