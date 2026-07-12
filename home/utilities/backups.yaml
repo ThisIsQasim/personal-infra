@@ -20,7 +20,7 @@ spec:
         spec:
           containers:
           - name: backups
-            image: ghcr.io/thisisqasim/rsync:0.0.12
+            image: ghcr.io/thisisqasim/rsync:0.0.13
             command:
             - /bin/sh
             - -c
