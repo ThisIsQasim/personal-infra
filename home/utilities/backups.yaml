@@ -25,6 +25,8 @@ spec:
             - /bin/sh
             - -c
             - |
+              [ $JOB_COMPLETION_INDEX -gt 0 ] && sleep 900
+
               case $JOB_COMPLETION_INDEX in
                 0) SERVER_NAME=reich SERVER_HOST=reich.project.com ;;
                 1) SERVER_NAME=node1 SERVER_HOST=y.y.y.y
@@ -77,5 +79,6 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: node1
           restartPolicy: Never
+  concurrencyPolicy: Forbid
   timeZone: 'Asia/Karachi'
   schedule: '15 5 * * *'
