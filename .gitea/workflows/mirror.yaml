@@ -22,7 +22,7 @@ jobs:
       - name: Rewrite history and push to mirror
         shell: bash
         run: |
-          mkdir ~/.ssh
+          mkdir -p ~/.ssh
           base64 -d <<<${MIRROR_REPO_KEY} > ~/.ssh/id_rsa
           chmod 0600 ~/.ssh/id_rsa
 
