@@ -82,3 +82,4 @@ spec:
   concurrencyPolicy: Forbid
   timeZone: 'Asia/Karachi'
   schedule: '15 5 * * *'
+  suspend: true
