@@ -30,6 +30,10 @@ spec:
   postgresql:
     parameters:
       max_wal_size: 2GB
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: preferred
+    topologyKey: kubernetes.io/hostname
   storage:
     size: 1Gi
     storageClass: local-path
