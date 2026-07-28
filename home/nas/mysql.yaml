@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: public.ecr.aws/docker/library/mysql:9.7.1
+        image: public.ecr.aws/docker/library/mysql:26.7.0
         imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:
