@@ -81,6 +81,8 @@ go2rtc:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-11:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-11_talk:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     pollo-1:
       - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
       - ffmpeg:pollo-1#audio=aac
@@ -286,6 +288,9 @@ cameras:
             rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
           roles:
             - detect
+    live:
+      streams:
+        hikvision-11 (Talk): hikvision-11_talk
     objects:
       track:
         - person
