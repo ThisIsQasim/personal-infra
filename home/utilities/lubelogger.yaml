@@ -128,6 +128,10 @@ metadata:
     gethomepage.dev/name: lubelogger
     gethomepage.dev/pod-selector: app=lubelogger
     gethomepage.dev/weight: "20"
+    gethomepage.dev/widget.type: lubelogger
+    gethomepage.dev/widget.url: http://lubelogger.utilities.svc:80
+    gethomepage.dev/widget.username: homepage
+    gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_LUBELOGGER_PASSWORD}}"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
