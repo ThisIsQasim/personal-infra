@@ -62,8 +62,9 @@ spec:
     tls:
       mode: Terminate
       certificateRefs:
-      - name: cluster-wildcard-cert
+      - group: ''
         kind: Secret
+        name: cluster-wildcard-cert
         namespace: cert-manager
     allowedRoutes:
       namespaces:
@@ -87,3 +88,7 @@ spec:
       requestRedirect:
         scheme: https
         statusCode: 308
+    matches:
+      - path:
+          type: PathPrefix
+          value: /

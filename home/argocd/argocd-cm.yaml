@@ -24,3 +24,9 @@ data:
       name: authentik
       type: oidc
       id: authentik
+  # istiod flips ValidatingWebhookConfiguration failurePolicy from the chart default (Ignore) to
+  # Fail once it confirms its webhook is healthy, so live state always drifts from what's in git.
+  # https://github.com/istio/istio/issues/52785
+  resource.customizations.ignoreDifferences.admissionregistration.k8s.io_ValidatingWebhookConfiguration: |
+    jqPathExpressions:
+    - '.webhooks[]?.failurePolicy'
