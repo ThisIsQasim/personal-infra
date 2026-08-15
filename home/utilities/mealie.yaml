@@ -112,7 +112,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Recipes
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: Life
     gethomepage.dev/icon: mealie.png
     gethomepage.dev/name: mealie
     gethomepage.dev/pod-selector: app=mealie

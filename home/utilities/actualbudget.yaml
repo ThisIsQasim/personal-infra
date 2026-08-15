@@ -85,7 +85,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Budgeting
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: Life
     gethomepage.dev/icon: actual-budget.png
     gethomepage.dev/name: actualbudget
     gethomepage.dev/pod-selector: app=actualbudget

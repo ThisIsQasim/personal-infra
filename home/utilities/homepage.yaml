@@ -15,12 +15,12 @@ data:
     layout:
     - System:
         style: row
-        columns: 3
+        columns: 4
     - Entertainment:
     - Home Automation:
     - Networking:
         Storage:
-    - Utilities:
+    - Life:
   docker.yaml: ""
   custom.css: ""
   custom.js: |
@@ -35,7 +35,7 @@ data:
             icon: unifi-controller.png
             description: Network Management Console
         - Storage: []
-    - Utilities:
+    - Life:
         - Monica:
             href: https://monica.home.com
             icon: monica.png

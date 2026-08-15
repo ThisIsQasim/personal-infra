@@ -123,7 +123,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Car Log
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: Life
     gethomepage.dev/icon: lubelogger.png
     gethomepage.dev/name: lubelogger
     gethomepage.dev/pod-selector: app=lubelogger

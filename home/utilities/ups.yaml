@@ -31,7 +31,7 @@ metadata:
   annotations:
     gethomepage.dev/description: APC Smart-UPS 1500
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: System
     gethomepage.dev/icon: ups.png
     gethomepage.dev/name: UPS
     gethomepage.dev/pod-selector: ""
