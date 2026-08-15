@@ -31,5 +31,6 @@ spec:
         - ups.home.com
         - httpbin.home.com
         - speedtest.home.com
+        - alertmanager.home.com
         notPaths:
         - /apple-touch-icon.png
