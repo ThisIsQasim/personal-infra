@@ -51,22 +51,6 @@ k8s_cluster:
     loadbalancer_apiserver_localhost: false
     use_localhost_as_kubeapi_loadbalancer: false
     gateway_api_enabled: true
-    ingress_nginx_service_type: LoadBalancer
-    ingress_nginx_service_annotations:
-      kube-vip.io/loadbalancerIPs: y.y.y.y
-    ingress_nginx_host_network: false
-    ingress_nginx_publish_service: ingress-nginx/ingress-nginx
-    ingress_nginx_configmap:
-      map-hash-bucket-size: '128'
-      ssl-protocols: 'TLSv1.2 TLSv1.3'
-      use-forwarded-headers: 'true'
-      forwarded-for-header: 'CF-Connecting-IP'
-      proxy-buffering: "off"
-      proxy-request-buffering: "off"
-      allow-snippet-annotations: "true"
-      annotations-risk-level: "Critical"
-      use-gzip: "true"
-      enable-brotli: "true"
     kube_vip_enabled: true
     kube_vip_controlplane_enabled: true
     kube_vip_address: y.y.y.y
