@@ -45,12 +45,22 @@ spec:
           value: "True"
         - name: OIDC_CONFIGURATION_URL
           value: "https://authentik.home.com/application/o/mealie/.well-known/openid-configuration"
+        - name: OIDC_GROUPS_CLAIM
+          value: "groups"
         - name: OIDC_ADMIN_GROUP
           value: "Mealie Admins"
+        - name: OIDC_USER_GROUP
+          value: "Mealie Users"
         - name: OIDC_AUTO_REDIRECT
           value: "True"
         - name: OIDC_PROVIDER_NAME
           value: "Login with SSO"
+        - name: OIDC_AUTO_REDIRECT
+          value: "true"
+        - name: OIDC_REMEMBER_ME
+          value: "true"
+        - name: OIDC_REQUIRES_EMAIL_VERIFICATION
+          value: "false"
         volumeMounts:
         - mountPath: /app/data/
           name: data
