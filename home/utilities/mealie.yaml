@@ -107,6 +107,10 @@ metadata:
     gethomepage.dev/name: mealie
     gethomepage.dev/pod-selector: app=mealie
     gethomepage.dev/weight: "30"
+    gethomepage.dev/widget.type: mealie
+    gethomepage.dev/widget.version: "2"
+    gethomepage.dev/widget.url: http://mealie.utilities.svc:80
+    gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_MEALIE_KEY}}"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
