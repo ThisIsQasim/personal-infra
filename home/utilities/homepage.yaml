@@ -182,7 +182,13 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
           - name: HOMEPAGE_ALLOWED_HOSTS
-            value: home.com
+            value: "home.com"
+          - name: HOMEPAGE_AUTH_ENABLED
+            value: "true"
+          - name: HOMEPAGE_OIDC_ISSUER
+            value: "https://authentik.home.com/application/o/homepage/"
+          - name: HOMEPAGE_EXTERNAL_URL
+            value: "https://home.com"
           envFrom:
           - secretRef:
               name: homepage

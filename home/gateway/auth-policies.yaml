@@ -30,8 +30,6 @@ spec:
         - frigate.home.com
         - ups.home.com
         - httpbin.home.com
-        - home.com
-        - lubelogger.home.com
         - speedtest.home.com
         notPaths:
         - /apple-touch-icon.png
