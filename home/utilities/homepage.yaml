@@ -13,6 +13,9 @@ data:
     headerStyle: clean
     target: _self
     layout:
+    - System:
+        style: row
+        columns: 3
     - Entertainment:
     - Home Automation:
     - Networking:
@@ -33,14 +36,19 @@ data:
             description: Network Management Console
         - Storage: []
     - Utilities:
-        - Gitea:
-            href: https://git.project.com/
-            icon: gitea.png
-            description: Git server
         - Monica:
             href: https://monica.home.com
             icon: monica.png
             description: Personal CRM
+    - System:
+        - Gitea:
+            href: https://git.project.com/
+            icon: gitea.png
+            description: Git server
+            widget:
+              type: gitea
+              url: https://git.project.com/
+              key: {{HOMEPAGE_VAR_GITEA_KEY}}
   widgets.yaml: |
     - unifi_console:
         url: https://y.y.y.y

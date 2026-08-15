@@ -89,7 +89,7 @@ metadata:
     gethomepage.dev/icon: actual-budget.png
     gethomepage.dev/name: actualbudget
     gethomepage.dev/pod-selector: app=actualbudget
-    gethomepage.dev/weight: "25"
+    gethomepage.dev/weight: "50"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io

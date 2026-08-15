@@ -6,7 +6,7 @@ metadata:
   annotations:
     gethomepage.dev/description: GitOps
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Utilities
+    gethomepage.dev/group: System
     gethomepage.dev/icon: argo-cd.png
     gethomepage.dev/name: Argocd
     gethomepage.dev/widget.type: argocd

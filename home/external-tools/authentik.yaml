@@ -24,7 +24,7 @@ server:
       annotations:
         gethomepage.dev/description: Authentication
         gethomepage.dev/enabled: "true"
-        gethomepage.dev/group: Utilities
+        gethomepage.dev/group: System
         gethomepage.dev/icon: authentik.png
         gethomepage.dev/name: authentik
         gethomepage.dev/pod-selector: app.kubernetes.io/name=authentik
