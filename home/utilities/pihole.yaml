@@ -384,7 +384,7 @@ spec:
         - --source=gateway-grpcroute
         - --gateway-listener-sets
         - --domain-filter=home.com
-        - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
+        - --annotation-filter=external-dns.kubernetes.io/exclude notin (true)
         # Pihole only supports A/CNAME records so there is no mechanism to track ownership.
         # You don't need to set this flag, but if you leave it unset, you will receive warning
         # logs when ExternalDNS attempts to create TXT records.
