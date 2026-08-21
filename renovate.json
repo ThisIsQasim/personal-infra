@@ -49,7 +49,7 @@
         "docker"
       ],
       "matchPackageNames": [
-        "quay.io/minio/minio"
+        "pgsty/silo"
       ],
       "versioning": "regex:^RELEASE\\.(?<major>\\d+)-(?<minor>\\d+)-(?<patch>\\d+).*"
     },

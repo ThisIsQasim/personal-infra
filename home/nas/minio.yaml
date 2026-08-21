@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: minio
-        image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+        image: pgsty/silo:RELEASE.2026-08-06T00-00-00Z
         imagePullPolicy: IfNotPresent
         args:
         - server
@@ -47,13 +47,15 @@ spec:
         env:
         - name: MINIO_REGION
           value: eu-central-1
+        - name: MINIO_BROWSER_REDIRECT_URL
+          value: "https://minio.home.com"
         - name: MINIO_IDENTITY_OPENID_CONFIG_URL
           value: https://authentik.home.com/application/o/minio/.well-known/openid-configuration
         - name: MINIO_IDENTITY_OPENID_CLAIM_NAME
           value: policy
         - name: MINIO_IDENTITY_OPENID_SCOPES
           value: "openid, email, profile, minio"
-        - name: MINIO_IDENTITY_OPENID_COMMENT
+        - name: MINIO_IDENTITY_OPENID_DISPLAY_NAME
           value: "Login with SSO"
         envFrom:
         - secretRef:
