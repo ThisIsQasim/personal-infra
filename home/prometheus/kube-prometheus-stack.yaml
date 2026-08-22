@@ -17,6 +17,17 @@ prometheus:
         capacity: 5000
         maxSamplesPerSend: 1000
         maxShards: 400
+    - url: "https://cortex.work.com/api/v1/push"
+      # No secret: cortex's ingest sidecar trusts this cluster's own
+      # ServiceAccount tokens (JWT source "f8k"), so this just points at
+      # the token every pod already gets by default. `authorization`
+      # (the non-deprecated field) can only reference a Secret, not a
+      # file, so bearerTokenFile is the one that actually fits here.
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      queueConfig: #2x the default
+        capacity: 5000
+        maxSamplesPerSend: 1000
+        maxShards: 400
     # - url: "https://prometheus.work.com/api/v1/write"
     #   basicAuth:
     #       username:
