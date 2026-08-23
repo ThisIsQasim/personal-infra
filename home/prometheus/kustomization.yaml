@@ -6,7 +6,6 @@ commonAnnotations:
 
 resources:
 - namespace.yaml
-- ingress-nginx.yaml
 
 helmCharts:
 - name: kube-prometheus-stack
