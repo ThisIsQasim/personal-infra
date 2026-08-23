@@ -42,17 +42,3 @@ patches:
     - op: replace
       path: /metadata/namespace
       value: monitoring
-
-
-generators:
-- |
-  apiVersion: viaduct.ai/v1
-  kind: ksops
-  metadata:
-    name: secrets
-    annotations:
-      config.kubernetes.io/function: |
-          exec:
-            path: ksops
-  files:
-    - ./remote-prometheus.enc.yaml    
