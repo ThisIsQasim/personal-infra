@@ -16,6 +16,18 @@ prometheus:
         capacity: 5000
         maxSamplesPerSend: 1000
         maxShards: 400
+      # Cardinality trim, added 2026-08-25 (mirrors the ClusterNest-side
+      # infra repo's k8s/prometheus/cluster.jsonnet change): apiserver/etcd
+      # request duration histograms carry 24/19 `le` buckets each by
+      # default. Keep only le={0.1,1,5,10,+Inf} — real boundaries both
+      # metrics actually emit, enough for histogram_quantile panels to
+      # stay roughly usable at reduced resolution — and drop the rest.
+      # Scoped to just these two metrics on this remoteWrite target.
+      writeRelabelConfigs:
+      - action: drop
+        sourceLabels: [__name__, le]
+        separator: ";"
+        regex: '(apiserver_request_duration_seconds_bucket|etcd_request_duration_seconds_bucket);(0\.005|0\.025|0\.05|0\.2|0\.4|0\.6|0\.8|1\.25|1\.5|2\.0|3\.0|4\.0|6\.0|8\.0|15\.0|20\.0|30\.0|45\.0|60\.0)'
     retention: 1d
     affinity:
       nodeAffinity:
