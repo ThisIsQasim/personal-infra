@@ -113,6 +113,7 @@ data:
     rev-server=y.y.y.y
     server=/home.home.com/y.y.y.y
     server=//y.y.y.y
+    address=/code.home.com/y.y.y.y
   05-custom-list.conf: |
     addn-hosts=/etc/pihole/custom.list
 ---
