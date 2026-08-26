@@ -78,27 +78,6 @@ spec:
       enableServiceLinks: false
       securityContext:
         fsGroup: 1001
-      initContainers:
-      - image: public.ecr.aws/docker/library/docker:29.7.2-dind
-        name: docker
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - name: docker
-          mountPath: /var/run/
-        startupProbe:
-          exec:
-            command:
-            - /usr/bin/test
-            - -S
-            - /var/run/docker.sock
-        livenessProbe:
-          exec:
-            command:
-            - /usr/bin/test
-            - -S
-            - /var/run/docker.sock
-        restartPolicy: Always
       containers:
       - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:0219ebec79b9c1d5a68314f46da96f688c366000533e6a0b21450bb5773154ea
         name: server
@@ -108,9 +87,6 @@ spec:
         - /bin/bash
         - -c
         - |
-          curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-28.5.1.tgz
-          tar xzvf docker-28.5.1.tgz
-          sudo cp docker/* /usr/bin/
           ulimit -n 1048576
           exec /entrypoint.sh
         env:
@@ -202,9 +178,6 @@ spec:
           name: x11-socket
         - mountPath: /tmp/pulse/
           name: pulse-socket
-        - name: docker
-          mountPath: /var/run/docker.sock
-          subPath: docker.sock
         - mountPath: /dev
           name: dev
         - mountPath: /run/udev
@@ -224,8 +197,6 @@ spec:
       - name: x11-socket
         emptyDir: {}
       - name: pulse-socket
-        emptyDir: {}
-      - name: docker
         emptyDir: {}
       - name: dev
         hostPath:

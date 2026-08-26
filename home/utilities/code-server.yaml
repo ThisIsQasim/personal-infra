@@ -1,0 +1,229 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: code-server
+  name: code-server
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app: code-server
+  name: code-server
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: code-server
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: code-server
+  name: code-server
+data:
+  install-deps.sh: |
+    #!/bin/bash
+
+    pushd $(mktemp -d)
+
+    SSH_DIR="/home/coder/.ssh"
+    chmod 700 ${SSH_DIR}
+    chmod 0600 ${SSH_DIR}/id_rsa*
+
+    sudo apt-get update && \
+    sudo apt-get install -y postgresql net-tools gnupg2 unzip openjdk-25-jdk tmux
+
+    sudo install -o root -g root -m 0755 -D -t /usr/local/bin /mnt/dind-image/usr/local/bin/docker /mnt/dind-image/usr/local/bin/docker-proxy
+    sudo install -o root -g root -m 0755 -D -t /usr/local/libexec/docker/cli-plugins /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-compose /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-buildx
+
+    curl -Lo node.tar.gz https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.gz
+    sudo tar -C /usr/local --strip-components 1 -xzf node.tar.gz
+    npm install -g yarn
+
+    curl -Lo go.linux-amd64.tar.gz https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go.linux-amd64.tar.gz
+    echo 'source ~/.bashrc
+    export PATH=$PATH:/usr/local/go/bin:/home/coder/go/bin
+    export EDITOR="code-server --wait"' > ~/.bash_profile
+
+    rm -f *.tar.gz
+    popd
+    chmod 0700 /home/coder/work/api/pg_data
+    /usr/lib/postgresql/17/bin/pg_ctl -D /home/coder/work/api/pg_data -o '-k /tmp' -l /dev/null start
+
+    mkdir -p /home/coder/work/.vscode
+    ln -sf /home/coder/work/infra/k8s/code-server/tasks.json /home/coder/work/.vscode/tasks.json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-server
+  labels:
+    app: code-server
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: code-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-server
+  labels:
+    app: code-server
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: code-server
+  template:
+    metadata:
+      labels:
+        app: code-server
+    spec:
+      securityContext:
+        fsGroup: 1000
+      initContainers:
+      - name: init-chmod-data
+        image: "codercom/code-server:4.134.0-debian"
+        imagePullPolicy: IfNotPresent
+        command:
+          - /bin/bash
+          - -c
+          - |
+            chown -R 1000:1000 /home/coder
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: data
+          mountPath: /home/coder
+      - image: public.ecr.aws/docker/library/docker:29.7.2-dind
+        name: docker
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: docker
+          mountPath: /var/run/
+        startupProbe:
+          exec:
+            command:
+            - /usr/bin/test
+            - -S
+            - /var/run/docker.sock
+        livenessProbe:
+          exec:
+            command:
+            - /usr/bin/test
+            - -S
+            - /var/run/docker.sock
+        restartPolicy: Always
+      containers:
+      - name: code-server
+        image: "codercom/code-server:4.134.0-debian"
+        args:
+          - --proxy-domain
+          - code.home.com
+        imagePullPolicy: Always
+        env:
+        - name: EXTENSIONS_GALLERY
+          value: '{"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery", "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index", "itemUrl": "https://marketplace.visualstudio.com/items"}'
+        securityContext:
+          runAsUser: 1000
+        volumeMounts:
+        - name: data
+          mountPath: /home/coder
+        - name: entrypoints
+          mountPath: /entrypoint.d/install-deps.sh
+          subPath: install-deps.sh
+        - name: docker
+          mountPath: /var/run/docker.sock
+          subPath: docker.sock
+        - name: dind-image
+          mountPath: /mnt/dind-image
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /
+            port: http
+        livenessProbe:
+          tcpSocket:
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+          requests:
+            cpu: 0.1
+            memory: 8Gi
+          limits:
+            memory: 32Gi
+      serviceAccountName: code-server
+      volumes:
+      - name: data
+        hostPath:
+          path: /mnt/external/code-server
+          type: DirectoryOrCreate
+      - name: entrypoints
+        configMap:
+          name: code-server
+          defaultMode: 493
+      - name: docker
+        emptyDir: {}
+      - name: dind-image
+        image:
+          reference: public.ecr.aws/docker/library/docker:29.7.2-dind
+          pullPolicy: IfNotPresent
+      nodeSelector:
+        kubernetes.io/hostname: node3
+      tolerations:
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: code-server
+  labels:
+    app: code-server
+  annotations:
+    gethomepage.dev/description: Cloud IDE
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: System
+    gethomepage.dev/icon: code-server.png
+    gethomepage.dev/name: code-server
+    gethomepage.dev/pod-selector: app=code-server
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+  hostnames:
+  - "*.code.home.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: code-server
+      port: 8080

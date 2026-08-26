@@ -13,6 +13,26 @@ spec:
   - group: ""
     kind: Secret
     name: cluster-wildcard-cert
+  - group: ""
+    kind: Secret
+    name: code-server-cert
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: code-server
+  namespace: cert-manager
+spec:
+  dnsNames:
+  - "*.code.home.com"
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt
+  secretName: code-server-cert
+  usages:
+  - digital signature
+  - key encipherment
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -65,6 +85,20 @@ spec:
       - group: ''
         kind: Secret
         name: cluster-wildcard-cert
+        namespace: cert-manager
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https-code-server
+    protocol: HTTPS
+    port: 443
+    hostname: "*.code.home.com"
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - group: ''
+        kind: Secret
+        name: code-server-cert
         namespace: cert-manager
     allowedRoutes:
       namespaces:

@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: utilities
 resources:
 - namespace.yaml
+- code-server.yaml
 - homepage.yaml
 - ups.yaml
 - pihole.yaml
