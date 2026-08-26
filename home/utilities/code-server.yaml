@@ -218,6 +218,7 @@ spec:
     name: gateway
     namespace: istio-ingress
   hostnames:
+  - code.home.com
   - "*.code.home.com"
   rules:
   - matches:
