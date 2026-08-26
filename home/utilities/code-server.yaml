@@ -154,6 +154,9 @@ spec:
           subPath: docker.sock
         - name: dind-image
           mountPath: /mnt/dind-image
+        - name: c9t-token
+          mountPath: /var/run/secrets/c9t/serviceaccount
+          readOnly: true
         ports:
           - name: http
             containerPort: 8080
@@ -192,6 +195,14 @@ spec:
         image:
           reference: public.ecr.aws/docker/library/docker:29.7.2-dind
           pullPolicy: IfNotPresent
+      - name: c9t-token
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: k8s.work.com
+              expirationSeconds: 86400
+              path: token
       nodeSelector:
         kubernetes.io/hostname: node3
       tolerations:
