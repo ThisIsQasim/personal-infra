@@ -32,5 +32,6 @@ spec:
         - httpbin.home.com
         - speedtest.home.com
         - alertmanager.home.com
+        - code.home.com
         notPaths:
         - /apple-touch-icon.png
