@@ -226,7 +226,14 @@ spec:
         type: PathPrefix
         value: /
       headers:
-      - name: ":authority"
+      - name: "host"
+        type: Exact
+        value: code.home.com
+    - path:
+        type: PathPrefix
+        value: /
+      headers:
+      - name: "host"
         type: RegularExpression
         value: "^[0-9]+\\.code\\.home\\.com$"
     backendRefs:
