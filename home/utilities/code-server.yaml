@@ -225,6 +225,10 @@ spec:
     - path:
         type: PathPrefix
         value: /
+      headers:
+      - name: ":authority"
+        type: RegularExpression
+        value: "^[0-9]+\\.code\\.home\\.com$"
     backendRefs:
     - name: code-server
       port: 8080
