@@ -99,7 +99,7 @@ spec:
         fsGroup: 1000
       initContainers:
       - name: init-chmod-data
-        image: "codercom/code-server:4.134.0-debian"
+        image: "codercom/code-server:4.135.0-debian"
         imagePullPolicy: IfNotPresent
         command:
           - /bin/bash
@@ -133,7 +133,7 @@ spec:
         restartPolicy: Always
       containers:
       - name: code-server
-        image: "codercom/code-server:4.134.0-debian"
+        image: "codercom/code-server:4.135.0-debian"
         args:
           - --proxy-domain
           - code.home.com
