@@ -13,11 +13,11 @@ helmCharts:
   namespace: istio-system
   releaseName: istio-base
   repo: https://istio-release.storage.googleapis.com/charts
-  version: 1.30.3
+  version: 1.30.4
   includeCRDs: true
 - name: istiod
   namespace: istio-system
   releaseName: istiod
   repo: https://istio-release.storage.googleapis.com/charts
-  version: 1.30.3
+  version: 1.30.4
   valuesFile: istiod.yaml
