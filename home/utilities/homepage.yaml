@@ -13,14 +13,14 @@ data:
     headerStyle: clean
     target: _self
     layout:
-    - System:
+    - Household:
         style: row
-        columns: 5
+        columns: 4
     - Entertainment:
     - Home Automation:
     - Networking:
         Storage:
-    - Household:
+    - System:
   docker.yaml: ""
   custom.css: ""
   custom.js: |
