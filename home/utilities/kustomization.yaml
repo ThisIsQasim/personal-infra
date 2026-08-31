@@ -6,15 +6,8 @@ resources:
 - code-server.yaml
 - homepage.yaml
 - ups.yaml
-- pihole.yaml
-- tailscale.yaml
-- ddclient.yaml
-- speedtest.yaml
 - apcupsd.yaml
-- zte-hack.yaml
-- httpbin.yaml
 - backups.yaml
-- byedpi.yaml
 
 generators:
 - |
@@ -33,30 +26,6 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     envs:
     - ./homepage.enc.env
-  - metadata:
-      name: pihole
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "true"
-    envs:
-    - ./pihole.enc.env
-  - metadata:
-      name: tailscale
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "false"
-    envs:
-    - ./tailscale.enc.env
-  - metadata:
-      name: zte-hack
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "true"
-    envs:
-    - ./zte-hack.enc.env
-  - metadata:
-      name: ddclient
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "true"
-    files:
-    - ddclient.conf=./ddclient.enc.conf
   - metadata:
       name: backups
       annotations:

@@ -75,7 +75,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: external-dns
-  namespace: utilities
+  namespace: networking
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -462,7 +462,7 @@ metadata:
     gethomepage.dev/weight: "30"
     gethomepage.dev/widget.type: pihole
     gethomepage.dev/widget.version: "6"
-    gethomepage.dev/widget.url: http://pihole.utilities.svc:80
+    gethomepage.dev/widget.url: http://pihole.networking.svc:80
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
 spec:
   parentRefs:
@@ -539,7 +539,7 @@ kind: DestinationRule
 metadata:
   name: pihole
 spec:
-  host: pihole.utilities.svc.cluster.local
+  host: pihole.networking.svc.cluster.local
   trafficPolicy:
     loadBalancer:
       consistentHash:

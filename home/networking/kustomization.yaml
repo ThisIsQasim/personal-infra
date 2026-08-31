@@ -1,0 +1,48 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: networking
+resources:
+- namespace.yaml
+- pihole.yaml
+- tailscale.yaml
+- ddclient.yaml
+- speedtest.yaml
+- zte-hack.yaml
+- httpbin.yaml
+- byedpi.yaml
+
+generators:
+- |
+  apiVersion: viaduct.ai/v1
+  kind: ksops
+  metadata:
+    name: secret-envs
+    annotations:
+      config.kubernetes.io/function: |
+          exec:
+            path: ksops
+  secretFrom:
+  - metadata:
+      name: pihole
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./pihole.enc.env
+  - metadata:
+      name: tailscale
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "false"
+    envs:
+    - ./tailscale.enc.env
+  - metadata:
+      name: zte-hack
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    envs:
+    - ./zte-hack.enc.env
+  - metadata:
+      name: ddclient
+      annotations:
+        kustomize.config.k8s.io/needs-hash: "true"
+    files:
+    - ddclient.conf=./ddclient.enc.conf

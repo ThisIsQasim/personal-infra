@@ -12,6 +12,7 @@ spec:
       - app: ha
       - app: household
       - app: nas
+      - app: networking
       - app: prometheus
       - app: utilities
   template:

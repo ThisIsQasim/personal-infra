@@ -15,7 +15,7 @@ data:
     layout:
     - System:
         style: row
-        columns: 4
+        columns: 5
     - Entertainment:
     - Home Automation:
     - Networking:
