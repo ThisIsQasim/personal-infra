@@ -222,6 +222,7 @@ metadata:
     gethomepage.dev/icon: code-server.png
     gethomepage.dev/name: code-server
     gethomepage.dev/pod-selector: app=code-server
+    gethomepage.dev/weight: "10"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io

@@ -22,7 +22,7 @@ metadata:
           argocd-repo-server,
           argocd-server
       )
-    gethomepage.dev/weight: "0"
+    gethomepage.dev/weight: "20"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
