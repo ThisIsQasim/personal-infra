@@ -56,7 +56,7 @@ spec:
       volumes:
         - name: data
           hostPath:
-            path: /home/utilities/actualbudget/data
+            path: /home/household/actualbudget/data
             type: DirectoryOrCreate
       nodeSelector:
         kubernetes.io/hostname: node1
@@ -85,7 +85,7 @@ metadata:
   annotations:
     gethomepage.dev/description: Budgeting
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Life
+    gethomepage.dev/group: Household
     gethomepage.dev/icon: actual-budget.png
     gethomepage.dev/name: actualbudget
     gethomepage.dev/pod-selector: app=actualbudget

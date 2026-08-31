@@ -20,7 +20,7 @@ data:
     - Home Automation:
     - Networking:
         Storage:
-    - Life:
+    - Household:
   docker.yaml: ""
   custom.css: ""
   custom.js: |
@@ -35,7 +35,7 @@ data:
             icon: unifi-controller.png
             description: Network Management Console
         - Storage: []
-    - Life:
+    - Household:
         - Monica:
             href: https://monica.home.com
             icon: monica.png
