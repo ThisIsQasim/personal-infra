@@ -58,7 +58,7 @@ data:
     /usr/lib/postgresql/17/bin/pg_ctl -D /home/coder/work/api/pg_data -o '-k /tmp' -l /dev/null start
 
     mkdir -p /home/coder/work/.vscode
-    ln -sf /home/coder/work/infra/k8s/code-server/tasks.json /home/coder/work/.vscode/tasks.json
+    ln -sf /home/coder/work/infra/scripts/tasks.json /home/coder/work/.vscode/tasks.json
 ---
 apiVersion: v1
 kind: Service
