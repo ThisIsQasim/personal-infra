@@ -543,9 +543,7 @@ spec:
   trafficPolicy:
     loadBalancer:
       consistentHash:
-        httpCookie:
-          name: PHPSESSID
-          ttl: 7200s
+        useSourceIp: true
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget
