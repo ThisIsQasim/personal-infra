@@ -66,35 +66,35 @@ spec:
       volumes:
         - name: config
           hostPath:
-            path: /home/utilities/lubelogger/config
+            path: /home/household/lubelogger/config
             type: DirectoryOrCreate
         - name: data
           hostPath:
-            path: /home/utilities/lubelogger/data
+            path: /home/household/lubelogger/data
             type: DirectoryOrCreate
         - name: translations
           hostPath:
-            path: /home/utilities/lubelogger/translations
+            path: /home/household/lubelogger/translations
             type: DirectoryOrCreate
         - name: documents
           hostPath:
-            path: /home/utilities/lubelogger/documents
+            path: /home/household/lubelogger/documents
             type: DirectoryOrCreate
         - name: images
           hostPath:
-            path: /home/utilities/lubelogger/images
+            path: /home/household/lubelogger/images
             type: DirectoryOrCreate
         - name: temp
           hostPath:
-            path: /home/utilities/lubelogger/temp
+            path: /home/household/lubelogger/temp
             type: DirectoryOrCreate
         - name: log
           hostPath:
-            path: /home/utilities/lubelogger/log
+            path: /home/household/lubelogger/log
             type: DirectoryOrCreate
         - name: keys
           hostPath:
-            path: /home/utilities/lubelogger/keys
+            path: /home/household/lubelogger/keys
             type: DirectoryOrCreate
       nodeSelector:
         kubernetes.io/hostname: node1
@@ -123,13 +123,13 @@ metadata:
   annotations:
     gethomepage.dev/description: Car Log
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/group: Life
+    gethomepage.dev/group: Household
     gethomepage.dev/icon: lubelogger.png
     gethomepage.dev/name: lubelogger
     gethomepage.dev/pod-selector: app=lubelogger
     gethomepage.dev/weight: "20"
     gethomepage.dev/widget.type: lubelogger
-    gethomepage.dev/widget.url: http://lubelogger.utilities.svc:80
+    gethomepage.dev/widget.url: http://lubelogger.household.svc:80
     gethomepage.dev/widget.username: homepage
     gethomepage.dev/widget.password: "{{HOMEPAGE_VAR_LUBELOGGER_PASSWORD}}"
 spec:

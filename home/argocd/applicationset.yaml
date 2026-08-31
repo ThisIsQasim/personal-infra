@@ -10,6 +10,7 @@ spec:
       - app: external-tools
       - app: gateway
       - app: ha
+      - app: household
       - app: nas
       - app: prometheus
       - app: utilities

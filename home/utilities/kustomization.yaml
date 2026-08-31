@@ -12,12 +12,9 @@ resources:
 - speedtest.yaml
 - apcupsd.yaml
 - zte-hack.yaml
-- lubelogger.yaml
 - httpbin.yaml
 - backups.yaml
 - byedpi.yaml
-- actualbudget.yaml
-- mealie.yaml
 
 generators:
 - |
@@ -43,12 +40,6 @@ generators:
     envs:
     - ./pihole.enc.env
   - metadata:
-      name: lubelogger
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "true"
-    envs:
-    - ./lubelogger.enc.env
-  - metadata:
       name: tailscale
       annotations:
         kustomize.config.k8s.io/needs-hash: "false"
@@ -72,9 +63,3 @@ generators:
         kustomize.config.k8s.io/needs-hash: "true"
     files:
     - id_rsa=./backups.enc.pem
-  - metadata:
-      name: mealie
-      annotations:
-        kustomize.config.k8s.io/needs-hash: "true"
-    envs:
-    - ./mealie.enc.env
