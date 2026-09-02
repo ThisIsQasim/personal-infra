@@ -4,10 +4,17 @@
 # pod-to-AWS-role federation. The apiserver's own --service-account-issuer
 # is set to https://kubernetes.home.com (no port) to match.
 #
-# Both paths proxy straight to the real apiserver via an ExternalName alias
-# (kept in this namespace so the HTTPRoute's backendRef stays same-namespace
-# - a cross-namespace ref to the default namespace's own `kubernetes`
-# Service would need a ReferenceGrant living there instead).
+# Both paths proxy straight to the real apiserver. Routed via a manually-
+# addressed Service (no selector, explicit Endpoints at the kube-vip HA VIP
+# for the control plane, y.y.y.y
+# cert's own SAN list and the gateway's kube-vip.io/loadbalancerIPs pattern
+# in gateway.yaml) rather than through the built-in `kubernetes` Service:
+# Istio silently ignores any DestinationRule TLS override targeting
+# kubernetes.default.svc.cluster.local (confirmed live - correct policy,
+# confirmed pushed by istiod, but Envoy's cluster still used the default
+# auto-mTLS matcher, not the policy) - and an ExternalName alias to it
+# doesn't dodge this either, since Istio registers the cluster under the
+# resolved target name, not the alias's own name.
 #
 # TODO: the apiserver's own /.well-known/openid-configuration already
 # reports the correct "issuer", but its "jwks_uri" is the raw internal node
@@ -23,22 +30,30 @@ kind: Service
 metadata:
   name: kubernetes-apiserver
 spec:
-  type: ExternalName
-  externalName: kubernetes.default.svc.cluster.local
   ports:
   - port: 443
+    targetPort: 6443
     protocol: TCP
     name: https
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: kubernetes-apiserver
+subsets:
+- addresses:
+  - ip: y.y.y.y
+  ports:
+  - port: 6443
+    name: https
+    protocol: TCP
 ---
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: kubernetes-apiserver
 spec:
-  # Istio registers the Envoy cluster for an ExternalName Service under the
-  # resolved target hostname, not the alias's own name - confirmed live via
-  # the gateway's /clusters admin endpoint.
-  host: kubernetes.default.svc.cluster.local
+  host: kubernetes-apiserver.utilities.svc.cluster.local
   trafficPolicy:
     tls:
       mode: SIMPLE
