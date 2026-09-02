@@ -1,0 +1,49 @@
+---
+# Serves this cluster's OIDC discovery doc + JWKS under kubernetes.home.com
+# so AWS IAM can register it as an OIDC identity provider for IRSA-style
+# pod-to-AWS-role federation. The apiserver's own --service-account-issuer
+# is set to https://kubernetes.home.com (no port) to match.
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: kubernetes-apiserver
+spec:
+  host: kubernetes.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+      # apiserver cert is signed by this cluster's own self-signed CA, which
+      # Istio doesn't trust by default; skipped rather than wiring up the CA
+      # bundle since this hop is intra-cluster only - the public side is
+      # verified for real via cluster-wildcard-cert.
+      insecureSkipVerify: true
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: kubernetes-oidc-discovery
+spec:
+  hosts:
+  - kubernetes.home.com
+  gateways:
+  - istio-ingress/gateway
+  http:
+  - match:
+    - uri:
+        exact: /.well-known/openid-configuration
+    directResponse:
+      status: 200
+      body:
+        string: '{"issuer":"https://kubernetes.home.com","jwks_uri":"https://kubernetes.home.com/openid/v1/jwks","response_types_supported":["id_token"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"]}'
+    headers:
+      response:
+        set:
+          content-type: application/json
+  - match:
+    - uri:
+        prefix: /openid/v1/jwks
+    route:
+    - destination:
+        host: kubernetes.default.svc.cluster.local
+        port:
+          number: 443
