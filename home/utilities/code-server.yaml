@@ -5,6 +5,8 @@ metadata:
   labels:
     app: code-server
   name: code-server
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::739287607658:role/code-server
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
