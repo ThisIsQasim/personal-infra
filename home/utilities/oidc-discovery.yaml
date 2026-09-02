@@ -3,12 +3,39 @@
 # so AWS IAM can register it as an OIDC identity provider for IRSA-style
 # pod-to-AWS-role federation. The apiserver's own --service-account-issuer
 # is set to https://kubernetes.home.com (no port) to match.
+#
+# Both paths proxy straight to the real apiserver via an ExternalName alias
+# (kept in this namespace so the HTTPRoute's backendRef stays same-namespace
+# - a cross-namespace ref to the default namespace's own `kubernetes`
+# Service would need a ReferenceGrant living there instead).
+#
+# TODO: the apiserver's own /.well-known/openid-configuration already
+# reports the correct "issuer", but its "jwks_uri" is the raw internal node
+# IP, not this public hostname - deliberately not fixed via kube-apiserver's
+# --service-account-jwks-uri flag, since that would make in-cluster JWKS
+# consumers depend on this external hostname/gateway path being up. Needs a
+# response-body rewrite in front of this proxy instead (Lua EnvoyFilter, or
+# a small dedicated proxy) to patch just that field - not yet added, so
+# /.well-known/openid-configuration currently proxies through with the
+# wrong jwks_uri until that's in place.
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-apiserver
+spec:
+  type: ExternalName
+  externalName: kubernetes.default.svc.cluster.local
+  ports:
+  - port: 443
+    protocol: TCP
+    name: https
+---
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: kubernetes-apiserver
 spec:
-  host: kubernetes.default.svc.cluster.local
+  host: kubernetes-apiserver.utilities.svc.cluster.local
   trafficPolicy:
     tls:
       mode: SIMPLE
@@ -18,32 +45,33 @@ spec:
       # verified for real via cluster-wildcard-cert.
       insecureSkipVerify: true
 ---
-apiVersion: networking.istio.io/v1
-kind: VirtualService
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   name: kubernetes-oidc-discovery
+  labels:
+    app: kubernetes-oidc-discovery
 spec:
-  hosts:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
   - kubernetes.home.com
-  gateways:
-  - istio-ingress/gateway
-  http:
-  - match:
-    - uri:
-        exact: /.well-known/openid-configuration
-    directResponse:
-      status: 200
-      body:
-        string: '{"issuer":"https://kubernetes.home.com","jwks_uri":"https://kubernetes.home.com/openid/v1/jwks","response_types_supported":["id_token"],"subject_types_supported":["public"],"id_token_signing_alg_values_supported":["RS256"]}'
-    headers:
-      response:
-        set:
-          content-type: application/json
-  - match:
-    - uri:
-        prefix: /openid/v1/jwks
-    route:
-    - destination:
-        host: kubernetes.default.svc.cluster.local
-        port:
-          number: 443
+  rules:
+  - matches:
+    - path:
+        type: Exact
+        value: /.well-known/openid-configuration
+    backendRefs:
+    - name: kubernetes-apiserver
+      port: 443
+  - matches:
+    - path:
+        type: Exact
+        value: /openid/v1/jwks
+    backendRefs:
+    - name: kubernetes-apiserver
+      port: 443
