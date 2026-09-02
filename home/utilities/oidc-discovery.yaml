@@ -35,7 +35,10 @@ kind: DestinationRule
 metadata:
   name: kubernetes-apiserver
 spec:
-  host: kubernetes-apiserver.utilities.svc.cluster.local
+  # Istio registers the Envoy cluster for an ExternalName Service under the
+  # resolved target hostname, not the alias's own name - confirmed live via
+  # the gateway's /clusters admin endpoint.
+  host: kubernetes.default.svc.cluster.local
   trafficPolicy:
     tls:
       mode: SIMPLE
