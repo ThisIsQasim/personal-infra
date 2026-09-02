@@ -1,0 +1,80 @@
+---
+# Rewrites the "jwks_uri" field in the proxied OIDC discovery response for
+# kubernetes.home.com (see ../utilities/oidc-discovery.yaml) from the
+# apiserver's own internal node IP to the public hostname, so AWS IAM can
+# actually reach it. Only the response body needs to change - everything
+# else about the proxied response (issuer, status, other fields) is already
+# correct - so this patches just that field via a Lua filter rather than
+# hand-authoring a full static response.
+#
+# Lives here (istio-ingress), not in utilities: EnvoyFilter's
+# workloadSelector only matches workloads in its own namespace, and the
+# gateway pods it needs to reach live here.
+#
+# Verified live before writing this: gateway pods carry the
+# gateway.networking.k8s.io/gateway-name=gateway label used below, and their
+# https (443) listener's filter chain has envoy.filters.network.http_connection_manager
+# with envoy.filters.http.router as a sub filter, matching the insertion
+# point this patches.
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: kubernetes-oidc-discovery-jwks-uri
+  namespace: istio-ingress
+spec:
+  workloadSelector:
+    labels:
+      gateway.networking.k8s.io/gateway-name: gateway
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: GATEWAY
+      listener:
+        portNumber: 443
+        filterChain:
+          filter:
+            name: envoy.filters.network.http_connection_manager
+            subFilter:
+              name: envoy.filters.http.router
+    patch:
+      operation: INSERT_BEFORE
+      value:
+        name: envoy.filters.http.lua
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+          default_source_code:
+            inline_string: |
+              -- Request path/host aren't visible from envoy_on_response, so
+              -- stash them in dynamic metadata during envoy_on_request.
+              function envoy_on_request(request_handle)
+                local headers = request_handle:headers()
+                local meta = request_handle:streamInfo():dynamicMetadata()
+                meta:set("envoy.filters.http.lua", "request_path", headers:get(":path"))
+                meta:set("envoy.filters.http.lua", "request_authority", headers:get(":authority"))
+              end
+
+              function envoy_on_response(response_handle)
+                local meta = response_handle:streamInfo():dynamicMetadata():get("envoy.filters.http.lua")
+                if meta == nil then
+                  return
+                end
+                if meta["request_authority"] ~= "kubernetes.home.com" then
+                  return
+                end
+                if meta["request_path"] ~= "/.well-known/openid-configuration" then
+                  return
+                end
+
+                local body = response_handle:body()
+                if body == nil then
+                  return
+                end
+
+                local content = body:getBytes(0, body:length())
+                local patched = string.gsub(
+                  content,
+                  '"jwks_uri":"[^"]*"',
+                  '"jwks_uri":"https://kubernetes.home.com/openid/v1/jwks"'
+                )
+                body:setBytes(patched)
+              end
