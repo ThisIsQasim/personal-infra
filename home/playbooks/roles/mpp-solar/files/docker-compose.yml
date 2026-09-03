@@ -4,7 +4,7 @@ services:
     build:
       context: .
       pull: true
-    pull_policy: missing
+    pull_policy: build
     privileged: true
     restart: unless-stopped
     volumes:
