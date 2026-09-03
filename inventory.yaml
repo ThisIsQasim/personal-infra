@@ -48,6 +48,8 @@ k8s_cluster:
     kube_node:
   vars:
     ansible_become: true
+    kube_kubeadm_apiserver_extra_args:
+      service-account-issuer: "https://kubernetes.home.com"
     loadbalancer_apiserver_localhost: false
     use_localhost_as_kubeapi_loadbalancer: false
     gateway_api_enabled: true
