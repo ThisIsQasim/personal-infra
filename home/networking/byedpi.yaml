@@ -13,6 +13,10 @@ spec:
     port: 1080
     protocol: TCP
     targetPort: socks
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
   selector:
     app: byedpi
   type: LoadBalancer
@@ -64,6 +68,20 @@ spec:
             cpu: 100m
           limits:
             memory: 256Mi
+      - image: gogost/gost:3.3.0
+        name: gost
+        args:
+        - -L=http://:8080
+        - -F=socks5://127.0.0.1:1080
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            memory: 64Mi
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
