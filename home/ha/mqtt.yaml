@@ -16,6 +16,8 @@ data:
     password_file /mosquitto/config/passwd
 
     log_dest stdout
+    log_type error
+    log_type warning
   configure.sh: |
     #/bin/sh -ec
     mosquitto_passwd -c -b /runtime/passwd ${MQTT_USERNAME} ${MQTT_PASSWORD}
