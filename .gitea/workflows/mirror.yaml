@@ -52,7 +52,7 @@ jobs:
 
           echo -e '\nThe following apps with their versions are deployed' >> README.md
           grep -r image: . \
-            | grep -oE '/[a-zA-Z0-9]*:.*' \
+            | grep -oE '/[a-zA-Z0-9-]*:.*' \
             | uniq \
             | sed -e 's:^/:- :g' -e 's/:v/:/g' -e 's/:/ (/g' -e 's/"$//g' -e 's/$/)/g' \
               >> README.md
