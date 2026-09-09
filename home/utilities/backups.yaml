@@ -45,6 +45,7 @@ spec:
                         -e "ssh -o StrictHostKeyChecking=no -i /root/id_rsa"'
 
               case $SERVER_NAME in
+
                 reich)
                    rsync backups@${SERVER_HOST}:/root \
                              :/var/www \
@@ -53,12 +54,20 @@ spec:
                              :/etc/letsencrypt \
                              :/var/spool/cron/ \
                              :/mnt/nextcloud ${TARGET_DIR}/;;
-                node1|node2|node3|raspberrypi-zigbee|raspberrypi-solar)
+
+                node1|node2|raspberrypi-zigbee|raspberrypi-solar)
                    rsync backups@${SERVER_HOST}:/root \
                              :/home \
                              :/var/spool/cron/ ${TARGET_DIR}/;;
 
+                node3)
+                   rsync backups@${SERVER_HOST}:/root \
+                             :/home \
+                             :/mnt/external/code-server/ \
+                             :/var/spool/cron/ ${TARGET_DIR}/;;
+
                 *) echo "Unknown server" &&  exit 1 ;;
+
               esac
             volumeMounts:
             - name: sshkey
@@ -82,4 +91,4 @@ spec:
   concurrencyPolicy: Forbid
   timeZone: 'Asia/Karachi'
   schedule: '15 5 * * *'
-  suspend: true
+  suspend: false
