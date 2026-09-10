@@ -208,6 +208,8 @@ spec:
             value: "https://authentik.home.com/application/o/homepage/"
           - name: HOMEPAGE_EXTERNAL_URL
             value: "https://home.com"
+          - name: HOMEPAGE_OIDC_AUTO_LOGIN
+            value: "true"
           envFrom:
           - secretRef:
               name: homepage
