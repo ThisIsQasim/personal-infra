@@ -111,6 +111,7 @@ metadata:
     gethomepage.dev/widget.key: "{{HOMEPAGE_VAR_JELLYFIN_KEY}}"
     gethomepage.dev/widget.enableBlocks: "true"
     gethomepage.dev/widget.enableNowPlaying: "true"
+    gethomepage.dev/widget.version: "2"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
