@@ -61,7 +61,7 @@ ffmpeg:
     record: preset-record-generic-audio-aac
 go2rtc:
   ffmpeg:
-    global: "-vaapi_device /dev/dri/renderD128"
+    global: -vaapi_device /dev/dri/renderD128
   streams:
     hikvision-1:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
@@ -109,7 +109,10 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.183,0,0.291,0,0.291,0.049,0.185,0.044
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.183,0,0.291,0,0.291,0.049,0.185,0.044
   hikvision-2:
     record:
       motion:
@@ -125,15 +128,24 @@ cameras:
             - detect
     motion:
       mask:
-        - 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
     objects:
       track:
         - person
       filters:
         person:
           mask:
-            - 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
-            - 0.7,0.815,0.692,0.904,0.716,0.908,0.723,0.823
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 1,0.316,0.523,0.084,0.182,0.13,0,0.172,0,0,1,0
+            object_mask_2:
+              friendly_name: Object Mask 2 (person)
+              enabled: true
+              coordinates: 0.7,0.815,0.692,0.904,0.716,0.908,0.723,0.823
   hikvision-3:
     record:
       motion:
@@ -152,7 +164,10 @@ cameras:
         - person
     motion:
       mask:
-        - 0.259,0.029,0.287,0.029,0.287,0.071,0.257,0.069
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.259,0.029,0.287,0.029,0.287,0.071,0.257,0.069
   hikvision-4:
     ffmpeg:
       inputs:
@@ -165,7 +180,10 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.254,0.024,0.293,0.024,0.293,0.071,0.254,0.071
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.254,0.024,0.293,0.024,0.293,0.071,0.254,0.071
     objects:
       track:
         - person
@@ -174,7 +192,11 @@ cameras:
       filters:
         person:
           mask:
-            - 0.381,0.979,0.374,0.809,0.444,0.75,0.487,0.776,0.465,0.825,0.473,0.911,0.45,0.959
+            object_mask_1:
+              friendly_name: Object Mask 1 (person)
+              enabled: true
+              coordinates: 
+                0.381,0.979,0.374,0.809,0.444,0.75,0.487,0.776,0.465,0.825,0.473,0.911,0.45,0.959
   hikvision-5:
     ffmpeg:
       inputs:
@@ -187,7 +209,10 @@ cameras:
             - detect
     motion:
       mask:
-        - 1,0,1,0.097,0.487,0.138,0,0.251,0,0
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 1,0,1,0.097,0.487,0.138,0,0.251,0,0
     review:
       alerts:
         required_zones:
@@ -213,7 +238,10 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.257,0.029,0.287,0.029,0.289,0.069,0.265,0.075
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.257,0.029,0.287,0.029,0.289,0.069,0.265,0.075
     objects:
       track:
         - person
@@ -229,7 +257,10 @@ cameras:
             - detect
     motion:
       mask:
-        - 0.22,0,0.292,0,0.295,0.039,0.221,0.046
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.22,0,0.292,0,0.295,0.039,0.221,0.046
     review:
       alerts:
         required_zones:
@@ -266,14 +297,17 @@ cameras:
         - person
     motion:
       mask:
-        - 0.291,0.072,0.288,0,0.22,0,0.217,0.073
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.291,0.072,0.288,0,0.22,0,0.217,0.073
   hikvision-9:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-9
           roles:
             - record
-        - path:
+        - path: 
             rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
           roles:
             - detect
@@ -286,7 +320,7 @@ cameras:
         - path: rtsp://127.0.0.1:8554/hikvision-11
           roles:
             - record
-        - path:
+        - path: 
             rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
           roles:
             - detect
@@ -314,8 +348,14 @@ cameras:
         - person
     motion:
       mask:
-        - 0.761,0,0.747,0.175,0.631,0.114,0.436,0.153,0.441,0
-        - 0.199,0,0.27,0,0.267,0.089,0.2,0.088
+        motion_mask_1:
+          friendly_name: Motion Mask 1
+          enabled: true
+          coordinates: 0.761,0,0.747,0.175,0.631,0.114,0.436,0.153,0.441,0
+        motion_mask_2:
+          friendly_name: Motion Mask 2
+          enabled: true
+          coordinates: 0.199,0,0.27,0,0.267,0.089,0.2,0.088
 classification:
   custom:
     Gate:
