@@ -18,7 +18,7 @@ spec:
         app: jellyseerr
     spec:
       containers:
-      - image: fallenbagel/jellyseerr:2.7.3
+      - image: ghcr.io/seerr-team/seerr:v3.4.1
         imagePullPolicy: IfNotPresent
         name: jellyseerr
         env:
