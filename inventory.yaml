@@ -54,6 +54,7 @@ k8s_cluster:
     use_localhost_as_kubeapi_loadbalancer: false
     gateway_api_enabled: true
     kube_vip_enabled: true
+    kube_vip_version: 1.2.3
     kube_vip_controlplane_enabled: true
     kube_vip_address: y.y.y.y
     kube_vip_cidr: 24
@@ -65,6 +66,9 @@ k8s_cluster:
     kube_vip_services_enabled: true
     kube_vip_enableServicesElection: true
     kube_vip_arp_enabled: true
+    kube_vip_leaseduration: 15
+    kube_vip_renewdeadline: 10
+    kube_vip_retryperiod: 2
     kube_network_plugin: cilium
     kube_network_plugin_multus: true
     cilium_cni_exclusive: false
