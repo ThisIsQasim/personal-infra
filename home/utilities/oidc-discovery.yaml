@@ -69,6 +69,8 @@ metadata:
   name: kubernetes-oidc-discovery
   labels:
     app: kubernetes-oidc-discovery
+  annotations:
+    external-dns.kubernetes.io/exclude: "true"
 spec:
   parentRefs:
   - group: gateway.networking.k8s.io
