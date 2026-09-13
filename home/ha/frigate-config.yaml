@@ -60,6 +60,8 @@ ffmpeg:
   output_args:
     record: preset-record-generic-audio-aac
 go2rtc:
+  ffmpeg:
+    global: "-vaapi_device /dev/dri/renderD128"
   streams:
     hikvision-1:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
