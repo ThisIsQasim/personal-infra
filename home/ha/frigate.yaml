@@ -113,7 +113,7 @@ spec:
             scheme: HTTP
         env:
         - name: LIBVA_DRIVER_NAME
-          value: i965
+          value: radeonsi
         envFrom:
         - secretRef:
             name: frigate
