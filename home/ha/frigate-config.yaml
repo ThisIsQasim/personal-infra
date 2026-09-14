@@ -5,6 +5,9 @@ mqtt:
   password: '{FRIGATE_MQTT_PASSWORD}'
 tls:
   enabled: false
+face_recognition:
+  enabled: true
+  model_size: small
 auth:
   enabled: false
 proxy:
