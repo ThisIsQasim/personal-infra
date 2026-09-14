@@ -50,6 +50,16 @@ k8s_cluster:
     ansible_become: true
     kube_kubeadm_apiserver_extra_args:
       service-account-issuer: "https://kubernetes.home.com"
+    kubeadm_patches:
+    - target: kube-apiserver
+      type: strategic
+      patch:
+        spec:
+          containers:
+          - name: kube-apiserver
+            resources:
+              requests:
+                memory: 1536Mi
     loadbalancer_apiserver_localhost: false
     use_localhost_as_kubeapi_loadbalancer: false
     gateway_api_enabled: true
@@ -58,8 +68,11 @@ k8s_cluster:
     kube_vip_controlplane_enabled: true
     kube_vip_address: y.y.y.y
     kube_vip_cidr: 24
+    extra_etc_hosts:
+    - ip: "y.y.y.y
+      hostnames: ["kubernetes.home.com"]
     loadbalancer_apiserver:
-      address: "{{ kube_vip_address }}"
+      address: "kubernetes.home.com"
       port: 6443
     supplementary_addresses_in_ssl_keys:
     - kubernetes.home.com
