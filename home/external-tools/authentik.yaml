@@ -16,6 +16,13 @@ authentik:
   error_reporting:
     enabled: true
 server:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 768Mi
+    limits:
+      cpu: 750m
+      memory: 1200Mi
   ingress:
     enabled: false
   route:
@@ -50,6 +57,13 @@ server:
       mountPath: /postgres-creds
       readOnly: true
 worker:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 384Mi
+    limits:
+      cpu: 500m
+      memory: 640Mi
   volumes:
     - name: postgres-creds
       secret:
