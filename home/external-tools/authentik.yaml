@@ -1,4 +1,6 @@
 global:
+  affinity:
+    podAntiAffinity: hard
   env:
   - name: AUTHENTIK_SECRET_KEY
     valueFrom:
@@ -16,6 +18,7 @@ authentik:
   error_reporting:
     enabled: true
 server:
+  replicas: 2
   resources:
     requests:
       cpu: 100m
