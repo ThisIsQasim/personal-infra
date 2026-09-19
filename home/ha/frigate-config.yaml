@@ -84,6 +84,8 @@ go2rtc:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-9:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+    hikvision-10:
+      - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-11:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-11_talk:
@@ -308,6 +310,19 @@ cameras:
     ffmpeg:
       inputs:
         - path: rtsp://127.0.0.1:8554/hikvision-9
+          roles:
+            - record
+        - path: 
+            rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+          roles:
+            - detect
+    objects:
+      track:
+        - person
+  hikvision-10:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/hikvision-10
           roles:
             - record
         - path: 
