@@ -216,6 +216,7 @@ metadata:
   labels:
     app: code-server
   annotations:
+    external-dns.kubernetes.io/exclude: "true"
     gethomepage.dev/description: Cloud IDE
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: System
