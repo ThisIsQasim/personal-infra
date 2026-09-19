@@ -79,7 +79,7 @@ spec:
       securityContext:
         fsGroup: 1001
       containers:
-      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:9094366c5445675251813f2ac8b170305e0ddc76af8a4df59d3bc2ca1b0e257a
+      - image: ghcr.io/thisisqasim/steam-headless:fedora@sha256:33fd68ee830330a5c175f2d027d3aa3c7ee85a98aa901b874a33e9c539e49dab
         name: server
         securityContext:
           privileged: true
