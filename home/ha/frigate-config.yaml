@@ -95,7 +95,7 @@ go2rtc:
       - ffmpeg:pollo-1#audio=aac
     pollo-2:
       - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
-      - ffmpeg:pollo-1#audio=aac
+      - ffmpeg:pollo-2#audio=aac
   webrtc:
     candidates:
       - y.y.y.y
