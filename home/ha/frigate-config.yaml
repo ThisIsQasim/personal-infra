@@ -93,6 +93,9 @@ go2rtc:
     pollo-1:
       - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
       - ffmpeg:pollo-1#audio=aac
+    pollo-2:
+      - rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+      - ffmpeg:pollo-1#audio=aac
   webrtc:
     candidates:
       - y.y.y.y
@@ -374,6 +377,22 @@ cameras:
           friendly_name: Motion Mask 2
           enabled: true
           coordinates: 0.199,0,0.27,0,0.267,0.089,0.2,0.088
+  pollo-2:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/pollo-2
+          roles:
+            - record
+        - path: 
+            rtsp://admin:{FRIGATE_POLLO_PASSWORD}@y.y.y.y
+          roles:
+            - detect
+    detect:
+      width: 640
+      height: 360
+    objects:
+      track:
+        - person
 classification:
   custom:
     Gate:
