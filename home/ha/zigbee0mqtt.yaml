@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: zigbee0mqtt
+  name: zigbee0mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee0mqtt
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: zigbee0mqtt
+    spec:
+      containers:
+      - image: koenkk/zigbee2mqtt:2.14.1
+        imagePullPolicy: IfNotPresent
+        name: zigbee0mqtt
+        env:
+        - name: TZ
+          value: 'Asia/Karachi'
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_PORT
+          value: 'tcp://y.y.y.y
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE
+          value: "115200"
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER
+          value: 'zstack'
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED
+          value: "false"
+        - name: ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER
+          value: "20"
+        - name: ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL
+          value: "25"
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      restartPolicy: Always
+      volumes:
+      - name: data
+        hostPath:
+          path: /home/ha/zigbee0mqtt
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: node2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: zigbee0mqtt
+  name: zigbee0mqtt
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: zigbee0mqtt
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: zigbee0mqtt
+  labels:
+    app: zigbee0mqtt
+  annotations:
+    gethomepage.dev/description: Zigbee to MQTT
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Home Automation
+    gethomepage.dev/icon: zigbee2mqtt.png
+    gethomepage.dev/name: Zigbee0MQTT
+    gethomepage.dev/pod-selector: app=zigbee0mqtt
+    gethomepage.dev/weight: "45"
+spec:
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: gateway
+    namespace: istio-ingress
+    sectionName: https
+  hostnames:
+  - zigbee0mqtt.home.com
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: zigbee0mqtt
+      port: 8080
