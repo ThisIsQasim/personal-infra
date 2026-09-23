@@ -23,6 +23,36 @@ spec:
         env:
         - name: TZ
           value: 'Asia/Karachi'
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_PORT
+          value: 'tcp://y.y.y.y
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE
+          value: "115200"
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER
+          value: 'zstack'
+        - name: ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED
+          value: "false"
+        - name: ZIGBEE2MQTT_CONFIG_ADVANCED_TRANSMIT_POWER
+          value: "20"
+        - name: ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL
+          value: "25"
+        - name: ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED
+          value: "true"
+        - name: ZIGBEE2MQTT_CONFIG_FRONTEND_PORT
+          value: "8080"
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
+          value: 'mqtt://mqtt:1883'
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC
+          value: 'zigbee2mqtt'
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_USER
+          valueFrom:
+            secretKeyRef:
+              name: mqtt
+              key: MQTT_USERNAME
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mqtt
+              key: MQTT_PASSWORD
         ports:
         - name: http
           containerPort: 8080
@@ -30,26 +60,17 @@ spec:
         resources:
           requests:
             cpu: "100m"
-            smarter-devices/ttyUSB0: 1
           limits:
             memory: "1Gi"
-            smarter-devices/ttyUSB0: 1
         volumeMounts:
         - name: data
           mountPath: /app/data
-        - name: udev
-          mountPath: /run/udev
-          readOnly: true
       restartPolicy: Always
       volumes:
       - name: data
         hostPath:
           path: /home/ha/zigbee2mqtt
           type: DirectoryOrCreate
-      - name: udev
-        hostPath:
-          path: /run/udev
-          type: Directory
       nodeSelector:
         kubernetes.io/hostname: node2
 ---
@@ -80,7 +101,7 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Home Automation
     gethomepage.dev/icon: zigbee2mqtt.png
-    gethomepage.dev/name: Zigbee2MQTT
+    gethomepage.dev/name: Zigbee0MQTT
     gethomepage.dev/pod-selector: app=zigbee2mqtt
     gethomepage.dev/weight: "40"
 spec:
