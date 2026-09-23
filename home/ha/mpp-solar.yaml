@@ -1,0 +1,124 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mpp-solar
+  labels:
+    app: mpp-solar
+data:
+  configure.sh: |
+    #/bin/sh -ec
+    cat <<EOF > /runtime/mpp-solar.conf
+    [SETUP]
+    pause=5
+    mqtt_broker=mqtt
+    mqtt_user=${MQTT_USERNAME}
+    mqtt_pass=${MQTT_PASSWORD}
+
+    [1496142307100831000000]
+    port=/dev/ttyUSB0
+    protocol=PI18
+    command=GS#MOD
+    tag=mpp
+    outputs=hass_mqtt,prom_file
+    EOF
+  stale-metrics-cleaner.sh: |
+    #!/bin/sh
+    while sleep 60; do
+     find /var/lib/node_exporter/ -type f -name 'mpp-solar-*.prom' -mmin +2 -execdir rm -- '{}' \;
+    done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mpp-solar
+  name: mpp-solar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mpp-solar
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mpp-solar
+    spec:
+      initContainers:
+      - name: config
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - /configure.sh
+        envFrom:
+        - secretRef:
+            name: mqtt
+        volumeMounts:
+        - name: runtime
+          mountPath: /runtime
+        - name: config
+          mountPath: /configure.sh
+          subPath: configure.sh
+      containers:
+      - name: mpp-solar
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TZ
+          value: Asia/Karachi
+        resources:
+          requests:
+            cpu: "50m"
+            smarter-devices/ttyUSB0: 1
+          limits:
+            memory: "128Mi"
+            smarter-devices/ttyUSB0: 1
+        livenessProbe:
+          initialDelaySeconds: 180
+          periodSeconds: 60
+          timeoutSeconds: 10
+          failureThreshold: 3
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - test -n "$(find /var/lib/node_exporter -maxdepth 1 -name 'mpp-solar-*.prom' -mmin -5)"
+        volumeMounts:
+        - name: runtime
+          mountPath: /etc/mpp-solar/mpp-solar.conf
+          subPath: mpp-solar.conf
+        - name: metrics
+          mountPath: /var/lib/node_exporter
+      - name: stale-metrics-cleaner
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - /stale-metrics-cleaner.sh
+        resources:
+          requests:
+            cpu: "10m"
+          limits:
+            memory: "32Mi"
+        volumeMounts:
+        - name: config
+          mountPath: /stale-metrics-cleaner.sh
+          subPath: stale-metrics-cleaner.sh
+        - name: metrics
+          mountPath: /var/lib/node_exporter
+      restartPolicy: Always
+      volumes:
+      - name: config
+        configMap:
+          name: mpp-solar
+      - name: runtime
+        emptyDir: {}
+      - name: metrics
+        hostPath:
+          path: /var/lib/node_exporter
+          type: DirectoryOrCreate
+      nodeSelector:
+        kubernetes.io/hostname: node2
