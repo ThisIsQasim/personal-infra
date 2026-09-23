@@ -35,6 +35,8 @@ spec:
           value: "20"
         - name: ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL
           value: "25"
+        - name: ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN
+          value: 'ISO_8601'
         - name: ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED
           value: "true"
         - name: ZIGBEE2MQTT_CONFIG_FRONTEND_PORT
