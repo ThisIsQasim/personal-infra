@@ -1,7 +1,0 @@
----
-- hosts: raspberrypi-solar
-  become: true
-  force_handlers: true
-  roles:
-    - monitoring
-    - mpp-solar

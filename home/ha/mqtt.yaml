@@ -51,13 +51,10 @@ metadata:
   labels:
     app: mqtt
     node: node2
-  annotations:
-    kube-vip.io/loadbalancerIPs: y.y.y.y
 spec:
   ports:
   - port: 1883
-  type: LoadBalancer
-  externalTrafficPolicy: Local
+  type: ClusterIP
   selector:
     app: mqtt
     node: node2
