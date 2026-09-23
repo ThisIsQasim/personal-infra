@@ -35,6 +35,10 @@ spec:
           value: "20"
         - name: ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL
           value: "25"
+        - name: ZIGBEE2MQTT_CONFIG_FRONTEND_ENABLED
+          value: "true"
+        - name: ZIGBEE2MQTT_CONFIG_FRONTEND_PORT
+          value: "8080"
         - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
           value: 'mqtt://mqtt:1883'
         - name: ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC
