@@ -10,7 +10,7 @@ data:
     #/bin/sh -ec
     cat <<EOF > /runtime/mpp-solar.conf
     [SETUP]
-    pause=5
+    pause=2
     mqtt_broker=mqtt
     mqtt_user=${MQTT_USERNAME}
     mqtt_pass=${MQTT_PASSWORD}
