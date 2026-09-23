@@ -35,6 +35,20 @@ spec:
           value: "20"
         - name: ZIGBEE2MQTT_CONFIG_ADVANCED_CHANNEL
           value: "25"
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
+          value: 'mqtt://mqtt:1883'
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC
+          value: 'zigbee0mqtt'
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_USER
+          valueFrom:
+            secretKeyRef:
+              name: mqtt
+              key: MQTT_USERNAME
+        - name: ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mqtt
+              key: MQTT_PASSWORD
         ports:
         - name: http
           containerPort: 8080
