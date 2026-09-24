@@ -17,6 +17,7 @@ data:
 
     [1496142307100831000000]
     port=socket://y.y.y.y
+    porttype=serial
     protocol=PI18
     command=GS#MOD
     tag=mpp
