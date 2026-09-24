@@ -25,7 +25,10 @@ data:
     EOF
   stale-metrics-cleaner.sh: |
     #!/bin/sh
-    while sleep 60; do
+    # sleep in the background so the trap runs as soon as SIGTERM arrives
+    trap 'exit 0' TERM INT
+    while true; do
+     sleep 60 & wait $!
      find /var/lib/node_exporter/ -type f -name 'mpp-solar-*.prom' -mmin +2 -execdir rm -- '{}' \;
     done
 ---
