@@ -14,27 +14,13 @@
     autoremove: true
   tags: ser2net
 
-- name: Install podman and iptables-persistent
+- name: Install podman, podman-compose and iptables-persistent
   ansible.builtin.package:
     name:
       - podman
+      - podman-compose
       - iptables-persistent
     state: present
-  tags: ser2net
-
-- name: Setup the debian backports apt repo
-  ansible.builtin.apt_repository:
-    repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main"
-    filename: backports
-    state: present
-  tags: ser2net
-
-# podman-compose before 1.0.6 adds the default network even with network_mode: host
-- name: Install podman-compose from backports
-  ansible.builtin.apt:
-    name: podman-compose
-    default_release: "{{ ansible_distribution_release }}-backports"
-    state: latest
   tags: ser2net
 
 - name: Make sure podman restarts containers on boot

@@ -1,5 +1,5 @@
 ---
-- name: restart ntpd
+- name: restart ntpsec
   ansible.builtin.service:
-    name: ntpd
+    name: ntpsec
     state: restarted
