@@ -16,7 +16,7 @@ data:
     mqtt_pass=${MQTT_PASSWORD}
 
     [1496142307100831000000]
-    port=/dev/ttyUSB0
+    port=socket://y.y.y.y
     protocol=PI18
     command=GS#MOD
     tag=mpp
@@ -72,10 +72,8 @@ spec:
         resources:
           requests:
             cpu: "50m"
-            smarter-devices/ttyUSB0: 1
           limits:
             memory: "128Mi"
-            smarter-devices/ttyUSB0: 1
         livenessProbe:
           initialDelaySeconds: 180
           periodSeconds: 60
