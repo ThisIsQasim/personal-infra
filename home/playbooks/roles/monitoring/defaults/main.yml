@@ -1,0 +1,5 @@
+---
+prometheus_config_dir: "/etc/prometheus"
+# prometheus_url:
+# prometheus_username:
+# prometheus_password:

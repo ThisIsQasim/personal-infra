@@ -1,0 +1,8 @@
+---
+- name: recreate ser2net
+  ansible.builtin.command: podman-compose up -d --force-recreate
+  args:
+    chdir: "{{ ser2net_project_directory }}"
+
+- name: save iptables
+  ansible.builtin.command: netfilter-persistent save

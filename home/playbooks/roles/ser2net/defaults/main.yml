@@ -1,0 +1,7 @@
+---
+ser2net_project_directory: /root/ser2net
+ser2net_image: ghcr.io/jippi/docker-ser2net:4.6.8
+ser2net_port: 4000
+ser2net_device: /dev/ttyUSB0
+ser2net_baud: 2400
+# ser2net_allowed_source:

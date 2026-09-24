@@ -1,0 +1,11 @@
+---
+services:
+  ser2net:
+    image: {{ ser2net_image }}
+    restart: always
+    # Host networking so the INPUT chain firewall rules apply to the ser2net port
+    network_mode: host
+    devices:
+    - {{ ser2net_device }}:{{ ser2net_device }}
+    volumes:
+    - ./ser2net.yaml:/etc/ser2net/ser2net.yaml:ro

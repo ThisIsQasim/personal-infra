@@ -1,0 +1,109 @@
+---
+- name: Remove docker and compose packages
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+      - docker.io
+      - docker-compose
+    state: absent
+    purge: true
+    autoremove: true
+  tags: ser2net
+
+- name: Remove docker python packages
+  ansible.builtin.pip:
+    name:
+      - docker
+      - docker-compose
+    state: absent
+  tags: ser2net
+
+- name: Remove docker apt repo, data and the old mpp-solar project
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/apt/sources.list.d/docker.list
+    - /etc/apt/keyrings/docker.gpg
+    - /etc/apt/keyrings/.docker.gpg.enarmored
+    - /var/lib/docker
+    - /var/lib/containerd
+    - /root/mpp-solar
+  tags: ser2net
+
+- name: Install podman, podman-compose and iptables-persistent
+  ansible.builtin.package:
+    name:
+      - podman
+      - podman-compose
+      - iptables-persistent
+    state: present
+  tags: ser2net
+
+- name: Make sure podman restarts containers on boot
+  ansible.builtin.service:
+    name: podman-restart
+    enabled: true
+  tags: ser2net
+
+- name: Create ser2net project directory
+  ansible.builtin.file:
+    path: "{{ ser2net_project_directory }}"
+    state: directory
+    mode: '0755'
+  tags: ser2net
+
+- name: Write ser2net compose file and config
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ ser2net_project_directory }}/{{ item }}"
+    mode: '0644'
+    backup: true
+  with_items:
+    - docker-compose.yml
+    - ser2net.yaml
+  notify: recreate ser2net
+  tags: ser2net
+
+- name: Bring up services
+  ansible.builtin.command: podman-compose up -d
+  args:
+    chdir: "{{ ser2net_project_directory }}"
+  changed_when: false
+  tags: ser2net
+
+- name: Allow ser2net connections from the allowed source
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ ser2net_port }}"
+    source: "{{ ser2net_allowed_source }}"
+    jump: ACCEPT
+    comment: ser2net allowed source
+  notify: save iptables
+  tags: ser2net
+
+- name: Drop all other IPv4 ser2net connections
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ ser2net_port }}"
+    jump: DROP
+    comment: ser2net drop others
+  notify: save iptables
+  tags: ser2net
+
+- name: Drop all IPv6 ser2net connections
+  ansible.builtin.iptables:
+    ip_version: ipv6
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ ser2net_port }}"
+    jump: DROP
+    comment: ser2net drop others
+  notify: save iptables
+  tags: ser2net

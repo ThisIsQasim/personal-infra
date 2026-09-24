@@ -1,0 +1,8 @@
+%YAML 1.1
+---
+connection: &serial
+  accepter: tcp,{{ ser2net_port }}
+  enable: on
+  connector: serialdev,{{ ser2net_device }},{{ ser2net_baud }}n81,local
+  options:
+    kickolduser: true
