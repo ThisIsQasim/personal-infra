@@ -39,7 +39,7 @@ data:
     chmod 0600 ${SSH_DIR}/id_rsa*
 
     sudo apt-get update && \
-    sudo apt-get install -y postgresql net-tools gnupg2 unzip openjdk-25-jdk tmux
+    sudo apt-get install -y postgresql net-tools gnupg2 unzip openjdk-25-jdk tmux vim
 
     sudo install -o root -g root -m 0755 -D -t /usr/local/bin /mnt/dind-image/usr/local/bin/docker /mnt/dind-image/usr/local/bin/docker-proxy
     sudo install -o root -g root -m 0755 -D -t /usr/local/libexec/docker/cli-plugins /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-compose /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-buildx
