@@ -6,6 +6,7 @@ prometheus:
       cluster: home
     remoteWrite:
     - url: "https://cortex.work.com/api/v1/push"
+      messageVersion: V2.0
       # No secret: cortex's ingest sidecar trusts this cluster's own
       # ServiceAccount tokens (JWT source "f8k"), so this just points at
       # the token every pod already gets by default. `authorization`
