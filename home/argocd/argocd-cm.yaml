@@ -10,6 +10,7 @@ data:
   exec.enabled: "true"
   url: https://argocd.home.com
   timeout.reconciliation: "10m"
+  timeout.reconciliation.jitter: "120s"
   accounts.readonly: apiKey
   dex.config: |
     connectors:
