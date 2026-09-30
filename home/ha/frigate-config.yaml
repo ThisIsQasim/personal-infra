@@ -88,6 +88,7 @@ go2rtc:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     hikvision-11:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
+      - ffmpeg:hikvision-11#audio=aac
     hikvision-11_talk:
       - rtsp://admin:{FRIGATE_HIKVISION_PASSWORD}@y.y.y.y
     pollo-1:
