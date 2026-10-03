@@ -44,6 +44,8 @@ data:
     metadata:
       annotations:
         kube-vip.io/loadbalancerIPs: y.y.y.y
+    spec:
+      externalTrafficPolicy: Local
   deployment: |
     spec:
       replicas: 3
