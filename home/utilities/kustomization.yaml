@@ -9,7 +9,6 @@ resources:
 - apcupsd.yaml
 - backups.yaml
 - oidc-discovery.yaml
-- aepiw.yaml
 
 generators:
 - |

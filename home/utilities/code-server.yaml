@@ -5,8 +5,6 @@ metadata:
   labels:
     app: code-server
   name: code-server
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::739287607658:role/code-server
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -141,6 +139,16 @@ spec:
         env:
         - name: EXTENSIONS_GALLERY
           value: '{"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery", "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index", "itemUrl": "https://marketplace.visualstudio.com/items"}'
+        - name: AWS_STS_REGIONAL_ENDPOINTS
+          value: regional
+        - name: AWS_DEFAULT_REGION
+          value: eu-central-1
+        - name: AWS_REGION
+          value: eu-central-1
+        - name: AWS_ROLE_ARN
+          value: arn:aws:iam::739287607658:role/code-server
+        - name: AWS_WEB_IDENTITY_TOKEN_FILE
+          value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
         securityContext:
           runAsUser: 1000
         volumeMounts:
@@ -156,6 +164,9 @@ spec:
           mountPath: /mnt/dind-image
         - name: c9t-token
           mountPath: /var/run/secrets/c9t/serviceaccount
+          readOnly: true
+        - name: aws-iam-token
+          mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
           readOnly: true
         ports:
           - name: http
@@ -201,6 +212,14 @@ spec:
           sources:
           - serviceAccountToken:
               audience: k8s.work.com
+              expirationSeconds: 86400
+              path: token
+      - name: aws-iam-token
+        projected:
+          defaultMode: 420
+          sources:
+          - serviceAccountToken:
+              audience: sts.amazonaws.com
               expirationSeconds: 86400
               path: token
       nodeSelector:
