@@ -26,6 +26,12 @@ server:
     limits:
       cpu: 750m
       memory: 1200Mi
+  # Liveness depends on the database, so a short outage (a Postgres restart or
+  # switchover) would otherwise restart the pods and delay recovery. Readiness
+  # still pulls them out of rotation immediately.
+  livenessProbe:
+    failureThreshold: 12
+    timeoutSeconds: 5
   ingress:
     enabled: false
   route:

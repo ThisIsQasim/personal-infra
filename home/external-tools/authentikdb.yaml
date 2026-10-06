@@ -11,6 +11,7 @@ metadata:
   namespace: authentik
 spec:
   instances: 3
+  primaryUpdateMethod: switchover
   imageCatalogRef:
     apiGroup: postgresql.cnpg.io
     kind: ClusterImageCatalog
