@@ -116,6 +116,8 @@ spec:
         volumeMounts:
         - name: docker
           mountPath: /var/run/
+        - name: data
+          mountPath: /home/coder
         startupProbe:
           exec:
             command:
