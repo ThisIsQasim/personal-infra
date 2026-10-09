@@ -109,7 +109,7 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /home/coder
-      - image: public.ecr.aws/docker/library/docker:29.8.2-dind
+      - image: public.ecr.aws/docker/library/docker:29.9.0-dind
         name: docker
         securityContext:
           privileged: true
@@ -204,7 +204,7 @@ spec:
         emptyDir: {}
       - name: dind-image
         image:
-          reference: public.ecr.aws/docker/library/docker:29.8.2-dind
+          reference: public.ecr.aws/docker/library/docker:29.9.0-dind
           pullPolicy: IfNotPresent
       - name: c9t-token
         projected:
