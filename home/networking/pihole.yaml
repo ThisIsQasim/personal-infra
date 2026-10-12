@@ -242,6 +242,10 @@ spec:
         - --upstream=https://1.1.1.1/dns-query
         - --upstream=https://1.0.0.1/dns-query
         - --upstream=https://dns.cloudflare.com/dns-query
+        # Cloudflare sends no EDNS Client Subnet, so Akamai maps Apple names to
+        # PTCL edge nodes that are unreachable from Transworld. Google passes
+        # the client subnet and gets reachable Transworld nodes.
+        - --upstream=[/apple.com/itunes.apple.com/mzstatic.com/akadns.net/edgesuite.net/]https://dns.google/dns-query
         - --fallback=https://8.8.8.8/dns-query
         - --fallback=https://8.8.4.4/dns-query 
         - --http3
