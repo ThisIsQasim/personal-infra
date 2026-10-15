@@ -35,3 +35,9 @@ spec:
         - code.home.com
         notPaths:
         - /apple-touch-icon.png
+    - operation:
+        hosts:
+        - "*.code.home.com"
+        notHosts:
+        - 5000.code.home.com
+        - 5173.code.home.com
