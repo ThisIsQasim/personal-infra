@@ -42,15 +42,8 @@ data:
     sudo install -o root -g root -m 0755 -D -t /usr/local/bin /mnt/dind-image/usr/local/bin/docker /mnt/dind-image/usr/local/bin/docker-proxy
     sudo install -o root -g root -m 0755 -D -t /usr/local/libexec/docker/cli-plugins /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-compose /mnt/dind-image/usr/local/libexec/docker/cli-plugins/docker-buildx
 
-    curl -Lo node.tar.gz https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-x64.tar.gz
-    sudo tar -C /usr/local --strip-components 1 -xzf node.tar.gz
-    npm install -g yarn
-
-    curl -Lo go.linux-amd64.tar.gz https://go.dev/dl/go1.24.2.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go.linux-amd64.tar.gz
     echo 'source ~/.bashrc' > ~/.bash_profile
 
-    rm -f *.tar.gz
     popd
     chmod 0700 /home/coder/work/api/pg_data
     /usr/lib/postgresql/17/bin/pg_ctl -D /home/coder/work/api/pg_data -o '-k /tmp' -l /dev/null start
