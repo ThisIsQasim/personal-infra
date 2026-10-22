@@ -1,0 +1,33 @@
+# The keypair Authentik signs tokens and SAML assertions with. cert-manager
+# renews the certificate before it lapses and reuses the private key
+# (rotationPolicy: Never), so the JWKS key and the public key in SAML
+# metadata stay the same across renewals. Authentik imports it through
+# certificate discovery from /certs (authentik.yaml), under the name of its
+# directory; point the providers' signing certificate at it in the UI.
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: authentik-selfsigned
+  namespace: authentik
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: authentik-signing
+  namespace: authentik
+spec:
+  secretName: authentik-signing-cert
+  commonName: authentik-signing
+  duration: 8760h # 1y
+  renewBefore: 720h # 30d
+  privateKey:
+    algorithm: RSA
+    size: 4096
+    rotationPolicy: Never
+  usages:
+  - digital signature
+  issuerRef:
+    name: authentik-selfsigned
+    kind: Issuer

@@ -8,6 +8,7 @@ resources:
 - https://raw.githubusercontent.com/cloudnative-pg/postgres-containers/main/Debian/ClusterImageCatalog-bookworm.yaml
 - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.6.0/manifest.yaml
 - authentikdb.yaml
+- authentik-signing-cert.yaml
 
 helmCharts:
 - name: authentik

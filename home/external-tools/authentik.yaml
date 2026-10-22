@@ -61,9 +61,20 @@ server:
     - name: postgres-creds
       secret:
         secretName: authentik-pgsql-app
+    - name: signing-cert
+      secret:
+        secretName: authentik-signing-cert
+        items:
+          - key: tls.crt
+            path: authentik-signing/fullchain.pem
+          - key: tls.key
+            path: authentik-signing/privkey.pem
   volumeMounts:
     - name: postgres-creds
       mountPath: /postgres-creds
+      readOnly: true
+    - name: signing-cert
+      mountPath: /certs
       readOnly: true
 worker:
   resources:
@@ -77,7 +88,18 @@ worker:
     - name: postgres-creds
       secret:
         secretName: authentik-pgsql-app
+    - name: signing-cert
+      secret:
+        secretName: authentik-signing-cert
+        items:
+          - key: tls.crt
+            path: authentik-signing/fullchain.pem
+          - key: tls.key
+            path: authentik-signing/privkey.pem
   volumeMounts:
     - name: postgres-creds
       mountPath: /postgres-creds
+      readOnly: true
+    - name: signing-cert
+      mountPath: /certs
       readOnly: true
