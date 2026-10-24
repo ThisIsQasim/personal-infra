@@ -131,8 +131,7 @@ data:
   regex.list: |
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
-    (^|\.)home\.com;querytype=HTTPS
-    (^|\.)home\.com;querytype=AAAA
+    (^|\.)home\.com;querytype=HTTPS,AAAA;reply=nodata
   blacklist.txt: |
     www.hibids10.com
     api.tunnelbear.com
