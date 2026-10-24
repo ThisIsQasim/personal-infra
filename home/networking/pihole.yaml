@@ -132,6 +132,7 @@ data:
     (^|\.)tunnelbear\.com$
     (^|\.)acloudvideos\.com$
     (^|\.)home\.com;querytype=HTTPS
+    (^|\.)home\.com;querytype=AAAA
   blacklist.txt: |
     www.hibids10.com
     api.tunnelbear.com
