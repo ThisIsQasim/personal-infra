@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: minio
-        image: pgsty/silo:RELEASE.2026-10-18T00-00-00Z-distroless
+        image: pgsty/silo:RELEASE.2026-10-26T00-00-00Z-distroless
         imagePullPolicy: IfNotPresent
         args:
         - server
