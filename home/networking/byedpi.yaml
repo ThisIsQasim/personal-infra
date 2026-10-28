@@ -68,7 +68,7 @@ spec:
             cpu: 100m
           limits:
             memory: 256Mi
-      - image: gogost/gost:3.3.1
+      - image: gogost/gost:3.3.2
         name: gost
         args:
         - -L=http://:8080
