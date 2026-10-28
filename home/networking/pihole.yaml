@@ -525,6 +525,11 @@ spec:
           ip rule show table ${TABLE} | grep "from y.y.y.y
             ip rule add from y.y.y.y
             ip rule add from y.y.y.y
+          ip link show mvlan-shim || \
+            ip link add mvlan-shim link eno1 type macvlan mode bridge
+          ip link set mvlan-shim up
+          ip route replace y.y.y.y
+          ip route replace y.y.y.y
           sleep inf
         securityContext:
           runAsUser: 0
