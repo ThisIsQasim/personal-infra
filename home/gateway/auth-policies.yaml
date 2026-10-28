@@ -40,3 +40,4 @@ spec:
         - "*.code.home.com"
         notHosts:
         - 5000.code.home.com
+        - 4322.code.home.com
