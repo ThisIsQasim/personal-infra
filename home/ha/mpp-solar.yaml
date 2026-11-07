@@ -52,7 +52,7 @@ spec:
     spec:
       initContainers:
       - name: config
-        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.18
         imagePullPolicy: IfNotPresent
         command:
         - /bin/sh
@@ -68,7 +68,7 @@ spec:
           subPath: configure.sh
       containers:
       - name: mpp-solar
-        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.18
         imagePullPolicy: IfNotPresent
         env:
         - name: TZ
@@ -95,7 +95,7 @@ spec:
         - name: metrics
           mountPath: /var/lib/node_exporter
       - name: stale-metrics-cleaner
-        image: ghcr.io/thisisqasim/mpp-solar:0.0.17
+        image: ghcr.io/thisisqasim/mpp-solar:0.0.18
         imagePullPolicy: IfNotPresent
         command:
         - /bin/sh
