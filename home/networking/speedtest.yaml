@@ -21,6 +21,15 @@ spec:
       - image: ghcr.io/thisisqasim/speedtest-go:0.0.19
         imagePullPolicy: IfNotPresent
         name: speedtest
+        env:
+        - name: SPEEDTEST_ASSETS_PATH
+          value: /assets
+        - name: SPEEDTEST_DATABASE_TYPE
+          value: none
+        - name: SPEEDTEST_SERVER_LAT
+          value: "0"
+        - name: SPEEDTEST_SERVER_LNG
+          value: "0"
         ports:
         - containerPort: 8989
           name: http
@@ -40,6 +49,14 @@ spec:
             cpu: "50m"
           limits:
             memory: "128Mi"
+        volumeMounts:
+        - name: assets
+          mountPath: /assets
+          readOnly: true
+      volumes:
+      - name: assets
+        configMap:
+          name: speedtest-assets
 ---
 apiVersion: v1
 kind: Service

@@ -11,6 +11,15 @@ resources:
 - httpbin.yaml
 - byedpi.yaml
 
+configMapGenerator:
+- name: speedtest-assets
+  files:
+  - speedtest-assets/app.js
+  - speedtest-assets/index.html
+  - speedtest-assets/speedtest.js
+  - speedtest-assets/speedtest_worker.js
+  - speedtest-assets/style.css
+
 generators:
 - |
   apiVersion: viaduct.ai/v1

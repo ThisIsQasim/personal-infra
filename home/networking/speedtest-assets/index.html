@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Speedtest</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script src="speedtest.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Speedtest</h1>
+    <div id="connection" hidden>
+      <p id="ip"></p>
+      <p id="network"></p>
+    </div>
+  </header>
+  <main>
+    <section class="readings" aria-live="off">
+      <article class="reading" id="download">
+        <h2>Download</h2>
+        <p class="value"><span class="number">0</span> <span class="unit">Mbps</span></p>
+        <svg class="trace" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="fill-download" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#fill-download)"/><polyline fill="none" vector-effect="non-scaling-stroke"/></svg>
+      </article>
+      <article class="reading" id="upload">
+        <h2>Upload</h2>
+        <p class="value"><span class="number">0</span> <span class="unit">Mbps</span></p>
+        <svg class="trace" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="fill-upload" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-opacity="0.4"/><stop offset="1" stop-opacity="0"/></linearGradient></defs><polygon fill="url(#fill-upload)"/><polyline fill="none" vector-effect="non-scaling-stroke"/></svg>
+      </article>
+    </section>
+    <footer>
+      <dl>
+        <div><dt>Ping</dt><dd id="ping">-</dd></div>
+        <div><dt>Jitter</dt><dd id="jitter">-</dd></div>
+      </dl>
+      <p id="status" role="status"></p>
+      <button id="toggle" type="button">Start</button>
+    </footer>
+  </main>
+</body>
+</html>
