@@ -181,8 +181,10 @@ spec:
           requests:
             cpu: 0.1
             memory: 8Gi
+            smarter-devices/dri_renderD128: 1
           limits:
             memory: 32Gi
+            smarter-devices/dri_renderD128: 1
       serviceAccountName: code-server
       volumes:
       - name: data
