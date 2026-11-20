@@ -1,0 +1,11 @@
+# Values for the istio/gateway chart (kustomization.yaml).
+# Name keeps the Service at gateway-istio.istio-ingress, which CoreDNS rewrites to (inventory.yaml).
+name: gateway-istio
+kind: DaemonSet
+autoscaling:
+  enabled: false
+service:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  annotations:
+    kube-vip.io/loadbalancerIPs: y.y.y.y

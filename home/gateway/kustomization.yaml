@@ -10,6 +10,12 @@ resources:
 - oidc-discovery.yml
 
 helmCharts:
+- name: gateway
+  namespace: istio-ingress
+  releaseName: gateway
+  repo: https://istio-release.storage.googleapis.com/charts
+  version: 1.30.8
+  valuesFile: gateway-proxy.yaml
 - name: base
   namespace: istio-system
   releaseName: istio-base

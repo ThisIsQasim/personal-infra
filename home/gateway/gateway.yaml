@@ -34,31 +34,6 @@ spec:
   - digital signature
   - key encipherment
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: gateway-params
-  namespace: istio-ingress
-data:
-  service: |
-    metadata:
-      annotations:
-        kube-vip.io/loadbalancerIPs: y.y.y.y
-    spec:
-      externalTrafficPolicy: Local
-  deployment: |
-    spec:
-      replicas: 3
-      template:
-        spec:
-          topologySpreadConstraints:
-          - maxSkew: 1
-            topologyKey: kubernetes.io/hostname
-            whenUnsatisfiable: DoNotSchedule
-            labelSelector:
-              matchLabels:
-                gateway.networking.k8s.io/gateway-name: gateway
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
@@ -66,11 +41,11 @@ metadata:
   namespace: istio-ingress
 spec:
   gatewayClassName: istio
-  infrastructure:
-    parametersRef:
-      group: ""
-      kind: ConfigMap
-      name: gateway-params
+  # A Hostname address marks the Gateway as manually deployed: Istio does not
+  # create a Deployment or Service, it configures the proxies behind this Service.
+  addresses:
+  - type: Hostname
+    value: gateway-istio.istio-ingress.svc.cluster.local
   listeners:
   - name: http
     protocol: HTTP
