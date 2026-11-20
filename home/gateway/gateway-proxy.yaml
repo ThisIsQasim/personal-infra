@@ -9,3 +9,6 @@ service:
   externalTrafficPolicy: Local
   annotations:
     kube-vip.io/loadbalancerIPs: y.y.y.y
+# Lets Gateway-targeted policies (auth-policies.yaml) resolve to these pods.
+labels:
+  gateway.networking.k8s.io/gateway-name: gateway
