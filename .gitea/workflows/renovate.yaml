@@ -16,7 +16,7 @@ on:
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    container: ghcr.io/renovatebot/renovate:44.257.9-full
+    container: ghcr.io/renovatebot/renovate:45.1.2-full
     steps:
       - uses: actions/checkout@v7
       - run: renovate
